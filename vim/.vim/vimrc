@@ -1,0 +1,95 @@
+syntax on 
+set number 
+set hlsearch 
+set nocompatible
+set modelines=0
+set clipboard=unnamedplus
+
+"https://stackoverflow.com/questions/821902/disabling-swap-files-creation-in-vim
+set backupdir=~/.vim/backup//
+set directory=~/.vim/swap//
+set undodir=~/.vim/undo//
+
+"picked from steve losh's blog
+"https://stevelosh.com/blog/2010/09/coming-home-to-vim/
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
+set expandtab
+set encoding=utf-8
+set scrolloff=3
+set autoindent
+set smartindent
+set showmode "show which mode currently on 
+set showcmd "show command running bottom right
+set hidden
+set wildmenu
+set wildmode=list:longest
+set cursorline
+set ttyfast
+set ruler
+set backspace=indent,eol,start
+set laststatus=2
+set relativenumber
+set undofile
+let mapleader = ","
+" nnoremap <tab> %
+" vnoremap <tab> %
+au FocusLost * :wa
+inoremap jj <ESC>
+nnoremap / /\v
+vnoremap / /\v
+set ignorecase
+set gdefault
+set incsearch
+set showmatch
+set hlsearch
+nnoremap <leader><space> :noh<cr>
+set wrap
+nnoremap <leader>w <C-w>v<C-w>l
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+nnoremap <up> <nop>
+nnoremap <down> <nop>
+nnoremap <left> <nop>
+nnoremap <right> <nop>
+inoremap <up> <nop>
+inoremap <down> <nop>
+inoremap <left> <nop>
+inoremap <right> <nop>
+nnoremap j gj
+nnoremap k gk
+inoremap <F1> <ESC>
+nnoremap <F1> <ESC>
+vnoremap <F1> <ESC>
+nnoremap ; :
+au FocusLost * :wa
+inoremap jj <Esc>
+
+" fast saving
+" nmap <leader>w :w!<cr>
+
+" map space to search
+map <space> /
+map <C-space> ?
+
+"  Useful mappings for managing tabs 
+map <leader>tn :tabnew<cr> 
+map <leader>to :tabonly<cr> 
+map <leader>tc :tabclose<cr> 
+map <leader>tm :tabmove<cr>    
+map <leader>t :tabnext<cr> 
+map <leader>te :tabedit <C-r>=expand("%:p:h")<cr>/
+
+call plug#begin('~/.vim/plugged')
+Plug 'itchyny/lightline.vim'
+Plug 'tmsvg/pear-tree'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-repeat'
+call plug#end()
+
+let g:lightline = {
+       \  ' colorscheme ' :  ' solarized ' ,
+       \  }
