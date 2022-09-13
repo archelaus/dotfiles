@@ -1,19 +1,10 @@
 #!/usr/bin/env bash
 
 PACKAGES=(
-	bin
-	conda
-	editorconfig
-	eslint
-	gcloud
-	git
-	ipython
-	matplotlib
-	pylint
-	tmux
+	mpv
+	yt-dlp
+	yt-fzf
 	vim
-	zsh
-	rust
 )
 
 for PKG in ${PACKAGES[@]}; do
@@ -25,5 +16,5 @@ for PKG in ${PACKAGES[@]}; do
 		fi
 	done
 
-	stow --no-folding --verbose $PKG
+	stow --verbose $PKG
 done
