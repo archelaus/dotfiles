@@ -1,0 +1,14 @@
+--add-metadata
+# --write-description	
+# --write-annotations
+--sub-langs en.*
+# --no-write-subs
+# --no-write-auto-subs
+# --convert-subs srt
+--write-auto-subs
+# --write-subs
+--embed-thumbnail
+--embed-subs
+--merge-output-format mkv
+--external-downloader aria2c
+-f "bv*[height<=1080]+ba/b[height<=1080]"
