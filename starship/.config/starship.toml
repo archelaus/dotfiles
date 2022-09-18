@@ -1,0 +1,97 @@
+[aws]
+symbol = "  "
+
+[buf]
+symbol = " "
+
+[c]
+symbol = " "
+
+[character]
+success_symbol = "[➜](bold green) "
+error_symbol = "[➜](bold red) "
+
+[conda]
+symbol = " "
+
+[dart]
+symbol = " "
+
+[directory]
+read_only = " "
+
+[docker_context]
+symbol = " "
+
+[elixir]
+symbol = " "
+
+[elm]
+symbol = " "
+
+[git_branch]
+symbol = " "
+
+[golang]
+symbol = " "
+
+[haskell]
+symbol = " "
+
+[hg_branch]
+symbol = " "
+
+[java]
+symbol = " "
+
+[julia]
+symbol = " "
+
+[localip]
+ssh_only = true
+format = "@[$localipv4](bold red) "
+style = "bold yellow"
+disabled = false
+
+[memory_usage]
+symbol = " "
+
+[nim]
+symbol = " "
+
+[nix_shell]
+symbol = " "
+
+[nodejs]
+symbol = " "
+
+[package]
+symbol = " "
+
+[python]
+symbol = " "
+
+[spack]
+symbol = "🅢 "
+
+[status]
+format = "[$symbol $status]($style) "
+symbol = "✖"
+success_symbol = ""	
+not_executable_symbol = "🚫"
+not_found_symbol = "🔍"
+sigint_symbol = "🧱"
+signal_symbol = "⚡"
+style = "bold red"
+recognize_signal_code = true
+map_symbol = true
+disabled = false
+
+[sudo]
+format = "[as $symbol]($style)"
+style = "bold blue"
+symbol = "🧙 "
+disabled = false
+
+[rust]
+symbol = " "
