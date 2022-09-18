@@ -1,0 +1,6 @@
+configuration {
+ icon-theme: "WhiteSur-dark";
+ matching: "fuzzy";
+ show-icons: true;
+ }
+@import "/usr/share/rofi/themes/android_notification.rasi"
