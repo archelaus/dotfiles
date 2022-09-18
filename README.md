@@ -14,6 +14,9 @@ curl -sSf https://raw.githubusercontent.com/archelaus/dotfiles/master/install.sh
 | - | - |
 [fish](https://fishshell.com/) | friendly interactive shell
 [mpv](https://github.com/mpv-player/mpv) | command line video player
+[rofi](https://github.com/davatorium/rofi) | dmenu replacement
+[starship](https://starship.rs/) | shell prompt
+[topgrade](https://github.com/r-darwish/topgrade) | package manager
 [yt-dlp](https://github.com/yt-dlp/yt-dlp) | youtube-dl fork with additional features and fixes
 [yt-fzf](https://github.com/pystardust/ytfzf) | find and watch youtube videos from the terminal	
 [vim](https://www.vim.org/) | text editor
