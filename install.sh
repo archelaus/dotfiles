@@ -35,9 +35,8 @@ chmod +x "$TEMPD/cht.sh"
 curl -s https://api.github.com/repos/jaskaranSM/drivedlgo/releases/latest |
 grep browser_download_url |
 grep Linux_$(uname -m) |
-cut -d '"' -f 4 | wget -i- -qO- | gunzip > drivedlgo
-chmod +x drivedlgo
-mv drivedlgo "$TEMPD"
+cut -d '"' -f 4 | wget -i- -qO- | gunzip > "$TEMPD"/drivedlgo
+chmod +x "$TEMPD"/drivedlgo
 
 # batcat
 sudo apt install bat &&
@@ -57,6 +56,13 @@ curl -L https://github.com/dundee/gdu/releases/latest/download/gdu_linux_amd64.t
 chmod +x gdu_linux_amd64
 mv gdu_linux_amd64 "$TEMPD/gdu"
 
+# glow
+curl -s https://api.github.com/repos/charmbracelet/glow/releases/latest |
+grep browser_download_url |
+grep linux_$(uname -m) |
+cut -d '"' -f 4 | wget -i- -qO- | tar xz --directory "$TEMPD"
+chmod +x "$TEMPD"/glow
+
 # has
 curl -sL https://git.io/_has | tee "$TEMPD/has" >/dev/null
 chmod +x "$TEMPD/has"
@@ -65,9 +71,17 @@ chmod +x "$TEMPD/has"
 curl -s https://api.github.com/repos/denisidoro/navi/releases/latest |
 grep browser_download_url |
 grep $(uname -m)-unknown-linux |
-cut -d '"' -f 4 | wget -i- -qO- | tar xz
-chmod +x navi
-mv navi "$TEMPD"
+cut -d '"' -f 4 | wget -i- -qO- | tar xz --directory "$TEMPD"
+chmod +x "$TEMPD"/navi
+
+# procs
+curl -s https://api.github.com/repos/dalance/procs/releases/latest |
+grep browser_download_url |
+grep $(uname -m)-linux |
+cut -d '"' -f 4 |
+wget -i- -qO- | busybox unzip -
+chmod +x procs
+mv procs "$TEMPD"
 
 # tldr
 curl -o "$TEMPD/tldr" https://raw.githubusercontent.com/raylee/tldr/master/tldr &&
