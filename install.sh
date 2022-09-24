@@ -41,6 +41,11 @@ sudo apt install fd-find
 # fzf
 sudo apt install fzf
 
+# gdu
+curl -L https://github.com/dundee/gdu/releases/latest/download/gdu_linux_amd64.tgz | tar xz
+chmod +x gdu_linux_amd64
+mv gdu_linux_amd64 "$PATH_DIR/gdu"
+
 # has
 curl -sL https://git.io/_has | tee "$PATH_DIR/has" >/dev/null
 chmod +x "$PATH_DIR/has"
