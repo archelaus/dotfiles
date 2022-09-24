@@ -30,7 +30,11 @@ sudo apt install bat &&
 [ -f "$PATH_DIR/bat" ] || ln -s /usr/bin/batcat "$PATH_DIR/bat"
 	
 # exa
-curl -s https://api.github.com/repos/ogham/exa/releases/latest | grep browser_download_url | grep linux-$(uname -m)-v | cut -d '"' -f 4 | wget -i- -qO- | busybox unzip - 
+curl -s https://api.github.com/repos/ogham/exa/releases/latest |
+grep browser_download_url |
+grep linux-$(uname -m)-v |
+cut -d '"' -f 4 |
+wget -i- -qO- | busybox unzip -
 mv ./bin/exa "$PATH_DIR/exa" &&
 rm -rf completions man bin
 chmod +x "$PATH_DIR/exa"
@@ -49,6 +53,14 @@ mv gdu_linux_amd64 "$PATH_DIR/gdu"
 # has
 curl -sL https://git.io/_has | tee "$PATH_DIR/has" >/dev/null
 chmod +x "$PATH_DIR/has"
+
+# navi
+curl -s https://api.github.com/repos/denisidoro/navi/releases/latest |
+grep browser_download_url |
+grep $(uname -m)-unknown-linux |
+cut -d '"' -f 4 | wget -i- -qO- | tar xz
+chmod +x navi
+mv navi "$PATH_DIR"
 
 # tldr
 curl -o "$PATH_DIR/tldr" https://raw.githubusercontent.com/raylee/tldr/master/tldr &&
