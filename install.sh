@@ -25,6 +25,14 @@ command -v fish >/dev/null || { sudo apt-add-repository ppa:fish-shell/release-3
 curl https://cht.sh/:cht.sh > "$PATH_DIR/cht.sh"
 chmod +x "$PATH_DIR/cht.sh"
 
+# drivedlgo
+curl -s https://api.github.com/repos/jaskaranSM/drivedlgo/releases/latest |
+grep browser_download_url |
+grep Linux_$(uname -m) |
+cut -d '"' -f 4 | wget -i- -qO- | gunzip > drivedlgo
+chmod +x drivedlgo
+mv drivedlgo "$PATH_DIR"
+
 # batcat
 sudo apt install bat &&
 [ -f "$PATH_DIR/bat" ] || ln -s /usr/bin/batcat "$PATH_DIR/bat"
