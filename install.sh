@@ -15,15 +15,21 @@ else
 	exit 1
 fi
 
-PATH_DIR="${HOME}/.local/bin"
-[ -d "$PATH_DIR" ] || mkdir -p "$PATH_DIR"
+# Create a temporary directory and store its name in a variable.
+TEMPD=$(mktemp -d)
+
+# Exit if the temp directory wasn't created successfully.
+if [ ! -e "$TEMPD" ]; then
+    >&2 echo "Failed to create temp directory"
+    exit 1
+fi
 
 # fish
 command -v fish >/dev/null || { sudo apt-add-repository ppa:fish-shell/release-3; sudo apt update; sudo apt install fish; }
 
 # cheat.sh
-curl https://cht.sh/:cht.sh > "$PATH_DIR/cht.sh"
-chmod +x "$PATH_DIR/cht.sh"
+curl https://cht.sh/:cht.sh > "$TEMPD/cht.sh"
+chmod +x "$TEMPD/cht.sh"
 
 # drivedlgo
 curl -s https://api.github.com/repos/jaskaranSM/drivedlgo/releases/latest |
@@ -31,21 +37,14 @@ grep browser_download_url |
 grep Linux_$(uname -m) |
 cut -d '"' -f 4 | wget -i- -qO- | gunzip > drivedlgo
 chmod +x drivedlgo
-mv drivedlgo "$PATH_DIR"
+mv drivedlgo "$TEMPD"
 
 # batcat
 sudo apt install bat &&
-[ -f "$PATH_DIR/bat" ] || ln -s /usr/bin/batcat "$PATH_DIR/bat"
+[ -f "$TEMPD/bat" ] || ln -s /usr/bin/batcat "$TEMPD/bat"
 	
 # exa
-curl -s https://api.github.com/repos/ogham/exa/releases/latest |
-grep browser_download_url |
-grep linux-$(uname -m)-v |
-cut -d '"' -f 4 |
-wget -i- -qO- | busybox unzip -
-mv ./bin/exa "$PATH_DIR/exa" &&
-rm -rf completions man bin
-chmod +x "$PATH_DIR/exa"
+sudo apt install exa
 
 # fd
 sudo apt install fd-find
@@ -56,11 +55,11 @@ sudo apt install fzf
 # gdu
 curl -L https://github.com/dundee/gdu/releases/latest/download/gdu_linux_amd64.tgz | tar xz
 chmod +x gdu_linux_amd64
-mv gdu_linux_amd64 "$PATH_DIR/gdu"
+mv gdu_linux_amd64 "$TEMPD/gdu"
 
 # has
-curl -sL https://git.io/_has | tee "$PATH_DIR/has" >/dev/null
-chmod +x "$PATH_DIR/has"
+curl -sL https://git.io/_has | tee "$TEMPD/has" >/dev/null
+chmod +x "$TEMPD/has"
 
 # navi
 curl -s https://api.github.com/repos/denisidoro/navi/releases/latest |
@@ -68,12 +67,18 @@ grep browser_download_url |
 grep $(uname -m)-unknown-linux |
 cut -d '"' -f 4 | wget -i- -qO- | tar xz
 chmod +x navi
-mv navi "$PATH_DIR"
+mv navi "$TEMPD"
 
 # tldr
-curl -o "$PATH_DIR/tldr" https://raw.githubusercontent.com/raylee/tldr/master/tldr &&
-chmod +x "$PATH_DIR/tldr"
+curl -o "$TEMPD/tldr" https://raw.githubusercontent.com/raylee/tldr/master/tldr &&
+chmod +x "$TEMPD/tldr"
 
 # yt-dlp
-curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o "$PATH_DIR/yt-dlp" &&
-chmod +x "$PATH_DIR/yt-dlp"
+curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o "$TEMPD/yt-dlp" &&
+chmod +x "$TEMPD/yt-dlp"
+
+sudo mv $TEMPD/* /usr/local/bin/
+
+# Make sure the temp directory gets removed on script exit.
+trap "exit 1"           HUP INT PIPE QUIT TERM
+trap 'rm -rf "$TEMPD"'  EXIT
