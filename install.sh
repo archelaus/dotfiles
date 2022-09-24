@@ -56,4 +56,4 @@ chmod +x "$PATH_DIR/tldr"
 
 # yt-dlp
 curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o "$PATH_DIR/yt-dlp" &&
-chmod a+rx "$PATH_DIR/yt-dlp"
+chmod +x "$PATH_DIR/yt-dlp"
