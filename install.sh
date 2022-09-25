@@ -44,7 +44,7 @@ sudo apt install bat &&
 
 # bottom
 curl -L https://github.com/ClementTsang/bottom/releases/latest/download/bottom_x86_64-unknown-linux-gnu.tar.gz | tar xz
-chmod +x btm
+chmod +x btm && rm -rf completion
 mv btm "$TEMPD"
 	
 # dust
@@ -76,7 +76,7 @@ curl -s https://api.github.com/repos/charmbracelet/glow/releases/latest |
 grep browser_download_url |
 grep linux_$(uname -m) |
 cut -d '"' -f 4 | wget -i- -qO- | tar xz
-chmod +x glow_*/glow && mv glow_*/glow "$TEMPD" && rm -rf glow_*/
+chmod +x glow && mv glow "$TEMPD" && rm -rf completions
 
 # has
 curl -sL https://git.io/_has | tee "$TEMPD/has" >/dev/null
@@ -88,15 +88,6 @@ grep browser_download_url |
 grep $(uname -m)-unknown-linux |
 cut -d '"' -f 4 | wget -i- -qO- | tar xz --directory "$TEMPD"
 chmod +x "$TEMPD"/navi
-
-# procs
-curl -s https://api.github.com/repos/dalance/procs/releases/latest |
-grep browser_download_url |
-grep $(uname -m)-linux |
-cut -d '"' -f 4 |
-wget -i- -qO- | busybox unzip -
-chmod +x procs
-mv procs "$TEMPD"
 
 # ripgrep
 sudo apt install ripgrep
