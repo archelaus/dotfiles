@@ -75,8 +75,8 @@ mv gdu_linux_amd64 "$TEMPD/gdu"
 curl -s https://api.github.com/repos/charmbracelet/glow/releases/latest |
 grep browser_download_url |
 grep linux_$(uname -m) |
-cut -d '"' -f 4 | wget -i- -qO- | tar xz
-chmod +x glow && mv glow "$TEMPD" && rm -rf completions
+cut -d '"' -f 4 | wget -i- -qO- | tar xz --directory "$TEMPD"
+chmod +x "$TEMPD"/glow
 
 # has
 curl -sL https://git.io/_has | tee "$TEMPD/has" >/dev/null
