@@ -41,7 +41,19 @@ chmod +x "$TEMPD"/drivedlgo
 # batcat
 sudo apt install bat &&
 [ -f "$TEMPD/bat" ] || ln -s /usr/bin/batcat "$TEMPD/bat"
+
+# bottom
+curl -L https://github.com/ClementTsang/bottom/releases/latest/download/bottom_x86_64-unknown-linux-gnu.tar.gz | tar xz
+chmod +x btm
+mv btm "$TEMPD"
 	
+# dust
+curl -s https://api.github.com/repos/bootandy/dust/releases/latest |
+grep browser_download_url |
+grep $(uname -m)-unknown-linux-gnu |
+cut -d '"' -f 4 | wget -i- -qO- | tar xz
+chmod +x dust-*/dust && mv dust-*/dust "$TEMPD" && rm -rf dust-*/
+
 # exa
 sudo apt install exa
 
@@ -50,6 +62,9 @@ sudo apt install fd-find
 
 # fzf
 sudo apt install fzf
+
+# fx
+curl -L https://github.com/antonmedv/fx/releases/latest/download/fx_linux_amd64 -o "$TEMPD/fx"
 
 # gdu
 curl -L https://github.com/dundee/gdu/releases/latest/download/gdu_linux_amd64.tgz | tar xz
@@ -60,8 +75,8 @@ mv gdu_linux_amd64 "$TEMPD/gdu"
 curl -s https://api.github.com/repos/charmbracelet/glow/releases/latest |
 grep browser_download_url |
 grep linux_$(uname -m) |
-cut -d '"' -f 4 | wget -i- -qO- | tar xz --directory "$TEMPD"
-chmod +x "$TEMPD"/glow
+cut -d '"' -f 4 | wget -i- -qO- | tar xz
+chmod +x glow_*/glow && mv glow_*/glow "$TEMPD" && rm -rf glow_*/
 
 # has
 curl -sL https://git.io/_has | tee "$TEMPD/has" >/dev/null
