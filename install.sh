@@ -83,6 +83,9 @@ wget -i- -qO- | busybox unzip -
 chmod +x procs
 mv procs "$TEMPD"
 
+# ripgrep
+sudo apt install ripgrep
+
 # tldr
 curl -o "$TEMPD/tldr" https://raw.githubusercontent.com/raylee/tldr/master/tldr &&
 chmod +x "$TEMPD/tldr"
