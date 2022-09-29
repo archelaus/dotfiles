@@ -89,6 +89,15 @@ grep $(uname -m)-unknown-linux |
 cut -d '"' -f 4 | wget -i- -qO- | tar xz --directory "$TEMPD"
 chmod +x "$TEMPD"/navi
 
+# procs
+curl -s https://api.github.com/repos/dalance/procs/releases/latest |
+grep browser_download_url |
+grep $(uname -m)-linux |
+cut -d '"' -f 4 |
+wget -i- -qO- | busybox unzip -
+chmod +x procs
+mv procs "$TEMPD"
+
 # ripgrep
 sudo apt install ripgrep
 
