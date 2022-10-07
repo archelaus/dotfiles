@@ -126,10 +126,6 @@ mv procs "$TEMPD"
 # ripgrep
 sudo apt install ripgrep
 
-# tldr
-curl -o "$TEMPD/tldr" https://raw.githubusercontent.com/raylee/tldr/master/tldr &&
-chmod +x "$TEMPD/tldr"
-
 # yt-dlp
 curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o "$TEMPD/yt-dlp" &&
 chmod +x "$TEMPD/yt-dlp"
