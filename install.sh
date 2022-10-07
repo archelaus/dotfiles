@@ -134,6 +134,7 @@ curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o "$TE
 chmod +x "$TEMPD/yt-dlp"
 
 sudo mv $TEMPD/* /usr/local/bin/
+sudo rm /usr/local/bin/LICENSE /usr/local/bin/README.md 
 
 # Make sure the temp directory gets removed on script exit.
 trap "exit 1"           HUP INT PIPE QUIT TERM
