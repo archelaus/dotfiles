@@ -60,13 +60,14 @@ command -v docker >/dev/null || {
 	sudo sh get-docker.sh
 	sudo usermod -aG docker "$(whoami)"
 	sudo systemctl enable docker
+	rm get-docker.sh
 }
 command -v docker-compose >/dev/null || {
 	curl -s https://api.github.com/repos/docker/compose/releases/latest |
        jq -r '.assets[] | select(.name|match("linux-x86_64$")) | .browser_download_url' |
        wget -O docker-compose -i -
 	chmod +x docker-compose
-	mv docker-compose "$TEMPD/fx"
+	mv docker-compose "$TEMPD"
 }
 
 # exa
@@ -79,9 +80,9 @@ sudo apt install fd-find
 sudo apt install fzf
 
 # fx
-curl -L https://github.com/antonmedv/fx/releases/latest/download/fx_linux_amd64
-chmod +x fx_linux_amd64
-mv fx_linux_amd64 "$TEMPD/fx"
+curl -L https://github.com/antonmedv/fx/releases/latest/download/fx_linux_amd64 -o fx
+chmod +x fx
+mv fx "$TEMPD"
 
 # gdu
 curl -L https://github.com/dundee/gdu/releases/latest/download/gdu_linux_amd64.tgz | tar xz
