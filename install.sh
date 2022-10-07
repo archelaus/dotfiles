@@ -54,6 +54,17 @@ grep $(uname -m)-unknown-linux-gnu |
 cut -d '"' -f 4 | wget -i- -qO- | tar xz
 chmod +x dust-*/dust && mv dust-*/dust "$TEMPD" && rm -rf dust-*/
 
+# docker
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
+sudo usermod -aG docker "$(whoami)"
+sudo systemctl enable docker
+curl -s https://api.github.com/repos/docker/compose/releases/latest |
+       jq '.assets[] | select(.name|match("linux-x86_64$")) | .browser_download_url' |
+       wget -O docker-compose -i -
+chmod +x docker-compose
+mv docker-compose "$TEMPD/fx"
+
 # exa
 sudo apt install exa
 
@@ -64,7 +75,9 @@ sudo apt install fd-find
 sudo apt install fzf
 
 # fx
-curl -L https://github.com/antonmedv/fx/releases/latest/download/fx_linux_amd64 -o "$TEMPD/fx"
+curl -L https://github.com/antonmedv/fx/releases/latest/download/fx_linux_amd64
+chmod +x fx_linux_amd64
+mv fx_linux_amd64 "$TEMPD/fx"
 
 # gdu
 curl -L https://github.com/dundee/gdu/releases/latest/download/gdu_linux_amd64.tgz | tar xz
