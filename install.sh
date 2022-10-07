@@ -28,6 +28,7 @@ fi
 command -v fish >/dev/null || { sudo apt-add-repository ppa:fish-shell/release-3; sudo apt update; sudo apt install fish; }
 
 # cheat.sh
+sudo apt install rlwrap
 curl https://cht.sh/:cht.sh > "$TEMPD/cht.sh"
 chmod +x "$TEMPD/cht.sh"
 
