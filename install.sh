@@ -100,6 +100,12 @@ chmod +x "$TEMPD"/glow
 curl -sL https://git.io/_has | tee "$TEMPD/has" >/dev/null
 chmod +x "$TEMPD/has"
 
+# lazydocker
+curl -s https://api.github.com/repos/jesseduffield/lazydocker/releases/latest |
+	jq -r '.assets[] | select(.name|match("Linux_x86_64")) | .browser_download_url' |
+	wget -i- -qO- | tar xz --directory "$TEMPD"
+chmod +x "$TEMPD"/lazydocker
+
 # navi
 curl -s https://api.github.com/repos/denisidoro/navi/releases/latest |
 grep browser_download_url |
