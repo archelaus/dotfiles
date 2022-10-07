@@ -114,6 +114,14 @@ grep $(uname -m)-unknown-linux |
 cut -d '"' -f 4 | wget -i- -qO- | tar xz --directory "$TEMPD"
 chmod +x "$TEMPD"/navi
 
+# how2, nvm
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/$(curl -s https://api.github.com/repos/nvm-sh/nvm/releases/latest | jq -r .tag_name)/install.sh | bash
+command -v how2 >/dev/null || {
+	fisher install jorgebucaran/nvm.fish
+	nvm install latest
+	npm install -g how2
+}
+
 # procs
 curl -s https://api.github.com/repos/dalance/procs/releases/latest |
 grep browser_download_url |
