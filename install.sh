@@ -55,15 +55,19 @@ cut -d '"' -f 4 | wget -i- -qO- | tar xz
 chmod +x dust-*/dust && mv dust-*/dust "$TEMPD" && rm -rf dust-*/
 
 # docker
-curl -fsSL https://get.docker.com -o get-docker.sh
-sudo sh get-docker.sh
-sudo usermod -aG docker "$(whoami)"
-sudo systemctl enable docker
-curl -s https://api.github.com/repos/docker/compose/releases/latest |
-       jq '.assets[] | select(.name|match("linux-x86_64$")) | .browser_download_url' |
+command -v docker >/dev/null || {
+	curl -fsSL https://get.docker.com -o get-docker.sh
+	sudo sh get-docker.sh
+	sudo usermod -aG docker "$(whoami)"
+	sudo systemctl enable docker
+}
+command -v docker-compose >/dev/null || {
+	curl -s https://api.github.com/repos/docker/compose/releases/latest |
+       jq -r '.assets[] | select(.name|match("linux-x86_64$")) | .browser_download_url' |
        wget -O docker-compose -i -
-chmod +x docker-compose
-mv docker-compose "$TEMPD/fx"
+	chmod +x docker-compose
+	mv docker-compose "$TEMPD/fx"
+}
 
 # exa
 sudo apt install exa
