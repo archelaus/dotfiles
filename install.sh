@@ -108,6 +108,12 @@ chmod +x "$TEMPD"/glow
 curl -sL https://git.io/_has | tee "$TEMPD/has" >/dev/null
 chmod +x "$TEMPD/has"
 
+# jdupes
+curl -s https://api.github.com/repos/jbruchon/jdupes/releases/latest |
+	jq -r '.assets[] | select(.name|match("x86-64")) | .browser_download_url' |
+	wget -i- -qO- | tar xJ --wildcards --no-anchored 'jdupes-*/jdupes'
+chmod +x 'jdupes-*/jdupes' && mv 'jdupes-*/jdupes' '$TEMPD' && rm -rf 'jdupes-*/'
+
 # lazydocker
 curl -s https://api.github.com/repos/jesseduffield/lazydocker/releases/latest |
 	jq -r '.assets[] | select(.name|match("Linux_x86_64")) | .browser_download_url' |
