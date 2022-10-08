@@ -122,6 +122,9 @@ command -v how2 >/dev/null || {
 	npm install -g how2
 }
 
+# nnn
+sudo apt install nnn
+
 # procs
 curl -s https://api.github.com/repos/dalance/procs/releases/latest |
 grep browser_download_url |
