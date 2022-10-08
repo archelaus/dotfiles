@@ -40,8 +40,8 @@ cut -d '"' -f 4 | wget -i- -qO- | gunzip > "$TEMPD"/drivedlgo
 chmod +x "$TEMPD"/drivedlgo
 
 # batcat
-sudo apt install bat &&
-[ -f "$TEMPD/bat" ] || ln -s /usr/bin/batcat "$TEMPD/bat"
+sudo apt install bat
+ln -s $(which batcat) "$TEMPD"/bat
 
 # bottom
 curl -L https://github.com/ClementTsang/bottom/releases/latest/download/bottom_x86_64-unknown-linux-gnu.tar.gz | tar xz
@@ -76,6 +76,7 @@ sudo apt install exa
 
 # fd
 sudo apt install fd-find
+ln -s $(which fdfind) "$TEMPD"/fd
 
 # fzf
 sudo apt install fzf
