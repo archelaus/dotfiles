@@ -1,0 +1,7 @@
+#!/bin/bash
+
+jdupes -r . | {
+    while IFS= read -r file; do
+        [[ $file ]] && du "$file"
+    done
+} | sort -n

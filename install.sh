@@ -15,18 +15,22 @@ if [ ! -e "$TEMPD" ]; then
 fi
 
 # fish
-command -v fish >/dev/null || { sudo apt-add-repository ppa:fish-shell/release-3; sudo apt update; sudo apt install fish; }
+command -v fish >/dev/null || {
+	sudo apt-add-repository ppa:fish-shell/release-3
+	sudo apt update
+	sudo apt install fish
+}
 
 # as-tree
 curl -s https://api.github.com/repos/jez/as-tree/releases/latest |
 	jq -r '.assets[] | select(.name|match("linux")) | .browser_download_url' |
 	wget -i- -qO- | busybox unzip - -d "$TEMPD"
-chmod +x "$TEMPD/as-tree"
+chmod +x "$TEMPD"/as-tree
 
 # cheat.sh
 sudo apt install rlwrap
-curl https://cht.sh/:cht.sh > "$TEMPD/cht.sh"
-chmod +x "$TEMPD/cht.sh"
+curl https://cht.sh/:cht.sh > "$TEMPD"/cht.sh
+chmod +x "$TEMPD"/cht.sh
 
 # drivedlgo
 curl -s https://api.github.com/repos/jaskaranSM/drivedlgo/releases/latest |
@@ -55,7 +59,7 @@ chmod +x dust-*/dust && mv dust-*/dust "$TEMPD" && rm -rf dust-*/
 command -v docker >/dev/null || {
 	curl -fsSL https://get.docker.com -o get-docker.sh
 	sudo sh get-docker.sh
-	sudo usermod -aG docker "$(whoami)"
+	sudo usermod -aG docker '$(whoami)'
 	sudo systemctl enable docker
 	rm get-docker.sh
 }
@@ -78,43 +82,42 @@ ln -s $(which fdfind) "$TEMPD"/fd
 sudo apt install fzf
 
 # fx
-curl -L https://github.com/antonmedv/fx/releases/latest/download/fx_linux_amd64 -o fx
-chmod +x fx
-mv fx "$TEMPD"
+curl -L https://github.com/antonmedv/fx/releases/latest/download/fx_linux_amd64 -o "$TEMPD"/fx
+chmod +x "$TEMPD"/fx
 
 # gdu
 curl -L https://github.com/dundee/gdu/releases/latest/download/gdu_linux_amd64.tgz | tar xz
 chmod +x gdu_linux_amd64
-mv gdu_linux_amd64 "$TEMPD/gdu"
+mv gdu_linux_amd64 "$TEMPD"/gdu
 
 # glow
 curl -s https://api.github.com/repos/charmbracelet/glow/releases/latest |
 grep browser_download_url |
 grep linux_$(uname -m) |
-cut -d '"' -f 4 | wget -i- -qO- | tar xz --directory "$TEMPD"
+cut -d '"' -f 4 | wget -i- -qO- | tar xz -C "$TEMPD"
 chmod +x "$TEMPD"/glow
 
 # has
-curl -sL https://git.io/_has | tee "$TEMPD/has" >/dev/null
-chmod +x "$TEMPD/has"
+curl -sL https://git.io/_has | tee "$TEMPD"/has >/dev/null
+chmod +x "$TEMPD"/has
 
 # jdupes
 curl -s https://api.github.com/repos/jbruchon/jdupes/releases/latest |
 	jq -r '.assets[] | select(.name|match("x86-64")) | .browser_download_url' |
-	wget -i- -qO- | tar xJ --wildcards --no-anchored 'jdupes-*/jdupes'
-chmod +x 'jdupes-*/jdupes' && mv 'jdupes-*/jdupes' '$TEMPD' && rm -rf 'jdupes-*/'
+	wget -i- -qO- | tar xJ
+chmod +x jdupes-*/jdupes && mv jdupes-*/jdupes "$TEMPD" && rm -rf jdupes-*/
 
 # lazydocker
 curl -s https://api.github.com/repos/jesseduffield/lazydocker/releases/latest |
 	jq -r '.assets[] | select(.name|match("Linux_x86_64")) | .browser_download_url' |
-	wget -i- -qO- | tar xz --directory "$TEMPD"
+	wget -i- -qO- | tar xz -C "$TEMPD"
 chmod +x "$TEMPD"/lazydocker
 
 # navi
 curl -s https://api.github.com/repos/denisidoro/navi/releases/latest |
 grep browser_download_url |
 grep $(uname -m)-unknown-linux |
-cut -d '"' -f 4 | wget -i- -qO- | tar xz --directory "$TEMPD"
+cut -d '"' -f 4 | wget -i- -qO- | tar xz -C "$TEMPD"
 chmod +x "$TEMPD"/navi
 
 # how2, nvm
@@ -143,20 +146,20 @@ sudo apt install ripgrep
 # topgrade
 curl -s https://api.github.com/repos/r-darwish/topgrade/releases/latest |
 	jq -r '.assets[] | select(.name|match("linux-musl")) | .browser_download_url' |
-	wget -i- -qO- | tar xz --directory "$TEMPD"
+	wget -i- -qO- | tar xz -C "$TEMPD"
 chmod +x "$TEMPD"/topgrade
 
 # xplr
 curl -s https://api.github.com/repos/sayanarijit/xplr/releases/latest |
 	jq -r '.assets[] | select(.name|match("linux.tar.gz$")) | .browser_download_url' |
-	wget -i- -qO- | tar xz --directory "$TEMPD"
+	wget -i- -qO- | tar xz -C "$TEMPD"
 chmod +x "$TEMPD"/xplr
 
 # yt-dlp
-curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o "$TEMPD/yt-dlp" &&
-chmod +x "$TEMPD/yt-dlp"
+curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o "$TEMPD"/yt-dlp &&
+chmod +x "$TEMPD"/yt-dlp
 
-sudo mv $TEMPD/* /usr/local/bin/
+sudo mv "$TEMPD"/* /usr/local/bin/
 sudo rm /usr/local/bin/LICENSE /usr/local/bin/README.md 
 
 # Make sure the temp directory gets removed on script exit.
