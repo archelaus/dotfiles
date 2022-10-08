@@ -5,11 +5,11 @@ set -xe
 if type apt &> /dev/null; then
 	PM=apt
 	sudo apt update
-	sudo apt install -yyq software-properties-common build-essential cmake stow mpv vim
+	sudo apt install -yyq software-properties-common build-essential cmake stow mpv vim jq
 elif type yum &> /dev/null; then
 	PM=yum
 	sudo yum update
-	sudo yum install git stow mpv vim
+	sudo yum install git stow mpv vim jq
 else
 	echo "What linux is this"
 	exit 1
@@ -26,6 +26,12 @@ fi
 
 # fish
 command -v fish >/dev/null || { sudo apt-add-repository ppa:fish-shell/release-3; sudo apt update; sudo apt install fish; }
+
+# as-tree
+curl -s https://api.github.com/repos/jez/as-tree/releases/latest |
+	jq -r '.assets[] | select(.name|match("linux")) | .browser_download_url' |
+	wget -i- -qO- | busybox unzip - -d "$TEMPD"
+chmod +x "$TEMPD/as-tree"
 
 # cheat.sh
 sudo apt install rlwrap
