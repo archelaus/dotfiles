@@ -2,18 +2,8 @@
 
 set -xe
 
-if type apt &> /dev/null; then
-	PM=apt
-	sudo apt update
-	sudo apt install -yyq software-properties-common build-essential cmake stow mpv vim jq
-elif type yum &> /dev/null; then
-	PM=yum
-	sudo yum update
-	sudo yum install git stow mpv vim jq
-else
-	echo "What linux is this"
-	exit 1
-fi
+sudo apt update
+sudo apt install -yyq software-properties-common build-essential cmake stow mpv vim jq
 
 # Create a temporary directory and store its name in a variable.
 TEMPD=$(mktemp -d)
