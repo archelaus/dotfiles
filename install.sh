@@ -78,6 +78,10 @@ sudo apt install exa
 sudo apt install fd-find
 ln -s $(which fdfind) "$TEMPD"/fd
 
+# fff
+git clone https://github.com/dylanaraps/fff
+cd fff && sudo make install && cd .. && rm -rf fff/
+
 # fzf
 sudo apt install fzf
 
@@ -149,11 +153,6 @@ curl -s https://api.github.com/repos/r-darwish/topgrade/releases/latest |
 	wget -i- -qO- | tar xz -C "$TEMPD"
 chmod +x "$TEMPD"/topgrade
 
-# xplr
-curl -s https://api.github.com/repos/sayanarijit/xplr/releases/latest |
-	jq -r '.assets[] | select(.name|match("linux.tar.gz$")) | .browser_download_url' |
-	wget -i- -qO- | tar xz -C "$TEMPD"
-chmod +x "$TEMPD"/xplr
 
 # yt-dlp
 curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o "$TEMPD"/yt-dlp &&
