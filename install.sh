@@ -43,8 +43,7 @@ sudo apt install bat
 ln -s $(which batcat) "$TEMPD"/bat
 
 # bottom
-curl -L https://github.com/ClementTsang/bottom/releases/latest/download/bottom_x86_64-unknown-linux-gnu.tar.gz |
-bsdtar x
+curl -L https://github.com/ClementTsang/bottom/releases/latest/download/bottom_x86_64-unknown-linux-gnu.tar.gz | bsdtar x
 chmod +x btm && rm -rf completion
 mv btm "$TEMPD"
 
