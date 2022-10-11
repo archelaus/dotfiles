@@ -153,7 +153,6 @@ curl -s https://api.github.com/repos/r-darwish/topgrade/releases/latest |
 	wget -i- -qO- | bsdtar x -C"$TEMPD"
 chmod +x "$TEMPD"/topgrade
 
-
 # yt-dlp
 curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o "$TEMPD"/yt-dlp &&
 chmod +x "$TEMPD"/yt-dlp
