@@ -4,7 +4,7 @@ set -xe
 
 sudo apt update
 sudo apt install -yyq software-properties-common build-essential cmake \
-stow mpv vim jq libarchive-tools
+stow mpv vim jq libarchive-tools rlwrap
 
 # Create a temporary directory and store its name in a variable.
 TEMPD=$(mktemp -d)
@@ -29,15 +29,13 @@ curl -s https://api.github.com/repos/jez/as-tree/releases/latest |
 chmod +x "$TEMPD"/as-tree
 
 # cheat.sh
-sudo apt install rlwrap
 curl https://cht.sh/:cht.sh > "$TEMPD"/cht.sh
 chmod +x "$TEMPD"/cht.sh
 
 # drivedlgo
 curl -s https://api.github.com/repos/jaskaranSM/drivedlgo/releases/latest |
-grep browser_download_url |
-grep Linux_$(uname -m) |
-cut -d '"' -f 4 | wget -i- -qO- | gunzip > "$TEMPD"/drivedlgo
+	jq -r '.assets[] | select(.name|match("Linux_x86_64")) | .browser_download_url' |
+	wget -i- -qO- | gunzip > "$TEMPD"/drivedlgo
 chmod +x "$TEMPD"/drivedlgo
 
 # batcat
@@ -45,15 +43,15 @@ sudo apt install bat
 ln -s $(which batcat) "$TEMPD"/bat
 
 # bottom
-curl -L https://github.com/ClementTsang/bottom/releases/latest/download/bottom_x86_64-unknown-linux-gnu.tar.gz | tar xz
+curl -L https://github.com/ClementTsang/bottom/releases/latest/download/bottom_x86_64-unknown-linux-gnu.tar.gz |
+bsdtar x
 chmod +x btm && rm -rf completion
 mv btm "$TEMPD"
-	
+
 # dust
 curl -s https://api.github.com/repos/bootandy/dust/releases/latest |
-grep browser_download_url |
-grep $(uname -m)-unknown-linux-gnu |
-cut -d '"' -f 4 | wget -i- -qO- | bsdtar x
+	jq -r '.assets[] | select(.name|match("x86_64-unknown-linux-gnu")) | .browser_download_url' |
+	wget -i- -qO- | bsdtar x
 chmod +x dust-*/dust && mv dust-*/dust "$TEMPD" && rm -rf dust-*/
 
 # docker
@@ -93,9 +91,8 @@ mv gdu_linux_amd64 "$TEMPD"/gdu
 
 # glow
 curl -s https://api.github.com/repos/charmbracelet/glow/releases/latest |
-grep browser_download_url |
-grep linux_$(uname -m) |
-cut -d '"' -f 4 | wget -i- -qO- | bsdtar x -C"$TEMPD"
+	jq -r '.assets[] | select(.name|match("linux_x86_64")) | .browser_download_url' |
+	wget -i- -qO- | bsdtar x -C"$TEMPD"
 chmod +x "$TEMPD"/glow
 
 # has
@@ -116,9 +113,8 @@ chmod +x "$TEMPD"/lazydocker
 
 # navi
 curl -s https://api.github.com/repos/denisidoro/navi/releases/latest |
-grep browser_download_url |
-grep $(uname -m)-unknown-linux |
-cut -d '"' -f 4 | wget -i- -qO- | bsdtar x -C"$TEMPD"
+	jq -r '.assets[] | select(.name|match("x86_64-unknown-linux")) | .browser_download_url' |
+	wget -i- -qO- | bsdtar x -C"$TEMPD"
 chmod +x "$TEMPD"/navi
 
 # how2, nvm
@@ -137,12 +133,9 @@ chmod +x "$TEMPD"/nnn-*
 
 # procs
 curl -s https://api.github.com/repos/dalance/procs/releases/latest |
-grep browser_download_url |
-grep $(uname -m)-linux |
-cut -d '"' -f 4 |
-wget -i- -qO- | bsdtar x
-chmod +x procs
-mv procs "$TEMPD"
+	jq -r '.assets[] | select(.name|match("linux")) | .browser_download_url' |
+	wget -i- -qO- | bsdtar x -C"$TEMPD"
+chmod +x "$TEMPD"/procs
 
 # ripgrep
 sudo apt install ripgrep
