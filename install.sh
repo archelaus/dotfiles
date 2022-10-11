@@ -3,7 +3,8 @@
 set -xe
 
 sudo apt update
-sudo apt install -yyq software-properties-common build-essential cmake stow mpv vim jq
+sudo apt install -yyq software-properties-common build-essential cmake \
+stow mpv vim jq libarchive-tools
 
 # Create a temporary directory and store its name in a variable.
 TEMPD=$(mktemp -d)
@@ -24,7 +25,7 @@ command -v fish >/dev/null || {
 # as-tree
 curl -s https://api.github.com/repos/jez/as-tree/releases/latest |
 	jq -r '.assets[] | select(.name|match("linux")) | .browser_download_url' |
-	wget -i- -qO- | busybox unzip - -d "$TEMPD"
+	wget -i- -qO- | bsdtar x -C"$TEMPD"
 chmod +x "$TEMPD"/as-tree
 
 # cheat.sh
@@ -52,7 +53,7 @@ mv btm "$TEMPD"
 curl -s https://api.github.com/repos/bootandy/dust/releases/latest |
 grep browser_download_url |
 grep $(uname -m)-unknown-linux-gnu |
-cut -d '"' -f 4 | wget -i- -qO- | tar xz
+cut -d '"' -f 4 | wget -i- -qO- | bsdtar x
 chmod +x dust-*/dust && mv dust-*/dust "$TEMPD" && rm -rf dust-*/
 
 # docker
@@ -78,10 +79,6 @@ sudo apt install exa
 sudo apt install fd-find
 ln -s $(which fdfind) "$TEMPD"/fd
 
-# fff
-git clone https://github.com/dylanaraps/fff
-cd fff && sudo make install && cd .. && rm -rf fff/
-
 # fzf
 sudo apt install fzf
 
@@ -90,7 +87,7 @@ curl -L https://github.com/antonmedv/fx/releases/latest/download/fx_linux_amd64 
 chmod +x "$TEMPD"/fx
 
 # gdu
-curl -L https://github.com/dundee/gdu/releases/latest/download/gdu_linux_amd64.tgz | tar xz
+curl -L https://github.com/dundee/gdu/releases/latest/download/gdu_linux_amd64.tgz | bsdtar x
 chmod +x gdu_linux_amd64
 mv gdu_linux_amd64 "$TEMPD"/gdu
 
@@ -98,7 +95,7 @@ mv gdu_linux_amd64 "$TEMPD"/gdu
 curl -s https://api.github.com/repos/charmbracelet/glow/releases/latest |
 grep browser_download_url |
 grep linux_$(uname -m) |
-cut -d '"' -f 4 | wget -i- -qO- | tar xz -C "$TEMPD"
+cut -d '"' -f 4 | wget -i- -qO- | bsdtar x -C"$TEMPD"
 chmod +x "$TEMPD"/glow
 
 # has
@@ -108,20 +105,20 @@ chmod +x "$TEMPD"/has
 # jdupes
 curl -s https://api.github.com/repos/jbruchon/jdupes/releases/latest |
 	jq -r '.assets[] | select(.name|match("x86-64")) | .browser_download_url' |
-	wget -i- -qO- | tar xJ
+	wget -i- -qO- | bsdtar x
 chmod +x jdupes-*/jdupes && mv jdupes-*/jdupes "$TEMPD" && rm -rf jdupes-*/
 
 # lazydocker
 curl -s https://api.github.com/repos/jesseduffield/lazydocker/releases/latest |
 	jq -r '.assets[] | select(.name|match("Linux_x86_64")) | .browser_download_url' |
-	wget -i- -qO- | tar xz -C "$TEMPD"
+	wget -i- -qO- | bsdtar x -C"$TEMPD"
 chmod +x "$TEMPD"/lazydocker
 
 # navi
 curl -s https://api.github.com/repos/denisidoro/navi/releases/latest |
 grep browser_download_url |
 grep $(uname -m)-unknown-linux |
-cut -d '"' -f 4 | wget -i- -qO- | tar xz -C "$TEMPD"
+cut -d '"' -f 4 | wget -i- -qO- | bsdtar x -C"$TEMPD"
 chmod +x "$TEMPD"/navi
 
 # how2, nvm
@@ -133,14 +130,17 @@ command -v how2 >/dev/null || {
 }
 
 # nnn
-sudo apt install nnn
+curl -s https://api.github.com/repos/jarun/nnn/releases/latest |
+	jq -r '.assets[] | select(.name|match("nerd")) | .browser_download_url' |
+	wget -i- -qO- | bsdtar x -C"$TEMPD"
+chmod +x "$TEMPD"/nnn-*
 
 # procs
 curl -s https://api.github.com/repos/dalance/procs/releases/latest |
 grep browser_download_url |
 grep $(uname -m)-linux |
 cut -d '"' -f 4 |
-wget -i- -qO- | busybox unzip -
+wget -i- -qO- | bsdtar x
 chmod +x procs
 mv procs "$TEMPD"
 
@@ -150,7 +150,7 @@ sudo apt install ripgrep
 # topgrade
 curl -s https://api.github.com/repos/r-darwish/topgrade/releases/latest |
 	jq -r '.assets[] | select(.name|match("linux-musl")) | .browser_download_url' |
-	wget -i- -qO- | tar xz -C "$TEMPD"
+	wget -i- -qO- | bsdtar x -C"$TEMPD"
 chmod +x "$TEMPD"/topgrade
 
 
