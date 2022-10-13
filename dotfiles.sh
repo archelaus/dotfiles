@@ -2,6 +2,8 @@
 
 PACKAGES=(
 	apps
+	awesome
+	cloud
 	scripts
 	vim
 )
