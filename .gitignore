@@ -6,3 +6,4 @@ vim/.vim/undo/
 get-docker.sh
 scripts/.local/bin/*
 !scripts/.local/bin/*,*
+cloud/.config/rclone/mounts.conf
