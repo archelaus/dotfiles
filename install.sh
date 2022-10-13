@@ -49,7 +49,7 @@ mv btm "$TEMPD"
 
 # dust
 curl -s https://api.github.com/repos/bootandy/dust/releases/latest |
-	jq -r '.assets[] | select(.name|match("x86_64-unknown-linux-gnu")) | .browser_download_url' |
+	jq -r '.assets[] | select(.name|match("x86_64-unknown-linux-musl")) | .browser_download_url' |
 	wget -i- -qO- | bsdtar x
 chmod +x dust-*/dust && mv dust-*/dust "$TEMPD" && rm -rf dust-*/
 
@@ -112,7 +112,7 @@ chmod +x "$TEMPD"/lazydocker
 
 # navi
 curl -s https://api.github.com/repos/denisidoro/navi/releases/latest |
-	jq -r '.assets[] | select(.name|match("x86_64-unknown-linux")) | .browser_download_url' |
+	jq -r '.assets[] | select(.name|match("linux-musl")) | .browser_download_url' |
 	wget -i- -qO- | bsdtar x -C"$TEMPD"
 chmod +x "$TEMPD"/navi
 
@@ -134,7 +134,7 @@ chmod +x "$TEMPD"/nnn-*
 curl -s https://api.github.com/repos/dalance/procs/releases/latest |
 	jq -r '.assets[] | select(.name|match("linux")) | .browser_download_url' |
 	wget -i- -qO- | bsdtar x -C"$TEMPD"
-chmod +x "$TEMPD"/procsTell git-crypt which files to encr
+chmod +x "$TEMPD"/procs
 
 # ripgrep
 sudo apt install ripgrep
