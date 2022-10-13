@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 
 PACKAGES=(
-	mpv
-	yt-dlp
-	yt-fzf
+	apps
+	scripts
 	vim
 )
 

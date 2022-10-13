@@ -4,3 +4,5 @@ fist/fishd.tmp.*
 vim/.vim/swap/
 vim/.vim/undo/
 get-docker.sh
+scripts/.local/bin/
+
