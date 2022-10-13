@@ -1,5 +1,4 @@
 .gitattributes !filter !diff
-cloud/.config/rclone/mounts.conf !filter !diff
 apps/.config/deemix/** filter=git-crypt diff=git-crypt
 apps/.config/hexchat/** filter=git-crypt diff=git-crypt
 apps/.config/kdeconnect/** filter=git-crypt diff=git-crypt
