@@ -1,5 +1,4 @@
 .gitattributes !filter !diff
-cloud/.config/rclone/mounts.conf !filter !diff
 apps/.config/deemix/** filter=git-crypt diff=git-crypt
 apps/.config/hexchat/** filter=git-crypt diff=git-crypt
 apps/.config/kdeconnect/** filter=git-crypt diff=git-crypt
@@ -7,3 +6,4 @@ apps/.config/docker-compose.yml filter=git-crypt diff=git-crypt
 awesome/.config/fish/** filter=git-crypt diff=git-crypt
 cloud/.config/drivedlgo/** filter=git-crypt diff=git-crypt
 cloud/.config/rclone/** filter=git-crypt diff=git-crypt
+cloud/.config/rclone/mounts.conf !filter !diff
