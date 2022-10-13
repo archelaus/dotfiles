@@ -83,12 +83,6 @@ sudo apt install fzf
 curl -sL https://github.com/antonmedv/fx/releases/latest/download/fx_linux_amd64 -o "$TEMPD"/fx
 chmod +x "$TEMPD"/fx
 
-# git-crypt
-curl -s https://api.github.com/repos/AGWA/git-crypt/releases/latest |
-	jq -r '.assets[] | select(.name|match("linux-x86_64")) | .browser_download_url' |
-	wget -i- -qO- > "$TEMPD"/git-crypt
-chmod +x "$TEMPD"/git-crypt
-
 # gdu
 curl -sL https://github.com/dundee/gdu/releases/latest/download/gdu_linux_amd64.tgz | bsdtar x
 chmod +x gdu_linux_amd64
