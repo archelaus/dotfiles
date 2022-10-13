@@ -43,7 +43,7 @@ sudo apt install bat
 ln -s $(which batcat) "$TEMPD"/bat
 
 # bottom
-curl -L https://github.com/ClementTsang/bottom/releases/latest/download/bottom_x86_64-unknown-linux-gnu.tar.gz | bsdtar x
+curl -sL https://github.com/ClementTsang/bottom/releases/latest/download/bottom_x86_64-unknown-linux-gnu.tar.gz | bsdtar x
 chmod +x btm && rm -rf completion
 mv btm "$TEMPD"
 
@@ -80,11 +80,17 @@ ln -s $(which fdfind) "$TEMPD"/fd
 sudo apt install fzf
 
 # fx
-curl -L https://github.com/antonmedv/fx/releases/latest/download/fx_linux_amd64 -o "$TEMPD"/fx
+curl -sL https://github.com/antonmedv/fx/releases/latest/download/fx_linux_amd64 -o "$TEMPD"/fx
 chmod +x "$TEMPD"/fx
 
+# git-crypt
+curl -s https://api.github.com/repos/AGWA/git-crypt/releases/latest |
+	jq -r '.assets[] | select(.name|match("linux-x86_64")) | .browser_download_url' |
+	wget -i- -qO- > "$TEMPD"/git-crypt
+chmod +x "$TEMPD"/git-crypt
+
 # gdu
-curl -L https://github.com/dundee/gdu/releases/latest/download/gdu_linux_amd64.tgz | bsdtar x
+curl -sL https://github.com/dundee/gdu/releases/latest/download/gdu_linux_amd64.tgz | bsdtar x
 chmod +x gdu_linux_amd64
 mv gdu_linux_amd64 "$TEMPD"/gdu
 
@@ -134,7 +140,7 @@ chmod +x "$TEMPD"/nnn-*
 curl -s https://api.github.com/repos/dalance/procs/releases/latest |
 	jq -r '.assets[] | select(.name|match("linux")) | .browser_download_url' |
 	wget -i- -qO- | bsdtar x -C"$TEMPD"
-chmod +x "$TEMPD"/procs
+chmod +x "$TEMPD"/procsTell git-crypt which files to encr
 
 # ripgrep
 sudo apt install ripgrep
@@ -146,7 +152,7 @@ curl -s https://api.github.com/repos/r-darwish/topgrade/releases/latest |
 chmod +x "$TEMPD"/topgrade
 
 # yt-dlp
-curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o "$TEMPD"/yt-dlp &&
+curl -sL https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o "$TEMPD"/yt-dlp &&
 chmod +x "$TEMPD"/yt-dlp
 
 sudo mv "$TEMPD"/* /usr/local/bin/
