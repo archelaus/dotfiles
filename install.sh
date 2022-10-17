@@ -145,6 +145,14 @@ curl -s https://api.github.com/repos/r-darwish/topgrade/releases/latest |
 	wget -i- -qO- | bsdtar x -C"$TEMPD"
 chmod +x "$TEMPD"/topgrade
 
+# tv
+curl -s https://api.github.com/repos/alexhallam/tv/releases/latest |
+	jq -r '.assets[] | select(.name|match("linux-musl")) | .browser_download_url' |
+	wget -i- -qO- | bsdtar x
+chmod +x tidy-viewer-*/tidy-viewer &&
+mv tidy-viewer-*/tidy-viewer "$TEMPD" &&
+rm -rf ./tidy-viewer-*/
+
 # yt-dlp
 curl -sL https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o "$TEMPD"/yt-dlp &&
 chmod +x "$TEMPD"/yt-dlp
