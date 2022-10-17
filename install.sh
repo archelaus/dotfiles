@@ -127,8 +127,8 @@ command -v how2 >/dev/null || {
 # nnn
 curl -s https://api.github.com/repos/jarun/nnn/releases/latest |
 	jq -r '.assets[] | select(.name|match("nerd")) | .browser_download_url' |
-	wget -i- -qO- | bsdtar x -C"$TEMPD"
-chmod +x "$TEMPD"/nnn-*
+	wget -i- -qO- | bsdtar x
+chmod +x nnn-* && mv nnn-* "$TEMPD"/nnn
 
 # procs
 curl -s https://api.github.com/repos/dalance/procs/releases/latest |
