@@ -32,12 +32,6 @@ chmod +x "$TEMPD"/as-tree
 curl https://cht.sh/:cht.sh > "$TEMPD"/cht.sh
 chmod +x "$TEMPD"/cht.sh
 
-# drivedlgo
-curl -s https://api.github.com/repos/jaskaranSM/drivedlgo/releases/latest |
-	jq -r '.assets[] | select(.name|match("Linux_x86_64")) | .browser_download_url' |
-	wget -i- -qO- | gunzip > "$TEMPD"/drivedlgo
-chmod +x "$TEMPD"/drivedlgo
-
 # batcat
 sudo apt install bat
 ln -s $(which batcat) "$TEMPD"/bat
@@ -46,6 +40,16 @@ ln -s $(which batcat) "$TEMPD"/bat
 curl -sL https://github.com/ClementTsang/bottom/releases/latest/download/bottom_x86_64-unknown-linux-gnu.tar.gz | bsdtar x
 chmod +x btm && rm -rf completion
 mv btm "$TEMPD"
+
+# d-fi
+curl -sL https://github.com/d-fi/releases/releases/latest/download/d-fi-linux.zip | bsdtar x -C"$TEMPD"
+chmod +x "$TEMPD"/d-fi
+
+# drivedlgo
+curl -sL https://api.github.com/repos/jaskaranSM/drivedlgo/releases/latest |
+	jq -r '.assets[] | select(.name|match("Linux_x86_64")) | .browser_download_url' |
+	wget -i- -qO- | gunzip > "$TEMPD"/drivedlgo
+chmod +x "$TEMPD"/drivedlgo
 
 # dust
 curl -s https://api.github.com/repos/bootandy/dust/releases/latest |
