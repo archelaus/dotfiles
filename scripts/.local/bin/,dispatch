@@ -1,0 +1,91 @@
+#!/bin/bash
+
+url="${1}"
+
+# connect to "KDE connect"
+kde=$( kdeconnect-cli -a | grep -oh "^[0-9]" )
+
+if [ ! "$url" ]; then
+    echo "Invalid arguments"
+    exit 1
+fi
+
+# tested sites. 
+supportedTypes=('redd.it')
+
+isConnDev=true
+
+
+DATE=$(date +%Y-%m-%d_%H-%M-%S)
+
+# check if user exists.
+if [  "$kde" = "0" ]; then
+    echo "No KDE user connected"
+    isConnDev=false
+    id=$( adb devices | grep -oh "^\S*[0-9]" )
+    if [ -z "$id" ]; then
+        echo "ADB device list is empty."
+        exit 1
+    fi
+    loc="/sdcard/Download"
+else
+    id=$( kdeconnect-cli -a --id-only ) # Store client identity number to direct data.
+fi
+
+
+path="/home/aayu/Pictures/Spectacle/"
+name="kdeconn-$DATE"
+
+# extract file type from URL
+fileType=$( basename "$url" | sed "s/?.*//g;s/^.*\.//" )
+
+if [ -n "$fileType" ]; then
+    fileType="png"
+fi
+
+# resource identifier
+kind=$( echo "$url" | grep "${supportedTypes[0]}" )
+
+# Specific for REDDIT video downloads
+function redditGif(){
+    if [ "$fileType" = "gif" ]; then
+        fileType="mp4"
+    fi
+}
+
+# save file
+# function saveFile(){
+#     #
+# }
+
+if [ -n "$kind" ]; then
+    redditGif
+fi
+
+# arguments (Device-ID, target URL)
+function downloadContent(){
+    file="$path$name.$fileType"
+    echo $file
+    rm -f $file
+    wget -qO "$file" - "$url"
+}
+
+# transfer to connected device
+function sendFile(){
+    if [ "$isConnDev" = true ]; then
+        kdeconnect-cli -d "$id" --share "$file"
+    else
+        adb push "$file" "$loc"
+    fi
+}
+
+# final block
+function start(){
+    downloadContent
+    sendFile
+}
+
+start
+
+# wait $(rm -rf $filename)
+

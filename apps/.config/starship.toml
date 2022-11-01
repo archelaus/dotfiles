@@ -76,7 +76,7 @@ symbol = "🅢 "
 
 [status]
 format = "[$symbol $status]($style) "
-symbol = "✖"
+symbol = "✖ "
 success_symbol = ""	
 not_executable_symbol = "🚫"
 not_found_symbol = "🔍"
