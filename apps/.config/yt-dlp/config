@@ -1,14 +1,35 @@
---add-metadata
-# --write-description	
-# --write-annotations
---sub-langs en.*
-# --no-write-subs
-# --no-write-auto-subs
-# --convert-subs srt
---write-auto-subs
-# --write-subs
+# download
+--downloader-args aria2c:"-c -j16 -x16 -s16 -k1M"
+
+# filesystem
+--no-part
+# --write-info-json
+# --write-playlist-metafiles
+
+# post-processing
+--convert-subs srt
+--embed-chapters
+--embed-info-json
 --embed-thumbnail
---embed-subs
+# --embed-subs
+
+# sponsorblock
+# --sponsorblock-mark all
+# --sponsorblock-remove all
+
+# subtitle
+--write-subs
+--write-auto-subs
+--sub-langs "en.*"
+
+# verbosity
+--quiet
+--progress
+
+# video-format
+# -f "bv*[height<=1080]+ba/b[height<=1080]"
+-S res:1080
 --merge-output-format mkv
---external-downloader aria2c
--f "bv*[height<=1080]+ba/b[height<=1080]"
+
+# workarounds
+# --no-check-certificates

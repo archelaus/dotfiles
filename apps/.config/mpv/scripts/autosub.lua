@@ -3,7 +3,7 @@
 --=============================================================================
 --          This script uses Subliminal to download subtitles,
 --          so make sure to specify your system's Subliminal location below:
-local subliminal = '/home/aayu/.myvenv/bin/subliminal'
+local subliminal = '/home/aayu/.local/bin/subliminal'
 --=============================================================================
 -->>    SUBTITLE LANGUAGE:
 --=============================================================================
@@ -45,7 +45,7 @@ local logins = {
 local bools = {
     auto = false,   -- Automatically download subtitles, no hotkeys required
     debug = false, -- Use `--debug` in subliminal command for debug output
-    force = false,  -- Force download; will overwrite existing subtitle files
+    force = true,  -- Force download; will overwrite existing subtitle files
     utf8 = true,   -- Save all subtitle files as UTF-8
 }
 local excludes = {
@@ -59,8 +59,10 @@ local includes = {
     -- If anything is defined here, only the movies with a path
     -- containing any of these strings/paths will auto-download subtitles.
     -- Full paths are also allowed, e.g.:
-    '/mnt/Movies',
-    '/mnt/Misc./TV Shows',
+    -- '/home/david/Videos',
+    '/mnt/1. Movies',
+    '/mnt/2. TV Shows'
+    
 }
 --=============================================================================
 local utils = require 'mp.utils'
@@ -69,6 +71,11 @@ local utils = require 'mp.utils'
 -- Download function: download the best subtitles in most preferred language
 function download_subs(language)
     language = language or languages[1]
+    if #language == 0 then
+        log('No Language found\n')
+        return false
+    end
+            
     log('Searching ' .. language[1] .. ' subtitles ...', 30)
 
     -- Build the `subliminal` command, starting with the executable:
@@ -131,41 +138,7 @@ function control_downloads()
     mp.commandv('rescan_external_files')
     directory, filename = utils.split_path(mp.get_property('path'))
 
-    if directory:find('^http') then
-        mp.msg.warn('Automatic subtitle downloading is disabled for web streaming')
-        return
-    end
-
-    if not bools.auto then
-        mp.msg.warn('Automatic downloading disabled!')
-        return
-    end
-
-    for _, exclude in ipairs(excludes) do
-        local escaped_exclude = exclude:gsub('%W','%%%0')
-        local excluded = directory:find(escaped_exclude)
-
-        if excluded then
-            mp.msg.warn('This path is excluded from auto-downloading subs')
-            return
-        end
-    end
-
-    for i, include in ipairs(includes) do
-        local escaped_include = include:gsub('%W','%%%0')
-        local included = directory:find(escaped_include)
-
-        if included then break
-        elseif i == #includes then
-            mp.msg.warn('This path is not included for auto-downloading subs')
-            return
-        end
-    end
-
-    local duration = tonumber(mp.get_property('duration'))
-    if duration < 900 then
-        mp.msg.warn('Video is less than 15 minutes\n' ..
-                    '=> NOT downloading any subtitles')
+    if not autosub_allowed() then
         return
     end
 
@@ -194,7 +167,60 @@ function control_downloads()
     log('No subtitles were found')
 end
 
--- Check if new subtitles should be downloaded in this language:
+-- Check if subtitles should be auto-downloaded:
+function autosub_allowed()
+    local duration = tonumber(mp.get_property('duration'))
+    local active_format = mp.get_property('file-format')
+
+    if not bools.auto then
+        mp.msg.warn('Automatic downloading disabled!')
+        return false
+    elseif duration < 900 then
+        mp.msg.warn('Video is less than 15 minutes\n' ..
+                      '=> NOT auto-downloading subtitles')
+        return false
+    elseif directory:find('^http') then
+        mp.msg.warn('Automatic subtitle downloading is disabled for web streaming')
+        return false
+    elseif active_format:find('^cue') then
+        mp.msg.warn('Automatic subtitle downloading is disabled for cue files')
+        return false
+    else
+        local not_allowed = {'aiff', 'ape', 'flac', 'mp3', 'ogg', 'wav', 'wv', 'tta'}
+
+        for _, file_format in pairs(not_allowed) do
+            if file_format == active_format then
+                mp.msg.warn('Automatic subtitle downloading is disabled for audio files')
+                return false
+            end
+        end
+
+        for _, exclude in pairs(excludes) do
+            local escaped_exclude = exclude:gsub('%W','%%%0')
+            local excluded = directory:find(escaped_exclude)
+
+            if excluded then
+                mp.msg.warn('This path is excluded from auto-downloading subs')
+                return false
+            end
+        end
+
+        for i, include in ipairs(includes) do
+            local escaped_include = include:gsub('%W','%%%0')
+            local included = directory:find(escaped_include)
+
+            if included then break
+            elseif i == #includes then
+                mp.msg.warn('This path is not included for auto-downloading subs')
+                return false
+            end
+        end
+    end
+
+    return true
+end
+
+-- Check if subtitles should be downloaded in this language:
 function should_download_subs_in(language)
     for i, track in ipairs(sub_tracks) do
         local subtitles = track['external'] and
@@ -231,6 +257,6 @@ function log(string, secs)
 end
 
 
-mp.add_key_binding('a', 'download_subs', download_subs)
-mp.add_key_binding('s', 'download_subs2', download_subs2)
+mp.add_key_binding('F1', 'download_subs', download_subs)
+mp.add_key_binding('F2', 'download_subs2', download_subs2)
 mp.register_event('file-loaded', control_downloads)
