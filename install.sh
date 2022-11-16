@@ -140,6 +140,9 @@ curl -s https://api.github.com/repos/dalance/procs/releases/latest |
 	wget -i- -qO- | bsdtar x -C"$TEMPD"
 chmod +x "$TEMPD"/procs
 
+# rclone
+sudo -v ; curl https://rclone.org/install.sh | sudo bash -s beta
+
 # ripgrep
 sudo apt install ripgrep
 
