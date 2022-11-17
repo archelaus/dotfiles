@@ -1,6 +1,39 @@
 #!/usr/bin/env bash
 
-set -xe
+set -x
+set -euo pipefail
+# Consider Starting All Your Bash Scripts with These Options.
+# https://medium.com/factualopinions/consider-starting-all-your-bash-scripts-with-these-options-74fbec0cbb83
+
+if ! command -v systemctl >/dev/null 2>&1; then
+    echo "> Sorry but this script is only for Linux with systemd, eg: Ubuntu 16.04+/Centos 7+ ..."
+    exit 1
+fi
+
+OSARCH=$(uname -m)
+case $OSARCH in 
+    x86_64)
+        BINTAG=Linux_x86_64
+        ;;
+    i*86)
+        BINTAG=Linux_i386
+        ;;
+    arm64)
+        BINTAG=Linux_arm64
+        ;;
+    arm*)
+        BINTAG=Linux_armv6
+        ;;
+    *)
+        echo "unsupported OSARCH: $OSARCH"
+        exit 1
+        ;;
+esac
+
+# if [[ $(id -u) -ne 0 ]]; then
+#    echo "This script must be run as root" 
+#    exit 1
+# fi
 
 sudo apt update
 sudo apt install -yyq software-properties-common build-essential cmake \
@@ -37,7 +70,7 @@ sudo apt install bat
 ln -s $(which batcat) "$TEMPD"/bat
 
 # bottom
-curl -sL https://github.com/ClementTsang/bottom/releases/latest/download/bottom_x86_64-unknown-linux-gnu.tar.gz | bsdtar x
+curl -sL https://github.com/ClementTsang/bottom/releases/download/nightly/bottom_x86_64-unknown-linux-musl.tar.gz | bsdtar x
 chmod +x btm && rm -rf completion
 mv btm "$TEMPD"
 
@@ -141,7 +174,7 @@ curl -s https://api.github.com/repos/dalance/procs/releases/latest |
 chmod +x "$TEMPD"/procs
 
 # rclone
-sudo -v ; curl https://rclone.org/install.sh | sudo bash -s beta
+curl https://rclone.org/install.sh | sudo bash -s beta
 
 # ripgrep
 sudo apt install ripgrep

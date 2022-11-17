@@ -1,5 +1,6 @@
 apps/.config/mpv/watch_later/
 apps/.config/mpv/mpvClipboard.log
+apps/.config/mpv/mpvHistory.log
 vim/.vim/swap/
 vim/.vim/undo/
 get-docker.sh
