@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 
-set -x
-set -euo pipefail
 # Consider Starting All Your Bash Scripts with These Options.
 # https://medium.com/factualopinions/consider-starting-all-your-bash-scripts-with-these-options-74fbec0cbb83
+set -euo pipefail
 
 if ! command -v systemctl >/dev/null 2>&1; then
     echo "> Sorry but this script is only for Linux with systemd, eg: Ubuntu 16.04+/Centos 7+ ..."
@@ -35,6 +34,7 @@ fi
 #    exit 1
 # fi
 
+set -x
 sudo apt update
 sudo apt install -yyq software-properties-common build-essential cmake \
 stow mpv vim jq libarchive-tools rlwrap
@@ -174,7 +174,7 @@ curl -s https://api.github.com/repos/dalance/procs/releases/latest |
 chmod +x "$TEMPD"/procs
 
 # rclone
-curl https://rclone.org/install.sh | sudo bash -s beta
+curl https://rclone.org/install.sh | sudo bash -s beta || continue
 
 # ripgrep
 sudo apt install ripgrep
