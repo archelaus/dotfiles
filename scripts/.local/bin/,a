@@ -1,0 +1,125 @@
+#!/bin/sh
+
+have() {
+	have=$(which "$1" 2>/dev/null) && test -n "$have"
+}
+
+if have apt || have apt-get || have yum; then
+	cmd=$have
+else
+	echo "a: could not find package manager software" >&2
+	exit 1
+fi
+
+if [ 0 -eq "$(id -u)" ]; then
+	sudo=
+elif have sudo; then
+	sudo=sudo
+elif have s; then
+	sudo=s
+else
+	echo 'a: s or sudo required' >&2
+	exit 1
+fi
+
+# Normalise command by removing full path and collapse ‘apt’ and ‘apt-get’ into
+# a single entry.
+normalised=${cmd##*/}
+normalised=${normalised%-get}
+
+# If "$1" is not one of the known commands, assume install.  Also do some
+# mapping so yum commands look more like apt-get commands.  I have nothing
+# against yum but I'm more used to apt-get.
+case "${normalised##*/}:$1" in
+yum:remove|yum:purge)
+	shift
+	set -- erase "$@"
+	;;
+
+yum:--help)
+	shift
+	set -- help "$@"
+	;;
+
+yum:check | \
+yum:check-update | \
+yum:clean | \
+yum:deplist | \
+yum:distribution-synchronization | \
+yum:downgrade | \
+yum:groupinfo | \
+yum:groupinstall | \
+yum:grouplist | \
+yum:groupremove | \
+yum:history | \
+yum:info | \
+yum:install | \
+yum:list | \
+yum:load-transaction | \
+yum:makecache | \
+yum:provides | \
+yum:reinstall | \
+yum:repolist | \
+yum:resolvedep | \
+yum:search | \
+yum:shell | \
+yum:update-minimal | \
+yum:updateinfo | \
+yum:upgrade | \
+yum:help | \
+apt:install | \
+apt:remove | \
+apt:hold | \
+apt:unhold | \
+apt:markauto | \
+apt:unmarkauto | \
+apt:forbid-version | \
+apt:update | \
+apt:upgrade | \
+apt:safe-upgrade | \
+apt:full-upgrade | \
+apt:forget-new | \
+apt:search | \
+apt:show | \
+apt:clean | \
+apt:autoclean | \
+apt:changelog | \
+apt:download | \
+apt:reinstall | \
+apt:why | \
+apt:why-not)
+	;;
+
+apt:purge)
+	shift
+	set -- remove --purge --auto-remove "$@"
+	;;
+
+yum:?*|apt:?*)
+	set -- install "$@"
+	;;
+
+*)
+	echo 'a: do not know what to do' >&2
+	exit 1
+esac
+
+run() {
+	echo "+" "$@" >&2
+	$sudo "$@"
+}
+
+case "${normalised##*/}:$1" in apt:*install|apt:*upgrade)
+	age=$(( $(date +%s) - $(stat -c %Y /var/cache/apt/pkgcache.bin) ))
+	if [ $age -ge $((24 * 3600)) ]; then
+		run "$cmd" update
+		if have apt-file; then
+			run "$have" update
+		fi
+	fi
+esac
+
+run "$cmd" "$@"
+if [ $# -eq 1 ] && [ "$1" = update ] && have apt-file; then
+	run "$have" update
+fi
