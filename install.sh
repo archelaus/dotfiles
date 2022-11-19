@@ -123,6 +123,10 @@ sudo apt install fzf
 curl -sL https://github.com/antonmedv/fx/releases/latest/download/fx_linux_amd64 -o "$TEMPD"/fx
 chmod +x "$TEMPD"/fx
 
+# go-upload
+curl -sL https://github.com/Sorrow446/go-upload/latest/download/go-ul_linux_x64 -o "$TEMPD"/go-ul
+chmod +x "$TEMPD"/go-ul
+
 # gdu
 curl -sL https://github.com/dundee/gdu/releases/latest/download/gdu_linux_amd64.tgz | bsdtar x
 chmod +x gdu_linux_amd64

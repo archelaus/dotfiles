@@ -1,0 +1,24 @@
+#!/usr/bin/env python3
+
+from WE import we
+
+wet = we()
+# to upload a file/folder to the server
+fpath = input("Enter the file/folder path (full): ")
+if 'https' in fpath:
+    print("\nDownloading from WeTransfer 🐙")
+    wet.download(fpath)
+    # print("\nDownloaded to: ", metadata)
+else:
+    dname = input("Display name? ")
+    msg = input("Message? ")
+    print("\nUploading to WeTransfer 🐙")
+    metadata = wet.upload(fpath, dname, msg)
+    # pprint(metadata)
+
+    print(
+        f"\nName: {metadata['recommended_filename']}\nURL: {metadata['shortened_url']}\nExpiry date: {metadata['expires_at']}")
+    if msg:
+        print(f"Message: {metadata['message']}")
+    if dname:
+        print(f"Display name: {metadata['display_name']}")
