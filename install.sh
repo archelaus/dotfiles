@@ -81,6 +81,10 @@ mv btm "$TEMPD"
 curl -sL https://github.com/d-fi/releases/releases/latest/download/d-fi-linux.zip | bsdtar x -C"$TEMPD"
 chmod +x "$TEMPD"/d-fi
 
+# dict
+curl -sL https://github.com/BetaPictoris/dict/releases/latest/download/dict -o "$TEMPD"/dict
+chmod +x "$TEMPD"/dict
+
 # drivedlgo
 curl -sL https://api.github.com/repos/jaskaranSM/drivedlgo/releases/latest |
 	jq -r '.assets[] | select(.name|match("Linux_x86_64")) | .browser_download_url' |
@@ -173,6 +177,9 @@ curl -s https://api.github.com/repos/jarun/nnn/releases/latest |
 	jq -r '.assets[] | select(.name|match("nerd")) | .browser_download_url' |
 	wget -i- -qO- | bsdtar x
 chmod +x nnn-* && mv nnn-* "$TEMPD"/nnn
+
+# pipx
+python3 -m pip install --user pipx
 
 # procs
 curl -s https://api.github.com/repos/dalance/procs/releases/latest |
