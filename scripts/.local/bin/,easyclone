@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+
+cecho() {
+        local code="\033["
+        case "$1" in
+                black  | bk) color="${code}0;30m";;
+                red    |  r) color="${code}1;31m";;
+                green  |  g) color="${code}1;32m";;
+                yellow |  y) color="${code}1;33m";;
+                blue   |  b) color="${code}1;34m";;
+                purple |  p) color="${code}1;35m";;
+                cyan   |  c) color="${code}1;36m";;
+                gray   | gr) color="${code}0;37m";;
+                *) local text="$1"
+        esac
+        [ -z "$text" ] && local text="$color$2${code}0m"
+        echo -e "$text"
+}
+
+run() {
+	cecho g "\n¶ fclone $1"
+	read -p "Enter link or ID of parent folder: " link
+	folder_id="$(echo "$link" | rg -o "([\w-]){33}|([\w-]){19}")"
+	# cecho g "\n$folder_id\n"
+	fclone lsf -R ddlbottd:{$folder_id} --files-only --fast-list |
+	xargs -I% bash -c 'fclone $0 ddlbottd:{$1}/"%" ddlbottd:{1uiOBnr0SpCOYDG10G1qzChEKQJkopzyA} -P' $1 $folder_id &&
+	cecho -c "\nFinished!\n"
+}
+
+while true; do
+	cecho g "1.(M)ove\n2.(C)opy\n3.(Q)uit\n"
+	read -p "Choose: " opt
+		case $opt in
+		  1|m|M)
+		    run move 
+		    ;;
+		  2|c|C)
+		    run copy
+		    ;;
+		  3|q|Q)
+		  	cecho r "\nExiting.."; break
+		    ;;
+		  *) 
+		    cecho r "\nInvalid option: $opt\n"
+		    ;;
+		esac
+done
