@@ -152,6 +152,12 @@ curl -s https://api.github.com/repos/jbruchon/jdupes/releases/latest |
 	wget -i- -qO- | bsdtar x
 chmod +x jdupes-*/jdupes && mv jdupes-*/jdupes "$TEMPD" && rm -rf jdupes-*/
 
+# lazygit
+curl -s https://api.github.com/repos/jesseduffield/lazygit/releases/latest |
+	jq -r '.assets[] | select(.name|match("Linux_x86_64")) | .browser_download_url' |
+	wget -i- -qO- | bsdtar x -C"$TEMPD"
+chmod +x "$TEMPD"/lazygit
+
 # lazydocker
 curl -s https://api.github.com/repos/jesseduffield/lazydocker/releases/latest |
 	jq -r '.assets[] | select(.name|match("Linux_x86_64")) | .browser_download_url' |
