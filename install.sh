@@ -64,6 +64,12 @@ chmod +x "$TEMPD"/as-tree
 # anypaste
 curl -Lo "$TEMPD"/anypaste https://anypaste.xyz/sh
 
+# atuin
+curl -s https://api.github.com/repos/ellie/atuin/releases/latest |
+	jq -r '.assets[] | select(.name|match("linux")) | .browser_download_url' |
+	wget -i- -qO- | bsdtar x
+chmod +x atuin-*/atuin && mv atuin-*/atuin "$TEMPD" && rm -rf atuin-*/
+
 # cheat.sh
 curl https://cht.sh/:cht.sh > "$TEMPD"/cht.sh
 chmod +x "$TEMPD"/cht.sh
@@ -177,12 +183,6 @@ command -v how2 >/dev/null || {
 	nvm install latest
 	npm install -g how2
 }
-
-# mcfly
-curl -s https://api.github.com/repos/cantino/mcfly/releases/latest |
-	jq -r '.assets[] | select(.name|match("x86_64-unknown-linux-musl")) | .browser_download_url' |
-	wget -i- -qO- | bsdtar x -C"$TEMPD"
-chmod +x "$TEMPD"/mcfly
 
 # nnn
 curl -s https://api.github.com/repos/jarun/nnn/releases/latest |
