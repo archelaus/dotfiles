@@ -37,11 +37,10 @@ curl -sSf https://raw.githubusercontent.com/archelaus/dotfiles/master/install.sh
 - Split things into multiple files whenever possible
 - Minimalism
 - UNIX-y, every tool does its own thing well
-- No unnecessary fluff or visual effects
 - Focus on maximising productivity
 - Keep the home directory as clean as possible (XDG-compliance)
 
-## [NYI] The all important obligatory screenshot
+## The all important obligatory screenshot
 
 ![desktop rice](desktop.png)
 
