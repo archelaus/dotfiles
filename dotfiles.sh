@@ -1,9 +1,7 @@
-#!/usr/bin/env bash
+# not working
 
 PACKAGES=(
 	apps
-	scripts
-	vim
 )
 
 for PKG in ${PACKAGES[@]}; do
@@ -14,6 +12,4 @@ for PKG in ${PACKAGES[@]}; do
 			rm -f "$HOME/$filename"
 		fi
 	done
-
-	stow --verbose $PKG
 done
