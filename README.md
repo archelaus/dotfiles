@@ -12,13 +12,25 @@ curl -sSf https://raw.githubusercontent.com/archelaus/dotfiles/master/install.sh
 
 | package name | what it do |
 | - | - |
+[atuin](https://atuin.sh/) | shell history
+[bat](https://github.com/sharkdp/bat) | cat clone
+[bottom](https://clementtsang.github.io/bottom/) | system monitor
+[dict](https://github.com/BetaPictoris/dict) | command line dictionary
+[dust](https://github.com/repos/bootandy/dust) | du in rust
+[exa](https://the.exa.website/) | modern ls
+[fd](https://github.com/sharkdp/fd) | user friendly find
 [fish](https://fishshell.com/) | friendly interactive shell
+[fx](https://fx.wtf/) | json viewer
+[gdu](https://github.com/dundee/gdu) | du in go
+[glow](https://github.com/charmbracelet/glow) | markdown in terminal
 [mpv](https://github.com/mpv-player/mpv) | command line video player
+[nnn](https://github.com/jarun/nnn) | terminal file manager
 [rofi](https://github.com/davatorium/rofi) | dmenu replacement
+[navi](https://github.com/denisidoro/navi) | interactive cheatsheet
+[procs](https://github.com/dalance/procs) | ps in rust
 [starship](https://starship.rs/) | shell prompt
 [topgrade](https://github.com/r-darwish/topgrade) | package manager
 [yt-dlp](https://github.com/yt-dlp/yt-dlp) | youtube-dl fork with additional features and fixes
-[yt-fzf](https://github.com/pystardust/ytfzf) | find and watch youtube videos from the terminal	
 [vim](https://www.vim.org/) | text editor
 
 ## Philosophy
