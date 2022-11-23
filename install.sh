@@ -70,10 +70,6 @@ curl -s https://api.github.com/repos/ellie/atuin/releases/latest |
 	wget -i- -qO- | bsdtar x
 chmod +x atuin-*/atuin && mv atuin-*/atuin "$TEMPD" && rm -rf atuin-*/
 
-# cheat.sh
-curl https://cht.sh/:cht.sh > "$TEMPD"/cht.sh
-chmod +x "$TEMPD"/cht.sh
-
 # batcat
 sudo apt install bat
 ln -s $(which batcat) "$TEMPD"/bat
@@ -82,6 +78,10 @@ ln -s $(which batcat) "$TEMPD"/bat
 curl -sL https://github.com/ClementTsang/bottom/releases/download/nightly/bottom_x86_64-unknown-linux-musl.tar.gz | bsdtar x
 chmod +x btm && rm -rf completion
 mv btm "$TEMPD"
+
+# cheat.sh
+curl https://cht.sh/:cht.sh > "$TEMPD"/cht.sh
+chmod +x "$TEMPD"/cht.sh
 
 # d-fi
 curl -sL https://github.com/d-fi/releases/releases/latest/download/d-fi-linux.zip | bsdtar x -C"$TEMPD"
