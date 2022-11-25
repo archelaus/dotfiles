@@ -165,6 +165,12 @@ curl -s https://api.github.com/repos/jesseduffield/lazydocker/releases/latest |
 	wget -i- -qO- | bsdtar x -C"$TEMPD"
 chmod +x "$TEMPD"/lazydocker
 
+# lsd
+curl -s https://api.github.com/repos/Peltoche/lsd/releases/latest |
+	jq -r '.assets[] | select(.name|match("x86_64-unknown-linux-musl")) | .browser_download_url' |
+	wget -i- -qO- | bsdtar x
+chmod +x lsd-*/lsd && mv lsd-*/lsd "$TEMPD" && rm -rf lsd-*/lsd
+
 # navi
 curl -s https://api.github.com/repos/denisidoro/navi/releases/latest |
 	jq -r '.assets[] | select(.name|match("linux-musl")) | .browser_download_url' |
