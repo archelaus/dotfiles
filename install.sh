@@ -188,12 +188,6 @@ chmod +x nnn-* && mv nnn-* "$TEMPD"/nnn
 # pipx
 python3 -m pip install --user pipx
 
-# procs
-curl -s https://api.github.com/repos/dalance/procs/releases/latest |
-	jq -r '.assets[] | select(.name|match("linux")) | .browser_download_url' |
-	wget -i- -qO- | bsdtar x -C"$TEMPD"
-chmod +x "$TEMPD"/procs
-
 # rclone
 curl https://rclone.org/install.sh | sudo bash -s beta || continue
 
