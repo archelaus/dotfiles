@@ -1,0 +1,30 @@
+#!/bin/bash
+
+[[ -z $1 ]] && { echo "No link passed"; exit 1; }
+
+id=$(sed 's|.*gofile.io/d/||g' <<< "$1")
+echo "Downloading $id"
+
+#get guest account token for url and cookie
+token=$(curl -s 'https://api.gofile.io/createAccount' | jq -r '.data.token' 2>/dev/null)
+[[ $? -eq 0 ]] || { echo "Creating guest account failed, please try again later"; exit 1; }
+
+#get content info from api
+resp=$(curl 'https://api.gofile.io/getContent?contentId='"$id"'&token='"$token"'&websiteToken=12345&cache=true' 2>/dev/null)
+[[ $? -eq 0 ]] || { echo "URL unreachable, check provided link"; exit 1; }
+
+mkdir "$id" 2>/dev/null
+cd "$id"
+
+wget '--header=Cookie: accountToken='"$token" --delete-after "$1" -q -c -T 5 -t 1
+[[ $? -eq 0 ]] || { echo "Fetching page failed, check provided link"; exit 1; }
+
+for i in $(jq '.data.contents | keys | .[]' <<< "$resp"); do
+  filename=$(jq -r '.data.contents['"$i"'].name' <<< "$resp")
+  link=$(jq -r '.data.contents['"$i"'].link' <<< "$resp")
+
+  if [ ! -f "$filename" ] ; then
+    wget '--header=Cookie: accountToken='"$token" -O "$filename" "$link" -q --show-progress -c -T 5 -t 1
+    [ "$?" -ne 0 ] && echo "Downloading ""$filename"" failed, please try again later" && rm "$filename"
+  fi
+done
