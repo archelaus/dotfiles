@@ -147,6 +147,13 @@ chmod +x "$TEMPD"/glow
 curl -sL https://git.io/_has | tee "$TEMPD"/has >/dev/null
 chmod +x "$TEMPD"/has
 
+# insect
+if command -v insect >/dev/null; then
+	npm update -g insect
+else
+	npm install -g insect
+fi
+
 # jdupes
 curl -s https://api.github.com/repos/jbruchon/jdupes/releases/latest |
 	jq -r '.assets[] | select(.name|match("x86-64")) | .browser_download_url' |
