@@ -37,7 +37,7 @@ fi
 set -x
 sudo apt update
 sudo apt install -yyq software-properties-common build-essential cmake \
-stow mpv vim jq libarchive-tools rlwrap
+stow mpv vim jq libarchive-tools rlwrap zoxide
 
 # Create a temporary directory and store its name in a variable.
 TEMPD=$(mktemp -d)
