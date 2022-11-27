@@ -63,6 +63,7 @@ chmod +x "$TEMPD"/as-tree
 
 # anypaste
 curl -Lo "$TEMPD"/anypaste https://anypaste.xyz/sh
+chmod +x "$TEMPD"/anypaste
 
 # atuin
 curl -s https://api.github.com/repos/ellie/atuin/releases/latest |
