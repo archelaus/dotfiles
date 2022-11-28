@@ -42,7 +42,7 @@ curl -sSf https://raw.githubusercontent.com/archelaus/dotfiles/master/install.sh
 
 ## The all important obligatory screenshot
 
-![desktop rice](terminal.png)
+<img src="https://raw.githubusercontent.com/archelaus/dotfiles/main/terminal.png" width=50% height=50%>
 
 ## License
 
