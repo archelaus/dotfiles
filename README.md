@@ -42,7 +42,7 @@ curl -sSf https://raw.githubusercontent.com/archelaus/dotfiles/master/install.sh
 
 ## The all important obligatory screenshot
 
-<img src="https://raw.githubusercontent.com/archelaus/dotfiles/main/terminal.png" width=50% height=50%>
+<img src="https://raw.githubusercontent.com/archelaus/dotfiles/main/terminal.png" width=70% height=70%>
 
 ## License
 
