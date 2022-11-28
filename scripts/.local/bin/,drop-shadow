@@ -1,0 +1,83 @@
+#!/usr/bin/env bash
+
+# ---------------------------------
+# set this script as an executable:
+# chmod u+x drop-shadow.sh
+
+# example usage:
+# ./Users/personal/Workspace/drop-shadow/drop-shadow.sh /Users/personal/Workspace/drop-shadow/temp.png
+# ---------------------------------
+
+if [ -t 1 ]
+then
+  # Some colors
+  declare -A colors
+  colors[none]="\e[0m"
+  colors[red]="\e[31m"
+  colors[green]="\e[32m"
+  colors[yellow]="\e[33m"
+  colors[blue]="\e[34m"
+  colors[magenta]="\e[35m"
+  colors[cyan]="\e[36m"
+  colors[lightgray]="\e[37m"
+  colors[white]="\e[97m"
+fi
+
+function printer { echo -e "${@} ${colors[none]}" ;}
+
+# we need a filename as an argument
+if [ $# -eq 0 ]; then
+  printer "${colors[red]}[-] Needs the filename as the first argument"
+  exit -1
+fi
+
+# Required package
+command -v convert >/dev/null || {
+	printer "${colors[yellow]}The convert command must be available (from ImageMagick)"
+	exit 1
+}
+
+# use our argument path as our input filename
+input_filename="$1"
+
+# set our output directory for temp images
+output_dir=$(mktemp -d)
+
+# https://stackoverflow.com/questions/965053/extract-filename-and-extension-in-bash#965072
+filename=$(basename -- "$input_filename")
+extension="${filename##*.}"
+filename="${filename%.*}"
+
+# get the mean colorspace as a decimal
+colorspace=$(convert "$input_filename" -colorspace gray -format "%[fx:100*mean]%%" info:)
+colorspace=$(echo $colorspace | perl -pe 's{\d+\.\d+%}{$&/100}eg')
+
+# chose shadow color based on colorspace of the image
+chosen_shadow="#000"
+[ "`echo "$colorspace < 1.0" | bc`" -eq 1 ] && chosen_shadow="#B0B0B0"
+[ "`echo "$colorspace < 0.91" | bc`" -eq 1 ] && chosen_shadow="#AAA"
+[ "`echo "$colorspace < 0.6" | bc`" -eq 1 ] && chosen_shadow="#333"
+[ "`echo "$colorspace < 0.2" | bc`" -eq 1 ] && chosen_shadow="#222"
+[ "`echo "$colorspace < 0.1" | bc`" -eq 1 ] && chosen_shadow="#000"
+
+# generate rounded corners for image
+convert "$input_filename" \( +clone  -alpha extract -draw 'fill black polygon 0,0 0,15 15,0 fill white circle 15,15 15,0' \( +clone -flip \) -compose Multiply -composite \( +clone -flop \) -compose Multiply -composite \) -alpha off -compose CopyOpacity -composite "${output_dir}/${filename}_shadow.${extension}"
+
+# calculating whitespace by dimension and our magic numbers
+width=$(identify -ping -format '%w %h\n' "$input_filename" | cut -f 1 -d " ") # width
+height=$(identify -ping -format '%w %h\n' "$input_filename" | cut -f 2 -d " ") # height
+whitespace_bottom="$(echo "$width*0.042" | bc)"
+whitespace_top="$(echo "$height*0.026" | bc)"
+whitespace_sides="$(echo "$height*0.035" | bc)"
+
+# generate shadow for image
+convert "${output_dir}/${filename}_shadow.${extension}" \( +clone -background "$chosen_shadow" -shadow 100x10+0+10 \) +swap -background none -layers merge +repage "${output_dir}/${filename}_shadow.${extension}"
+
+# generate whitespace for image
+convert "${output_dir}/${filename}_shadow.${extension}" -bordercolor none -border 1 -gravity south -background none -splice 0x25 "${output_dir}/${filename}_shadow.${extension}"
+
+# copy generated image to clipboard
+cp "${output_dir}/${filename}_shadow.${extension}" "${HOME}/Pictures/Shadow"
+
+xclip -selection clipboard -t image/"$extension" -i "${output_dir}/${filename}_shadow.${extension}" &&
+printer "${colors[green]}Copied to clipboard 👍"
