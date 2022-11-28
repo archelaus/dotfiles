@@ -1,0 +1,79 @@
+#!/usr/bin/env bash
+set -eo pipefail
+
+# print a few health info about the running system
+
+title () {
+  printf "\\e[4m%s\\e[0m: " "${1}"
+}
+
+status_load () {
+  local LDAVG
+  local NLOAD
+  local NBPROC
+  local FACTOR
+  local NLOADNRM
+
+  case $(uname -s) in
+    Linux)
+      if ! command -v nproc > /dev/null 2>&1; then
+        FACTOR=0 # no color if I cannot compute load per cores
+      else
+        NBPROC="$(nproc)"
+        NLOAD="$(cut -f1 -d' ' /proc/loadavg | tr -d '.')"
+      fi
+      LDAVG="$(echo -n "$(cut -d" " -f1-3 /proc/loadavg)")"
+    ;;
+    Darwin)
+      NBPROC="$(sysctl -n hw.physicalcpu)"
+      LDAVG="$(sysctl -n vm.loadavg | tr -d '{' | tr -d '}' | cut -d ' ' -f2-4)"
+      NLOAD="$(echo "${LDAVG}" | cut -f1 -d' ' | tr -d '.')"
+    ;;
+  esac
+
+  # "complex" regex required
+  # shellcheck disable=SC2001
+  NLOADNRM="$(echo -n "$NLOAD" | sed 's/^0*//')"
+  if [ -z "${NLOADNRM}" ]; then
+    NLOADNRM=0
+  fi
+  FACTOR="$((NLOADNRM/NBPROC))"
+
+  if [ "${FACTOR}" -ge 200 ]; then
+    echo $'\e[31m'"${LDAVG}"$'\e[0m'
+  elif [ "${FACTOR}" -ge 100 ]; then
+    echo $'\e[33m'"${LDAVG}"$'\e[0m'
+  elif [ "${FACTOR}" -ge 50 ]; then
+    echo $'\e[32m'"${LDAVG}"$'\e[0m'
+  else
+    echo $'\e[2;2m'"${LDAVG}"$'\e[0m'
+  fi
+}
+
+morning () {
+  printf "It's %s, week %s, Weather: %s\n" "$(date)" "$(date +%U)" "$(curl -sSL "wttr.in/?format='%c+%f'")"
+}
+
+sudo -v # initiate a sudo token as it's needed for some commands
+morning
+title 'LOAD'; status_load
+
+if [ -f '/sys/class/thermal/thermal_zone0/temp' ]; then
+  title 'TEMP'; echo "$(($(</sys/class/thermal/thermal_zone0/temp)/1000))°"
+fi
+
+if command -v uname > /dev/null 2>&1; then
+  case $(uname -s) in
+    Linux)
+      if [ "$(ps --no-headers -o comm 1)" = 'systemd' ]; then
+        title 'SYSTEM'
+        sudo systemctl is-system-running || sudo systemctl --state=failed | grep -Ev '(^[A-Z]+)|(^$)' | grep -E '^●|$'
+      fi
+      title 'STORAGE'; echo; df -h --exclude-type=squashfs --exclude-type=tmpfs --exclude-type=devtmpfs
+    ;;
+    Darwin)
+      true
+    ;;
+  esac
+fi
+
