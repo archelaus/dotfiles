@@ -1,30 +1,50 @@
+let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
+if empty(glob(data_dir . '/autoload/plug.vim'))
+    silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+" Install vim-plug if not found
+if empty(glob('~/.vim/autoload/plug.vim'))
+    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+        \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+endif
+
+" Run PlugInstall if there are missing plugins
+autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
+    \| PlugInstall --sync | source $MYVIMRC
+\| endif
+
+set nocompatible            " disable compatibility to old-time vi
+set showmatch               " show matching brackets.
+set ignorecase              " case insensitive matching
+set mouse=v                 " middle-click paste with mouse
+set autoindent              " indent a new line the same amount as the line just typed
+set number                  " add line numbers
+set wildmode=longest,list   " get bash-like tab completions
+filetype plugin indent on   " allows auto-indenting depending on file type
+set tabstop=4               " number of columns occupied by a tab character
+set expandtab               " converts tabs to white space
+set shiftwidth=4            " width for autoindents
+set softtabstop=4           " see multiple spaces as tabstops so <BS> does the right thing
+
 syntax on 
-set number 
-set hlsearch 
-set nocompatible
 set modelines=0
 set clipboard=unnamedplus
 
-"https://stackoverflow.com/questions/821902/disabling-swap-files-creation-in-vim
-set backupdir=~/.vim/backup//
-set directory=~/.vim/swap//
-set undodir=~/.vim/undo//
+" https://stackoverflow.com/a/15317146
+" set backupdir=~/.vim/backup//
+" set directory=~/.vim/swap//
+" set undodir=~/.vim/undo//
 
-"picked from steve losh's blog
-"https://stevelosh.com/blog/2010/09/coming-home-to-vim/
-set tabstop=4
-set shiftwidth=4
-set softtabstop=4
-set expandtab
+" https://stevelosh.com/blog/2010/09/coming-home-to-vim/
 set encoding=utf-8
-set scrolloff=3
-set autoindent
+" set scrolloff=3
 set smartindent
 set showmode "show which mode currently on 
 set showcmd "show command running bottom right
 set hidden
 set wildmenu
-set wildmode=list:longest
 set cursorline
 set ttyfast
 set ruler
@@ -39,11 +59,8 @@ au FocusLost * :wa
 inoremap jj <ESC>
 nnoremap / /\v
 vnoremap / /\v
-set ignorecase
 set gdefault
 set incsearch
-set showmatch
-set hlsearch
 nnoremap <leader><space> :noh<cr>
 set wrap
 nnoremap <leader>w <C-w>v<C-w>l
@@ -75,7 +92,7 @@ inoremap jj <Esc>
 map <space> /
 map <C-space> ?
 
-"  Useful mappings for managing tabs 
+" Useful mappings for managing tabs 
 map <leader>tn :tabnew<cr> 
 map <leader>to :tabonly<cr> 
 map <leader>tc :tabclose<cr> 
@@ -88,8 +105,29 @@ Plug 'itchyny/lightline.vim'
 Plug 'tmsvg/pear-tree'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
+Plug 'mbbill/undotree'
+Plug 'Jorengarenar/fauxClip'
 call plug#end()
 
-let g:lightline = {
-       \  ' colorscheme ' :  ' solarized ' ,
-       \  }
+" https://www.youtube.com/watch?v=DogKdiRx7ls
+set nohlsearch
+set noswapfile
+set nobackup
+set undodir=~/.vim/undo//
+set undofile
+set scrolloff=8
+set signcolumn=yes
+
+nnoremap <F5> :UndotreeToggle<CR>
+
+" auto set paste on copy from system
+let &t_SI .= "\<Esc>[?2004h"
+let &t_EI .= "\<Esc>[?2004l"
+
+inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
+
+function! XTermPasteBegin()
+    set pastetoggle=<Esc>[201~
+    set paste
+    return ""
+endfunction
