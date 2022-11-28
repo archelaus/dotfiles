@@ -34,10 +34,13 @@ fi
 #    exit 1
 # fi
 
-set -x
 sudo apt update
 sudo apt install -yyq software-properties-common build-essential cmake \
 stow mpv vim jq libarchive-tools rlwrap zoxide
+
+for package in gallery-dl gitdir lolcat please-cli subliminal trash-cli virtualfish; do
+	pipx install $package
+done
 
 # Create a temporary directory and store its name in a variable.
 TEMPD=$(mktemp -d)
@@ -47,6 +50,8 @@ if [ ! -e "$TEMPD" ]; then
     >&2 echo "Failed to create temp directory"
     exit 1
 fi
+
+set -x
 
 # fish
 command -v fish >/dev/null || {
@@ -225,6 +230,8 @@ rm -rf ./tidy-viewer-*/
 # yt-dlp
 curl -sL https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o "$TEMPD"/yt-dlp &&
 chmod +x "$TEMPD"/yt-dlp
+
+set +x
 
 sudo mv "$TEMPD"/* /usr/local/bin/
 sudo rm /usr/local/bin/LICENSE /usr/local/bin/README.md 
