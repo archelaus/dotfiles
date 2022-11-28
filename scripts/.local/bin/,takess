@@ -1,0 +1,8 @@
+#!/bin/bash
+
+file=~/Pictures/Spectacle/$(hostname)_$(date "+%Y%m%d_%H%M%S").png
+spectacle -pabo "$file" &&
+while ! [ -f "$file" ]
+	do sleep 0.5
+done &&
+,drop-shadow "$file"
