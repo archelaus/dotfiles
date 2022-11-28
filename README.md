@@ -1,7 +1,7 @@
 # ~/.dotfiles
 My (highly opinionated) dotfiles and collection of various shell scripts.
 
-## [NYI] Installation
+## ⚠️  [NYI] Installation
 
 ```sh
 # linux, macos:
