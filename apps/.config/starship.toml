@@ -292,7 +292,7 @@ disabled = true
 
 [custom.git_last_commit_statusdirectories]
 description = "Show last commit message subject line in git repo"
-command = "git log --pretty='format:%s 🕑 %cr' 'HEAD^..HEAD' | head -n 1"
+command = "git log --pretty='format:%s 🕑 %cr' 'HEAD^..HEAD' | head -1"
 format = "[\\($output\\)]($style) "
 style = "dimmed green"
 detect_folders = ['.git']
