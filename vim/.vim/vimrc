@@ -131,3 +131,6 @@ function! XTermPasteBegin()
     set paste
     return ""
 endfunction
+
+" https://vi.stackexchange.com/a/479
+cnoremap w!! w !sudo tee %
