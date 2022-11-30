@@ -1,0 +1,15 @@
+#!/bin/sh
+
+x() {
+  local file
+  file="$(find -L $HOME/.notes -iname '*.md' -exec basename -s .md {} \; |
+  fzf --bind 'J:preview-down,K:preview-up' --reverse \
+  --preview-window wrap \
+  --preview 'sh -c "if file -i $HOME/.notes/{}.md | grep -q binary; then file -b $HOME/.notes/{}.md; else glow $HOME/.notes/{}.md; fi"')"
+
+  if [ -n "$file" ]; then
+    $EDITOR $HOME/.notes/"$file".md
+  fi
+}
+
+x $1
