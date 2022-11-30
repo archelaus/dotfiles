@@ -4,4 +4,18 @@
 
 - How to assign value if variable is unset?
 
-https://github.com/fish-shell/fish-shell/issues/3926
+`set -q XYZ; or set XYZ whatever`
+
+`set -q XYZ[1]; or set XYZ whatever`
+
+```
+string length -q -- $XYZ; or set XYZ whatever
+# or
+test -n "$XYZ"; or set XYZ whatever
+```
+
+`set -q XYZ || set XYZ stuff`
+
+`string length --quiet $var` # checks that the variable is not empty
+
+`not string length --quiet $var` # checks that the variable is empty
