@@ -9,6 +9,7 @@ $shlvl\
 $singularity\
 $kubernetes\
 $directory\
+${custom.tasks}\
 ${custom.giturl}\
 $vcsh\
 $git_branch\
@@ -296,3 +297,10 @@ command = "git log --pretty='format:%s 🕑 %cr' 'HEAD^..HEAD' | head -1"
 format = "[\\($output\\)]($style) "
 style = "dimmed green"
 detect_folders = ['.git']
+
+[custom.tasks]
+when = "true"
+command = "t | count"
+format = "🎯 [\\[$output\\]]($style) "
+style = "blue bold"
+disabled = false
