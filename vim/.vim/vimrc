@@ -106,7 +106,7 @@ Plug 'tmsvg/pear-tree'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'mbbill/undotree'
-Plug 'Jorengarenar/fauxClip'
+Plug 'christoomey/vim-system-copy'
 call plug#end()
 
 " https://www.youtube.com/watch?v=DogKdiRx7ls
