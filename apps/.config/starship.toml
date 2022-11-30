@@ -1,11 +1,92 @@
 # Inserts a blank line between shell prompts
 add_newline = true
 
+format = """
+$username\
+$hostname\
+$localip\
+$shlvl\
+$singularity\
+$kubernetes\
+$directory\
+${custom.giturl}\
+$vcsh\
+$git_branch\
+$git_commit\
+$git_state\
+$git_metrics\
+$git_status\
+$hg_branch\
+${custom.git_scope2}\
+${custom.git_last_commit_statusdirectories}\
+$docker_context\
+$package\
+$c\
+$cmake\
+$cobol\
+$daml\
+$dart\
+$deno\
+$dotnet\
+$elixir\
+$elm\
+$erlang\
+$golang\
+$haskell\
+$helm\
+$java\
+$julia\
+$kotlin\
+$lua\
+$nim\
+$nodejs\
+$ocaml\
+$perl\
+$php\
+$pulumi\
+$purescript\
+$python\
+$raku\
+$rlang\
+$red\
+$ruby\
+$rust\
+$scala\
+$swift\
+$terraform\
+$vlang\
+$vagrant\
+$zig\
+$buf\
+$nix_shell\
+$conda\
+$meson\
+$spack\
+$memory_usage\
+$aws\
+$gcloud\
+$openstack\
+$azure\
+$env_var\
+$crystal\
+$custom\
+$sudo\
+$cmd_duration\
+$line_break\
+$jobs\
+$battery\
+$time\
+$status\
+$container\
+$shell\
+${custom.emoji}\
+$character"""
+
 [aws]
 symbol = "  "
 
 [battery]
-format="[$symbol$percentage]($style) "
+format = "[$symbol$percentage]($style) "
 full_symbol = "🔋 "
 charging_symbol = "⚡️ "
 discharging_symbol = "💀 "
@@ -70,7 +151,7 @@ style = "bold yellow"
 disabled = false
 
 [memory_usage]
-format="via $symbol[${ram} \\($ram_pct\\)]($style) "
+format = "via $symbol[${ram} \\($ram_pct\\)]($style) "
 symbol = " "
 threshold = 50
 disabled = true
@@ -89,6 +170,14 @@ symbol = " "
 
 [python]
 symbol = " "
+
+[shell]
+format = "[$indicator]($style) "
+fish_indicator = ""
+bash_indicator = "\\$"
+unknown_indicator = "mystery shell"
+style = "cyan bold"
+disabled = true
 
 [spack]
 symbol = "🅢 "
@@ -114,3 +203,96 @@ disabled = false
 
 [rust]
 symbol = " "
+
+[custom.emoji]
+description = "Displays a (pseudo) random emoji for each prompt"
+# change the content of the EMOJIS array to your liking and replace the
+# number 12 with the number of items in the array, minus one
+command = "EMOJIS=(🐶 🐱 🐭 🐹 🐰 🐻 🐼 🐨 🐯 🦁 🐮 🐷 🐽 🐵 🙈 🙉 🙊 🐒 🐔 🐧 🐦 🐤 🐣 🐥 🐺 🐗 🐴 🦄 🐝 🐛 🐌 🐜 🕷 🦂 🐠 🐟 🐡 🐬 🐳 🐋 🐆 🐅 🐃 🐂 😀 😬 😁 😃 😄 😅 😆 😇 😉 😊 🙂 🙃 😋 😌 😍 😘 😗 😙 😚 😜 😝 😛 🤑 🤓 😎 🤗 😏 😶 😐 😑 😒 🙄 🤔 😳 😞 😟 😠 😔 😕 🙁 😣 😖 😯 😦 😧 😵 😲 🤐 👦 👧 👨 👩 👴 👵 👶 👱 👮 👲 👳 👷 👸 💂 ⛵️ 🛰 🪐 🚀 🧡 🔭 🌍 💫 ☄️ ✨ 🌠 🌌 ⭐️); EMOJI_INDEX=$(( $RANDOM % 118 + 0 )); echo ${EMOJIS[$EMOJI_INDEX]}"
+# if you are on windows, replace "true" with "1"
+when = "true"
+shell = ["bash", "--noprofile", "--norc"]
+format = "$output "
+
+[custom.giturl]
+# disabled = true
+description = "Display symbol for remote Git server"
+command = "check-git-remote"
+when = 'git rev-parse --is-inside-work-tree 2> /dev/null'
+shell = ["bash", "--noprofile", "--norc"]
+format = "$output  "
+
+[custom.git_scope]
+command = '''
+printf "(%s)" \
+  "$(if [ -n "$GIT_AUTHOR_NAME" ]; then echo "$GIT_AUTHOR_NAME"; else git config user.name; fi)"
+'''
+description = 'The currently configured Git user.{email,name}'
+format = 'as [$output]($style) '
+shell = ["dash"]
+style = 'blue bold'
+when = 'git rev-parse --is-inside-work-tree'
+disabled = true
+
+[custom.git_scope_linux]
+# Unfortunately, the `os` key doesn't yet accept a list (i.e. ["unix", "linux",
+# "macos"]), so this whole [custom.git_scope_linux] section has to be
+# duplicated for each platform, with the module renamed and `os` key changed
+os = "linux"
+# dash is one of the fastest shells commonly available
+shell = ["dash", "-eu"]
+# The fewer times the shell has to be called, the better, so the command is
+# always run and the conditional is part of the command
+when = true
+command = '''
+# -e will ensure this exits before anything is printed, if this isn't a git
+# worktree
+git rev-parse --is-inside-work-tree > /dev/null 2>&1
+
+if GIT_AUTHOR_NAME="${GIT_AUTHOR_NAME:-"$(git config --get user.name)"}" ; then
+	printf '(%s)' "${GIT_AUTHOR_NAME}"
+fi
+'''
+# Putting the command output in a conditional format string ensures it won't be
+# shown when there's no output
+# https://starship.rs/config/#conditional-format-strings
+format = '(as [$output]($style) )'
+style = "blue bold"
+description = 'The currently configured Git user.{email,name}'
+disabled = true
+
+[custom.git_scope2]
+shell = ["git", "config", "--get"]
+use_stdin = false
+detect_folders = ['.git']
+# Change to user.name for the name
+command = 'user.name'
+format = '[\($output\)]($style)'
+style = "blue bold"
+description = 'The currently configured Git user.email'
+disabled = true
+
+[custom.files]
+description = "Show files count for current directory"
+command = "fd -d 1 -tf | count"
+format = "📝 [$output]($style) "
+style = "white"
+when = "true"
+ignore_timeout = true
+disabled = true
+
+[custom.directories]
+description = "Show directory count count for current directory"
+command = "fd -d 1 -td | count"
+format = "📁 [$output]($style) "
+style = "blue"
+when = "true"
+ignore_timeout = true
+disabled = true
+
+[custom.git_last_commit_statusdirectories]
+description = "Show last commit message subject line in git repo"
+command = "git log --pretty='format:%s 🕑 %cr' 'HEAD^..HEAD' | head -n 1"
+format = "[\\($output\\)]($style) "
+style = "dimmed green"
+detect_folders = ['.git']
