@@ -130,3 +130,5 @@ if [ -n "$TERM" ] && [ "$TERM" != "dumb" ]; then
     export BLUE="$(tput setaf 4)"
     export NORM="$(tput sgr0)"
 fi
+
+eval "$(starship init bash)"
