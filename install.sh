@@ -38,7 +38,7 @@ sudo apt update
 sudo apt install -yyq software-properties-common build-essential cmake \
 stow mpv vim jq libarchive-tools rlwrap zoxide
 
-for package in gallery-dl gitdir lolcat please-cli subliminal trash-cli virtualfish; do
+for package in gallery-dl gitdir lolcat subliminal trash-cli virtualfish; do
 	pipx install $package
 done
 
@@ -218,6 +218,9 @@ curl -s https://api.github.com/repos/r-darwish/topgrade/releases/latest |
 	jq -r '.assets[] | select(.name|match("linux-musl")) | .browser_download_url' |
 	wget -i- -qO- | bsdtar x -C"$TEMPD"
 chmod +x "$TEMPD"/topgrade
+
+# t
+curl -sL https://raw.githubusercontent.com/sjl/t/master/t.py -o ~/.local/bin/t.py
 
 # tv
 curl -s https://api.github.com/repos/alexhallam/tv/releases/latest |
