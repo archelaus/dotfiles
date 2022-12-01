@@ -77,13 +77,14 @@ ${custom.git_last_commit_statusdirectories}\
 $line_break\
 $jobs\
 $battery\
-$time\
 $status\
 $container\
 $shell\
 ${custom.emoji}\
 ${custom.bash}\
 $character"""
+
+# right_format = "$time"
 
 [aws]
 symbol = "  "
@@ -177,9 +178,13 @@ symbol = " "
 
 [package]
 symbol = " "
+disabled = true
 
 [python]
 symbol = " "
+
+[rust]
+symbol = " "
 
 [shell]
 format = "[$indicator]($style) "
@@ -211,8 +216,8 @@ style = "bold blue"
 symbol = "🧙 "
 disabled = false
 
-[rust]
-symbol = " "
+[time]
+disabled = false
 
 [custom.emoji]
 description = "Displays a (pseudo) random emoji for each prompt"
@@ -290,7 +295,7 @@ format = "📝 [$output]($style) "
 style = "white"
 when = "true"
 ignore_timeout = true
-disabled = true
+disabled = false
 shell = ["fish","--no-config"]
 
 [custom.directories]
@@ -301,7 +306,7 @@ format = "📁 [$output]($style) "
 style = "blue"
 when = "true"
 ignore_timeout = true
-disabled = true
+disabled = false
 
 [custom.git_last_commit_statusdirectories]
 description = "Show last commit message subject line in git repo"
