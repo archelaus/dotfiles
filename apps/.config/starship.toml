@@ -234,11 +234,11 @@ ignore_timeout = true
 [custom.giturl]
 # disabled = true
 description = "Display symbol for remote Git server"
-command = ",check-git-remote"
+command = ",getgithost"
 # detect_folders = [".git"]
 when = 'git rev-parse --is-inside-work-tree 2> /dev/null'
 shell = ["bash", "--noprofile", "--norc"]
-format = "$output  "
+format = "$output "
 ignore_timeout = true
 
 [custom.git_scope]
