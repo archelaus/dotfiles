@@ -1,5 +1,6 @@
 # Inserts a blank line between shell prompts
 add_newline = true
+command_timeout = 1000
 
 format = """
 $username\
@@ -228,6 +229,7 @@ command = "EMOJIS=(🐶 🐱 🐭 🐹 🐰 🐻 🐼 🐨 🐯 🦁 🐮 🐷 �
 when = '[ "$STARSHIP_SHELL" == "fish" ]'
 shell = ["bash", "--noprofile", "--norc"]
 format = "$output "
+ignore_timeout = true
 
 [custom.giturl]
 # disabled = true
@@ -237,6 +239,7 @@ command = "check-git-remote"
 when = 'git rev-parse --is-inside-work-tree 2> /dev/null'
 shell = ["bash", "--noprofile", "--norc"]
 format = "$output  "
+ignore_timeout = true
 
 [custom.git_scope]
 command = '''
@@ -294,7 +297,6 @@ command = "fd -d 1 -tf | count"
 format = "📝 [$output]($style) "
 style = "white"
 when = "true"
-ignore_timeout = true
 disabled = false
 shell = ["fish","--no-config"]
 
@@ -305,7 +307,6 @@ shell = ["fish","--no-config"]
 format = "📁 [$output]($style) "
 style = "blue"
 when = "true"
-ignore_timeout = true
 disabled = false
 
 [custom.git_last_commit_statusdirectories]
@@ -314,6 +315,7 @@ command = "git log --pretty='format:%s 🕑 %cr' 'HEAD^..HEAD' | head -1"
 format = "[\\($output\\)]($style) "
 style = "dimmed green"
 detect_folders = ['.git']
+ignore_timeout = true
 
 [custom.tasks]
 shell = "fish"
@@ -329,6 +331,7 @@ command = "echo  "
 when = '[ "$STARSHIP_SHELL" == "bash" ]'
 shell = ["bash", "--noprofile", "--norc"]
 format = "$output "
+ignore_timeout = true
 
 [custom.git_newline] # Add a newline if we are in a git repo.
 disabled = false
@@ -340,3 +343,4 @@ description = "Adds a newline if a .git folder is found in the current working d
 style = "dimmed green"
 symbol = "\n╰─λ "
 format = "[$symbol]($style)"
+ignore_timeout = true
