@@ -125,6 +125,7 @@ symbol = " "
 
 [directory]
 read_only = " "
+truncation_symbol = " "
 
 [docker_context]
 symbol = " "
@@ -227,6 +228,7 @@ format = "$output "
 # disabled = true
 description = "Display symbol for remote Git server"
 command = "check-git-remote"
+# detect_folders = [".git"]
 when = 'git rev-parse --is-inside-work-tree 2> /dev/null'
 shell = ["bash", "--noprofile", "--norc"]
 format = "$output  "
@@ -327,6 +329,7 @@ format = "$output "
 disabled = false
 use_stdin = false
 detect_folders = [".git"]
+shell = ["bash", "--noprofile", "--norc"]
 when = "[ $(git rev-parse --show-toplevel 2> /dev/null) ]"
 description = "Adds a newline if a .git folder is found in the current working directory"
 style = "dimmed green"
