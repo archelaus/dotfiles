@@ -8,3 +8,4 @@ scripts/.local/bin/*
 !scripts/.local/bin/*,*
 desktop.png
 notes/.notes/quick.md
+!scripts/.local/bin/t.py
