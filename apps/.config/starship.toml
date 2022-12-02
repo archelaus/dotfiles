@@ -224,7 +224,7 @@ disabled = false
 description = "Displays a (pseudo) random emoji for each prompt"
 # change the content of the EMOJIS array to your liking and replace the
 # number 12 with the number of items in the array, minus one
-command = "EMOJIS=(🐶 🐱 🐭 🐹 🐰 🐻 🐼 🐨 🐯 🦁 🐮 🐷 🐽 🐵 🙈 🙉 🙊 🐒 🐔 🐧 🐦 🐤 🐣 🐥 🐺 🐗 🐴 🦄 🐝 🐛 🐌 🐜 🦂 🐠 🐟 🐡 🐬 🐳 🐋 🐆 🐅 🐃 🐂 😀 😬 😁 😃 😄 😅 😆 😇 😉 😊 🙂 🙃 😋 😌 😍 😘 😗 😙 😚 😜 😝 😛 🤑 🤓 😎 🤗 😏 😶 😐 😑 😒 🙄 🤔 😳 😞 😟 😠 😔 😕 🙁 😣 😖 😯 😦 😧 😵 😲 🤐 👦 👧 👨 👩 👴 👵 👶 👱 👮 👲 👳 👷 👸 💂 ⛵️ 🪐 🚀 🧡 🔭 🌍 💫 ☄️ ✨ 🌠 🌌 ⭐️); EMOJI_INDEX=$(( $RANDOM % 118 + 0 )); echo ${EMOJIS[$EMOJI_INDEX]}"
+command = "EMOJIS=(🐶 🐱 🐭 🐹 🐰 🐻 🐼 🐨 🐯 🦁 🐮 🐷 🐽 🐵 🙈 🙉 🙊 🐒 🐔 🐧 🐦 🐤 🐣 🐥 🐺 🐗 🐴 🦄 🐝 🐛 🐌 🐜 🦂 🐠 🐟 🐡 🐬 🐳 🐋 🐆 🐅 🐃 🐂 😀 😬 😁 😃 😄 😅 😆 😇 😉 😊 🙂 🙃 😋 😌 😍 😘 😗 😙 😚 😜 😝 😛 🤑 🤓 😎 🤗 😏 😶 😐 😑 😒 🙄 🤔 😳 😞 😟 😠 😔 😕 🙁 😣 😖 😯 😦 😧 😵 😲 🤐 👦 👧 👨 👩 👴 👵 👶 👱 👮 👲 👳 👷 👸 💂 ⛵️ 🪐 🚀 🧡 🔭 🌍 💫 ✨ 🌠 🌌 ⭐️); EMOJI_INDEX=$(( $RANDOM % 118 + 0 )); echo ${EMOJIS[$EMOJI_INDEX]}"
 # if you are on windows, replace "true" with "1"
 when = '[ "$STARSHIP_SHELL" == "fish" ]'
 shell = ["bash", "--noprofile", "--norc"]
