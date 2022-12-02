@@ -9,3 +9,4 @@ scripts/.local/bin/*
 desktop.png
 notes/.notes/quick.md
 !scripts/.local/bin/t.py
+!scripts/.local/bin/mi.py
