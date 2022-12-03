@@ -82,6 +82,7 @@ $status\
 $container\
 $shell\
 ${custom.emoji}\
+${custom.vpn}\
 ${custom.bash}\
 $character"""
 
@@ -224,11 +225,9 @@ disabled = false
 description = "Displays a (pseudo) random emoji for each prompt"
 # change the content of the EMOJIS array to your liking and replace the
 # number 12 with the number of items in the array, minus one
-shell = ["fish", "--no-config"]
-when = "test $STARSHIP_SHELL = fish"
-# shell = ["bash", "--noprofile", "--norc"]
-# when = '[ "$STARSHIP_SHELL" == "fish" ]'
-command = "random choice 🐶 🐱 🐭 🐹 🐰 🐻 🐼 🐨 🐯 🦁 🐮 🐷 🐽 🐵 🙈 🙉 🙊 🐒 🐔 🐧 🐦 🐤 🐣 🐥 🐺 🐗 🐴 🦄 🐝 🐛 🐌 🐜 🦂 🐠 🐟 🐡 🐬 🐳 🐋 🐆 🐅 🐃 🐂 😀 😬 😁 😃 😄 😅 😆 😇 😉 😊 🙂 🙃 😋 😌 😍 😘 😗 😙 😚 😜 😝 😛 🤑 🤓 😎 🤗 😏 😶 😐 😑 😒 🙄 🤔 😳 😞 😟 😠 😔 😕 🙁 😣 😖 😯 😦 😧 😵 😲 🤐 👦 👧 👨 👩 👴 👵 👶 👱 👮 👲 👳 👷 👸 💂 ⛵️ 🪐 🚀 🧡 🔭 🌍 💫 ✨ 🌠 🌌"
+shell = ["dash", "-eu"]
+when = "true"
+command = 'nmcli c show --active | rg -q tun && echo 📡 || fish -N -c "random choice 🐶 🐱 🐭 🐹 🐰 🐻 🐼 🐨 🐯 🦁 🐮 🐷 🐽 🐵 🙈 🙉 🙊 🐒 🐔 🐧 🐦 🐤 🐣 🐥 🐺 🐗 🐴 🦄 🐝 🐛 🐌 🐜 🦂 🐠 🐟 🐡 🐬 🐳 🐋 🐆 🐅 🐃 🐂 😀 😬 😁 😃 😄 😅 😆 😇 😉 😊 🙂 🙃 😋 😌 😍 😘 😗 😙 😚 😜 😝 😛 🤑 🤓 😎 🤗 😏 😶 😐 😑 😒 🙄 🤔 😳 😞 😟 😠 😔 😕 🙁 😣 😖 😯 😦 😧 😵 😲 🤐 👦 👧 👨 👩 👴 👵 👶 👱 👮 👲 👳 👷 👸 💂 ⛵️ 🪐 🚀 🧡 🔭 🌍 💫 ✨ 🌠 🌌"'
 format = "$output "
 
 [custom.giturl]
@@ -348,3 +347,10 @@ style = "dimmed green"
 symbol = "\n╰─λ "
 format = "[$symbol]($style)"
 ignore_timeout = true
+
+[custom.vpn]
+shell = ["dash", "-eu"]
+when = "nmcli c show --active | rg -q tun"
+command = "curl https://ipinfo.io/country"
+format = "$output "
+disabled = true
