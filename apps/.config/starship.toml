@@ -235,7 +235,6 @@ ignore_timeout = true
 # disabled = true
 description = "Display symbol for remote Git server"
 command = ",getgithost"
-# detect_folders = [".git"]
 when = 'git rev-parse --is-inside-work-tree 2> /dev/null'
 shell = ["bash", "--noprofile", "--norc"]
 format = "$output "
@@ -293,7 +292,7 @@ disabled = true
 
 [custom.files]
 description = "Show files count for current directory"
-command = "fd -d 1 -tf | count"
+command = "fd -d 1 -tf | count; true"
 format = "📝 [$output]($style) "
 style = "white"
 when = "true"
@@ -302,7 +301,7 @@ shell = ["fish","--no-config"]
 
 [custom.directories]
 description = "Show directory count count for current directory"
-command = "fd -d 1 -td | count"
+command = "fd -d 1 -td | count; true"
 shell = ["fish","--no-config"]
 format = "📁 [$output]($style) "
 style = "blue"
