@@ -132,3 +132,5 @@ if [ -n "$TERM" ] && [ "$TERM" != "dumb" ]; then
 fi
 
 eval "$(starship init bash)"
+
+source /home/aayu/.config/broot/launcher/bash/br

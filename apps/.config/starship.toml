@@ -110,8 +110,8 @@ symbol = " "
 # Prompt: └─
 # success_symbol = " [╰─λ](bold fg:blue)"
 # error_symbol = " [](bold fg:red)"
-success_symbol = "[➜](bold green) "
-error_symbol = "[➜](bold red) "
+success_symbol = "[➜](bold green)"
+error_symbol = "[➜](bold red)"
 
 [cmd_duration]
 disabled = false
@@ -224,32 +224,32 @@ disabled = false
 description = "Displays a (pseudo) random emoji for each prompt"
 # change the content of the EMOJIS array to your liking and replace the
 # number 12 with the number of items in the array, minus one
-command = "EMOJIS=(🐶 🐱 🐭 🐹 🐰 🐻 🐼 🐨 🐯 🦁 🐮 🐷 🐽 🐵 🙈 🙉 🙊 🐒 🐔 🐧 🐦 🐤 🐣 🐥 🐺 🐗 🐴 🦄 🐝 🐛 🐌 🐜 🦂 🐠 🐟 🐡 🐬 🐳 🐋 🐆 🐅 🐃 🐂 😀 😬 😁 😃 😄 😅 😆 😇 😉 😊 🙂 🙃 😋 😌 😍 😘 😗 😙 😚 😜 😝 😛 🤑 🤓 😎 🤗 😏 😶 😐 😑 😒 🙄 🤔 😳 😞 😟 😠 😔 😕 🙁 😣 😖 😯 😦 😧 😵 😲 🤐 👦 👧 👨 👩 👴 👵 👶 👱 👮 👲 👳 👷 👸 💂 ⛵️ 🪐 🚀 🧡 🔭 🌍 💫 ✨ 🌠 🌌 ⭐️); EMOJI_INDEX=$(( $RANDOM % 118 + 0 )); echo ${EMOJIS[$EMOJI_INDEX]}"
-# if you are on windows, replace "true" with "1"
-when = '[ "$STARSHIP_SHELL" == "fish" ]'
-shell = ["bash", "--noprofile", "--norc"]
+shell = ["fish", "--no-config"]
+when = "test $STARSHIP_SHELL = fish"
+# shell = ["bash", "--noprofile", "--norc"]
+# when = '[ "$STARSHIP_SHELL" == "fish" ]'
+command = "random choice 🐶 🐱 🐭 🐹 🐰 🐻 🐼 🐨 🐯 🦁 🐮 🐷 🐽 🐵 🙈 🙉 🙊 🐒 🐔 🐧 🐦 🐤 🐣 🐥 🐺 🐗 🐴 🦄 🐝 🐛 🐌 🐜 🦂 🐠 🐟 🐡 🐬 🐳 🐋 🐆 🐅 🐃 🐂 😀 😬 😁 😃 😄 😅 😆 😇 😉 😊 🙂 🙃 😋 😌 😍 😘 😗 😙 😚 😜 😝 😛 🤑 🤓 😎 🤗 😏 😶 😐 😑 😒 🙄 🤔 😳 😞 😟 😠 😔 😕 🙁 😣 😖 😯 😦 😧 😵 😲 🤐 👦 👧 👨 👩 👴 👵 👶 👱 👮 👲 👳 👷 👸 💂 ⛵️ 🪐 🚀 🧡 🔭 🌍 💫 ✨ 🌠 🌌"
 format = "$output "
-ignore_timeout = true
 
 [custom.giturl]
-# disabled = true
 description = "Display symbol for remote Git server"
+shell = ["dash", "-eu"]
+# shell = ["bash", "--noprofile", "--norc"]
 command = ",getgithost"
-when = 'git rev-parse --is-inside-work-tree 2> /dev/null'
-shell = ["bash", "--noprofile", "--norc"]
+when = "git rev-parse --is-inside-work-tree 2> /dev/null"
 format = "$output "
-ignore_timeout = true
+disabled = false
 
 [custom.git_scope]
+description = 'The currently configured Git user.{email,name}'
+shell = ["dash", "-eu"]
+when = "git rev-parse --is-inside-work-tree"
 command = '''
 printf "(%s)" \
   "$(if [ -n "$GIT_AUTHOR_NAME" ]; then echo "$GIT_AUTHOR_NAME"; else git config user.name; fi)"
 '''
-description = 'The currently configured Git user.{email,name}'
 format = 'as [$output]($style) '
-shell = ["dash"]
 style = 'blue bold'
-when = 'git rev-parse --is-inside-work-tree'
 disabled = true
 
 [custom.git_scope_linux]
@@ -292,43 +292,47 @@ disabled = true
 
 [custom.files]
 description = "Show files count for current directory"
-command = "fd -d 1 -tf | count; true"
+shell = ["dash", "-eu"]
+# shell = ["fish","--no-config"]
+when = "true"
+command = "fd -d 1 -tf | wc -l"
 format = "📝 [$output]($style) "
 style = "white"
-when = "true"
 disabled = false
-shell = ["fish","--no-config"]
 
 [custom.directories]
 description = "Show directory count count for current directory"
-command = "fd -d 1 -td | count; true"
-shell = ["fish","--no-config"]
+shell = ["dash", "-eu"]
+# shell = ["fish","--no-config"]
+when = "true"
+command = "fd -d 1 -td | wc -l"
 format = "📁 [$output]($style) "
 style = "blue"
-when = "true"
 disabled = false
 
 [custom.git_last_commit_statusdirectories]
 description = "Show last commit message subject line in git repo"
+shell = ["dash", "-eu"]
+detect_folders = ['.git']
 command = "git log --pretty='format:%s 🕑 %cr' 'HEAD^..HEAD' | head -1"
 format = "[\\($output\\)]($style) "
 style = "dimmed green"
-detect_folders = ['.git']
-ignore_timeout = true
+disabled = false
 
 [custom.tasks]
-shell = "fish"
-when = '[ (t | count) -ne 0 ]'
-command = "t | count"
+shell = ["dash", "-eu"]
+command = "python3 ~/.local/bin/t.py --task-dir ~/.tasks --list tasks -d | wc -l"
+when = true
 format = "🎯 [\\[$output\\]]($style) "
 style = "blue bold"
 disabled = false
 
 [custom.bash]
 description = "Show a terminal symbol, if in a Bash shell"
+shell = ["fish", "--no-config"]
+# shell = ["bash", "--noprofile", "--norc"]
 command = "echo  " 
-when = '[ "$STARSHIP_SHELL" == "bash" ]'
-shell = ["bash", "--noprofile", "--norc"]
+when = "test $STARSHIP_SHELL = bash"
 format = "$output "
 ignore_timeout = true
 
@@ -336,8 +340,9 @@ ignore_timeout = true
 disabled = false
 use_stdin = false
 detect_folders = [".git"]
-shell = ["bash", "--noprofile", "--norc"]
-when = "[ $(git rev-parse --show-toplevel 2> /dev/null) ]"
+# shell = ["bash", "--noprofile", "--norc"]
+shell = ["dash", "-eu"]
+when = "git rev-parse --show-toplevel 2> /dev/null"
 description = "Adds a newline if a .git folder is found in the current working directory"
 style = "dimmed green"
 symbol = "\n╰─λ "
