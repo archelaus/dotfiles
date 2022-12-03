@@ -46,7 +46,7 @@ done
 TEMPD=$(mktemp -d)
 
 # Exit if the temp directory wasn't created successfully.
-if [ ! -e "$TEMPD" ]; then
+if [[ ! -e $TEMPD ]]; then
     >&2 echo "Failed to create temp directory"
     exit 1
 fi
@@ -204,9 +204,6 @@ curl -s https://api.github.com/repos/jarun/nnn/releases/latest |
 	wget -i- -qO- | bsdtar x
 chmod +x nnn-* && mv nnn-* "$TEMPD"/nnn
 
-# pipx
-python3 -m pip install --user pipx
-
 # rclone
 curl https://rclone.org/install.sh | sudo bash -s beta || continue
 
@@ -218,9 +215,6 @@ curl -s https://api.github.com/repos/r-darwish/topgrade/releases/latest |
 	jq -r '.assets[] | select(.name|match("linux-musl")) | .browser_download_url' |
 	wget -i- -qO- | bsdtar x -C"$TEMPD"
 chmod +x "$TEMPD"/topgrade
-
-# t
-curl -sL https://raw.githubusercontent.com/sjl/t/master/t.py -o ~/.local/bin/t.py
 
 # tv
 curl -s https://api.github.com/repos/alexhallam/tv/releases/latest |
