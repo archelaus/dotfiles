@@ -7,3 +7,4 @@ scripts/.local/bin/*
 !scripts/.local/bin/*,*
 !scripts/.local/bin/t.py
 !scripts/.local/bin/mi.py
+notes/.notes/quick.md
