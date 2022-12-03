@@ -3,10 +3,7 @@ apps/.config/mpv/mpvClipboard.log
 apps/.config/mpv/mpvHistory.log
 vim/.vim/swap/
 vim/.vim/undo/
-get-docker.sh
 scripts/.local/bin/*
 !scripts/.local/bin/*,*
-desktop.png
-notes/.notes/quick.md
 !scripts/.local/bin/t.py
 !scripts/.local/bin/mi.py
