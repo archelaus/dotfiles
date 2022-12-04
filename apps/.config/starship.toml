@@ -236,7 +236,7 @@ shell = ["dash", "-eu"]
 # shell = ["bash", "--noprofile", "--norc"]
 command = ",getgithost"
 when = "git rev-parse --is-inside-work-tree 2> /dev/null"
-format = "$output "
+format = "$output  "
 disabled = false
 
 [custom.git_scope]
