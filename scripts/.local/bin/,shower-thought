@@ -14,7 +14,7 @@ USERAGENT="Mozilla/5.0 (X11; Linux x86_64; rv:100.0) Gecko/20100101 Firefox/100.
 APIURL="https://www.reddit.com/r/showerthoughts/top.json?sort=top&t=week&limit=100"
 # APIURL="https://www.reddit.com/r/showerthoughts.json?limit=100"
 
-# Remove cached response if older than 2 hours.
+# Remove cached response if older than 3 days.
 # find $(dirname $JSONCACHE) -maxdepth 1 -name "$(basename $JSONCACHE)"  \
 # -mmin +120 -exec rm {} \; 2>/dev/null
 fd -Hd1 "$(basename $JSONCACHE)" "$(dirname $JSONCACHE)" \
@@ -23,8 +23,8 @@ fd -Hd1 "$(basename $JSONCACHE)" "$(dirname $JSONCACHE)" \
 # exit on error
 set -e
 
-# If the cache file doesnt exist, we create it.
-if [[ ! -f $JSONCACHE ]]; then
+# If the cache file doesn't exist, we create it.
+if [[ ! -f $JSONCACHE || ! -s $JSONCACHE ]]; then
   curl -sH "User-Agent: $USERAGENT" "$APIURL" > "$JSONCACHE"
 fi
 
