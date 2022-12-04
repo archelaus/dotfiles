@@ -9,3 +9,4 @@ scripts/.local/bin/*
 !scripts/.local/bin/mi.py
 notes/.notes/quick.md
 !scripts/.local/bin/rofi-emoji
+!scripts/.local/bin/rofi-power-menu
