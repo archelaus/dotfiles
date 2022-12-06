@@ -10,3 +10,5 @@ scripts/.local/bin/*
 notes/.notes/quick.md
 !scripts/.local/bin/rofi-emoji
 !scripts/.local/bin/rofi-power-menu
+!scripts/.local/bin/tilix-backup
+!scripts/.local/bin/backup-appdata
