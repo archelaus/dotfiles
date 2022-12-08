@@ -11,7 +11,7 @@
 
 set_theme() {
     if [[ "$1" == "dark" ]]; then
-        new_gtk_theme="Orchis-Dark-Compact"
+        new_gtk_theme="vimix-dark-doder"
     elif [[ "$1" == "light" ]]; then
         new_gtk_theme="Orchis-Compact"
     else
