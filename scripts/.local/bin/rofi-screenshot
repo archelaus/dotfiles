@@ -1,0 +1,115 @@
+#!/usr/bin/env bash
+
+screenshot_directory="$HOME/Pictures/Screenshots"
+dt=$(date '+%Y-%m-%d_%H-%M')
+
+_rtc() {
+  notify-send --app-name="screenshot" "Screenshot" "Select a region to capture"
+  maim -s -m 10 -f png | xclip -selection clipboard -t image/png
+  notify-send --app-name="screenshot" "Screenshot" "Region copied to Clipboard!"
+}
+
+_rtf() {
+  notify-send --app-name="screenshot" "Screenshot" "Select a region to capture"
+  maim -s -m 10 -f png "$screenshot_directory/$dt.png"
+  notify-send --app-name="screenshot" "Screenshot" "Region saved to ${screenshot_directory//$HOME/'~'}!"
+}
+
+_stc() {
+  maim -i $(xdotool getactivewindow) -m 10 -f png | xclip -selection clipboard -t image/png
+  notify-send --app-name="screenshot" "Screenshot" "Screenshot copied to Clipboard!"
+}
+
+_stf() {
+  maim -i $(xdotool getactivewindow) -m 10 -f png "$screenshot_directory/$dt.png"
+  notify-send --app-name="screenshot" "Screenshot" "Saved to ${screenshot_directory//${HOME}/'~'}!"
+}
+
+_rtcmac() {
+  notify-send --app-name="screenshot" "Screenshot" "Select a region to capture"
+  maim -s -m 10 -f png "$screenshot_directory/$dt.png"
+  ,drop-shadow "$screenshot_directory/$dt.png"
+  notify-send --app-name="screenshot" "Screenshot" "Region copied to Clipboard!"
+}
+
+_stcmac() {
+  maim -i $(xdotool getactivewindow) -m 10 -f png "$screenshot_directory/$dt.png"
+  ,drop-shadow "$screenshot_directory/$dt.png"
+  notify-send --app-name="screenshot" "Screenshot" "Region copied to Clipboard!"
+}
+
+
+get_options() {
+  echo "1. Region  Clip"
+  echo "2. Region  File"
+  echo "3. Screen  Clip"
+  echo "4. Screen  File"
+  echo "5. Region  Clip (Mac)"
+  echo "6. Screen  Clip (Mac)"
+}
+
+check_deps() {
+  if ! hash "$1" 2>/dev/null; then
+    echo "Error: This script requires $1"
+    exit 1
+  fi
+}
+
+main() {
+  # check dependencies
+  check_deps maim
+  check_deps ffmpeg
+  check_deps xclip
+  check_deps rofi
+
+  # Get choice from rofi
+  choice=$( (get_options) | dmenu -i -p "Screenshot" )
+
+  # If user has not picked anything, exit
+  if [[ -z "${choice// }" ]]; then
+      exit 1
+  fi
+
+  # run the selected command
+  case $choice in
+    '1. Region  Clip')
+      _rtc
+      ;;
+    '2. Region  File')
+      _rtf
+      ;;
+    '3. Screen  Clip')
+      _stc
+      ;;
+    '4. Screen  File')
+      _stf
+      ;;
+    '  Region  File (GIF)')
+      rgrtf
+      ;;
+    '  Screen  File (GIF)')
+      rgstf
+      ;;
+    '  Region  File (MP4)')
+      rvrtf
+      ;;
+    '  Screen  File (MP4)')
+      rvstf
+      ;;
+    '5. Region  Clip (Mac)')
+      _rtcmac
+      ;;
+    '6. Screen  Clip (Mac)')
+      _stcmac
+      ;;
+  esac
+
+  # done
+  set -e
+}
+
+main $1 &
+
+exit 0
+
+! /bin/bash
