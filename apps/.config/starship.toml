@@ -127,6 +127,7 @@ format = '[$symbol \[$name\]]($style) '
 symbol = " "
 
 [directory]
+truncation_length = 3 
 read_only = " "
 truncation_symbol = " "
 
