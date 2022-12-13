@@ -133,5 +133,3 @@ fi
 
 eval "$(zoxide init bash)"
 eval "$(starship init bash)"
-
-source /home/aayu/.config/broot/launcher/bash/br
