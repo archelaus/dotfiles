@@ -3,6 +3,7 @@ apps/.config/mpv/mpvClipboard.log
 apps/.config/mpv/mpvHistory.log
 vim/.vim/swap/
 vim/.vim/undo/
+vim/.vim/.netrwhist
 scripts/.local/bin/*
 !scripts/.local/bin/*,*
 !scripts/.local/bin/t.py

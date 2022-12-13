@@ -1,5 +1,6 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhistcnt =4
+let g:netrw_dirhistcnt =5
+let g:netrw_dirhist_5='/home/aayu/.config/dunst/dunstrc'
 let g:netrw_dirhist_4='/home/aayu/.config/i3/scripts'
 let g:netrw_dirhist_3='/home/aayu/.config/picom'
 let g:netrw_dirhist_2='/home/aayu/.config/alacritty'
@@ -9,4 +10,3 @@ let g:netrw_dirhist_9='/home/aayu/.config/streamrip'
 let g:netrw_dirhist_8='/home/aayu'
 let g:netrw_dirhist_7='/home/aayu/.config'
 let g:netrw_dirhist_6='/home/aayu'
-let g:netrw_dirhist_5='/home/aayu/.gem'
