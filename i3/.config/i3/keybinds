@@ -97,3 +97,6 @@ mode "num" {
         bindsym Num_Lock mode "default"
 }
 bindsym Num_Lock mode "num"
+
+# -- Emoji picker using rofi
+bindsym $mod+grave exec ~/.local/bin/rofi-emoji
