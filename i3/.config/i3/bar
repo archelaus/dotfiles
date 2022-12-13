@@ -1,0 +1,17 @@
+# bar {
+#     font pango: Roboto Condensed Regular 10
+#     status_command i3blocks
+#     position top
+#     height 25
+#     strip_workspace_numbers yes
+# }
+
+# bar {
+#     height 25
+#     position top
+#     font pango: Roboto Condensed Regular 10
+#     status_command bumblebee-status \
+#     -m caffeine date datetime pulseout battery dunst \
+#     -p date.format="%a, %b %d (%y)" datetime.format="%H:%M" brightness.step=5 pulseout.start=true pulseout.percent_change=5 pulseout.limit=200% pulsectl.left-click=select_default_device_popup \
+#     -t gruvbox-powerline
+# }

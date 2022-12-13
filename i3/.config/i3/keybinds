@@ -1,0 +1,100 @@
+###############################################################
+# ----------------------- KEYBINDINGS ----------------------- #
+###############################################################
+
+set $browser        brave-browser
+set $fileexplorer   nemo
+
+# -- AUDIO FN KEYBINDS
+set $refresh_i3status killall -SIGUSR1 i3status
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% && $refresh_i3status
+# bindsym XF86AudioRaiseVolume exec --no-startup-id ~/.config/i3/scripts/volume-control up
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10% && $refresh_i3status
+# bindsym XF86AudioLowerVolume exec --no-startup-id ~/.config/i3/scripts/volume-control down
+bindsym XF86AudioMicMute     exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
+bindsym XF86AudioMute        exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
+
+# -- BRIGHTNESS FN KEYBINDS
+# -- Install `brightnessctl` package for these to work
+bindsym XF86MonBrightnessUp exec --no-startup-id ~/.config/i3/scripts/brightness-control up
+bindsym XF86MonBrightnessDown exec --no-startup-id ~/.config/i3/scripts/brightness-control down
+
+# -- START A TERMINAL
+bindsym $mod+Return exec --no-startup-id alacritty
+
+# -- KILL FOCUSED WINDOW
+bindsym $mod+Shift+q kill
+
+# -- LAUNCH APP MENU
+bindsym $mod+d exec --no-startup-id "rofi -show combi -combi-modi drun,window -icon-theme Papirus -show-icons"
+
+# -- RELOAD THE CONFIGURATION FILE
+bindsym $mod+Shift+c reload
+
+# -- RESTART I3
+bindsym $mod+Shift+r restart
+
+# -- EXIT I3
+# bindsym $mod+Shift+e exec --no-startup-id "i3-nagbar -t warning \
+#    -m 'Exit i3? This will end your X session.' \
+#    -B 'Yes, exit i3' 'i3-msg exit'"
+# bindsym $mod+Shift+e exec "rofi -show power-menu -modi power-menu:rofi-power-menu"
+bindsym $mod+Shift+e exec powermenu
+
+# -- ENTER RESIZE MODE
+bindsym $mod+r mode "resize"
+
+# -- POWER OFF BUTTON DMENU
+# bindsym XF86PowerOff exec --no-startup-id "rofi -show power-menu -modi power-menu:rofi-power-menu"
+
+# -- SCREENSHOT
+# bindsym Print      exec --no-startup-id flameshot full
+# bindsym $mod+Insert exec --no-startup-id flameshot gui
+bindsym $mod+Insert exec --no-startup-id rofi-screenshot
+
+# -- TOGGLE CLIPBOARD
+# bindsym $mod+z exec --no-startup-id rofi -modi "Clipboard:greenclip print" -show Clipboard -run-command '{cmd}' -theme ~/.config/rofi/selmenu.rasi
+
+# -- LOCK SCREEN WITH BETTERLOCKSCREEN
+# bindsym $mod+x exec --no-startup-id betterlockscreen -l
+bindsym $mod+x exec --no-startup-id ~/.config/i3/scripts/i3lock-extra
+
+# -- LOCK KEY AND MOUSE INPUT
+# bindsym $mod+Shift+F9 exec --no-startup-id xtrlock
+
+# -- TOGGLE TOUCHPAD
+# bindsym $mod+F6 exec --no-startup-id ~/.local/bin/toggle_touchpad
+
+# -- APP KEYBINDS
+# bindsym $mod+f       exec --no-startup-id $browser &
+# bindsym $mod+t       exec --no-startup-id $fileexplorer &
+
+# -- LAUNCH BTOP
+bindsym $mod+F11 exec --no-startup-id alacritty -e btop
+
+# -- SWAP MASTER
+bindsym $mod+m exec --no-startup-id ~/.config/i3/scripts/i3-swap-master.py
+
+bindsym $mod+semicolon [urgent="latest"] focus
+bindsym $mod+Shift+semicolon exec --no-startup-id ~/.config/i3/scripts/silence
+
+# move floating windows with keys
+bindsym $mod+Shift+m mode "move" focus floating
+mode "move" {
+    bindsym $mod+Tab focus right
+
+    bindsym Left  move left
+    bindsym Down  move down
+    bindsym Up    move up
+    bindsym Right move right
+
+    bindsym h     move left
+    bindsym j     move down
+    bindsym k     move up
+    bindsym l     move right
+
+    # back to normal: Enter or Escape
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+# bindsym $mod+y resize set 1200 px 800 px, move position center

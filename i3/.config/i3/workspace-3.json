@@ -1,0 +1,6 @@
+{
+    "layout": "stacked",
+    "nodes": [
+        {"swallows": [{"class": "Brave-browser"}]}
+    ]
+}

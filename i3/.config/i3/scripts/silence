@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+# https://github.com/skontar/Utility-old/blob/master/scripts/start-apps
+
+for win in $(wmctrl -l | awk -F' ' '{print $1}'); do
+    wmctrl -i -r $win -b remove,demands_attention
+done

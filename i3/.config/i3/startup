@@ -1,0 +1,52 @@
+##############################################################
+# -------------------- STARTUP COMMANDS -------------------- #
+##############################################################
+
+# -- WORKSPACE NAMES
+set $ws1 1: 
+set $ws2 2: 
+set $ws3 3: 
+set $ws4 4: 
+set $ws5 5: 
+set $ws6 6: 
+set $ws7 7
+set $ws8 8
+set $ws9 9
+set $ws10 10
+
+# -> Set wallpaper with feh
+exec_always --no-startup-id feh --bg-scale ~/Pictures/gundam.png
+
+# -- Start XDG autostart .desktop files using dex
+exec --no-startup-id dex --autostart --environment i3
+
+# -- Start xss-lock
+# exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
+
+# -- Start nm-applet system tray gui
+exec --no-startup-id nm-applet
+
+# -- Startup scripts
+exec_always --no-startup-id "sleep 20; ~/.config/i3/scripts/silence"
+# exec_always --no-startup-id ~/.config/i3/scripts/i3-master-layout.py -e ws3,ws4,ws5
+# exec_always --no-startup-id ~/.config/i3/scripts/floating-terminal.py &
+exec_always --no-startup-id autotiling --w 1
+
+# -- Startup daemons
+# exec --no-startup-id greenclip daemon>/dev/null     # Clipboard
+exec_always --no-startup-id picom &
+exec --no-startup-id xidlehook --detect-sleep --not-when-fullscreen --not-when-audio --timer 120 'xrandr --output eDP1 --brightness .1' 'xrandr --output eDP1 --brightness 1' --timer 300 'xrandr --output eDP1 --brightness 1; ~/.config/i3/scripts/i3lock-extra' '' --timer 600 'systemctl suspend' '' &
+exec_always --no-startup-id pactl set-sink-volume 0 200%
+exec_always --no-startup-id ~/.config/polybar/launch.sh
+
+# -- Startup programs
+exec --no-startup-id nemo &
+exec --no-startup-id alacritty &
+exec --no-startup-id brave-browser &
+exec --no-startup-id onboard &
+exec --no-startup-id kdeconnect-indicator &
+
+# -- Startup workspaces
+exec --no-startup-id i3-msg 'workspace $ws3; append_layout ~/.config/i3/workspace-3.json'
+exec --no-startup-id i3-msg 'workspace $ws4; append_layout ~/.config/i3/workspace-4.json'
+exec --no-startup-id i3-msg 'workspace $ws7'
