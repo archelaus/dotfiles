@@ -2,16 +2,16 @@
 #                         i3 CONFIG                         #
 #############################################################
 
-# -- SET MODIFIER
+# -- Set modifier
 set $mod Mod4
 
-# -- WINDOW TITLE FONT
+# -- Window title font
 font pango:Noto Sans 10
 
-# -- MOUSE+$MOD TO DRAG FLOATING WINDOWS TO THEIR WANTED POSITION
+# -- mouse+$mod to drag floating windows
 floating_modifier $mod
 
-# -- IMPORTS
+# -- Imports
 include ~/.config/i3/navigation
 include ~/.config/i3/startup
 include ~/.config/i3/winsettings

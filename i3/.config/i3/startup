@@ -14,7 +14,7 @@ set $ws8 8
 set $ws9 9
 set $ws10 10
 
-# -> Set wallpaper with feh
+# -- Set wallpaper with feh
 exec_always --no-startup-id feh --bg-scale ~/Pictures/gundam.png
 
 # -- Start XDG autostart .desktop files using dex
@@ -33,11 +33,11 @@ exec_always --no-startup-id "sleep 20; ~/.config/i3/scripts/silence"
 exec_always --no-startup-id autotiling --w 1
 
 # -- Startup daemons
-# exec --no-startup-id greenclip daemon>/dev/null     # Clipboard
-exec_always --no-startup-id picom &
+# exec --no-startup-id greenclip daemon>/dev/null # clipboard
+exec_always --no-startup-id picom & # compositor
+exec_always --no-startup-id pactl set-sink-volume 0 200% # set default volume
+exec_always --no-startup-id ~/.config/polybar/launch.sh # alternative to i3bar
 exec --no-startup-id xidlehook --detect-sleep --not-when-fullscreen --not-when-audio --timer 120 'xrandr --output eDP1 --brightness .1' 'xrandr --output eDP1 --brightness 1' --timer 300 'xrandr --output eDP1 --brightness 1; ~/.config/i3/scripts/i3lock-extra' '' --timer 600 'systemctl suspend' '' &
-exec_always --no-startup-id pactl set-sink-volume 0 200%
-exec_always --no-startup-id ~/.config/polybar/launch.sh
 
 # -- Startup programs
 exec --no-startup-id nemo &

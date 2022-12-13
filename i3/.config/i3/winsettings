@@ -2,7 +2,7 @@
 # ---------------------- WINDOW SETTINGS ---------------------- #
 #################################################################
 
-# -- WORKSPACE NAMES
+# -- Workspace names
 set $ws1 1: 
 set $ws2 2: 
 set $ws3 3: 
@@ -14,7 +14,7 @@ set $ws8 8
 set $ws9 9
 set $ws10 10
 
-# Define colors variables:
+# -- Define colors variables
 set $color1     #08052b
 # bg tab mode
 set $color2     #282828 
@@ -28,43 +28,30 @@ set $color9     #928374
 set $color10    #D65D0E
 set $color11    #282828
 
-# define colors for windows:
+# -- Define colors for windows
 #class                          border          bground         text            indicator       child_border
 client.focused               $color3           $color2         $color4           $color7         $color10
 client.unfocused             $color9           $color2         $color9           $color7         $color8
 client.focused_inactive      $color2           $color2         $color8           $color8         $color6
 client.urgent                $color4           $color4         $color5           $color7         $color11
 
-# -- BORDER THICKNESS
+# -- Border thickness
 default_border pixel 5
-
 for_window [class="^.*"] border pixel 5
-# -- DISABLE FOCUS FOR POP-UPS
+
+# -- Disable focus for pop-ups
 # no_focus [window_role="pop-up"]
 
-# -- FLOATING WINDOW SETTINGS
+# -- Floating windows
 for_window [class="Onboard"] floating enable, border none
 
-# -- MOVE APPS TO SPECIFIC WS
+# -- Move apps to specific workspaces
 for_window [class="Alacritty"] move to workspace $ws1
 for_window [class="Brave-browser"] move to workspace $ws3
 for_window [class="Nemo"] move to workspace $ws4
 for_window [class="TelegramDesktop"] move to workspace $ws5
 for_window [class="Spotify"] move to workspace $ws6
 
+# -- Workspace specific preferences
 focus_follows_mouse no
-bindsym $mod+Tab workspace next
-bindsym Mod1+Tab workspace prev
-
-#CapsLock indicator
-mode "caps" {
-    bindsym Caps_Lock mode "default"
-}
-bindsym Caps_Lock mode "caps"
-
-# Enable/disable numeric keyboard 
-mode "num" {
-        bindsym Num_Lock mode "default"
-}
-bindsym Num_Lock mode "num"
 # workspace_auto_back_and_forth yes
