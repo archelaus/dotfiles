@@ -105,6 +105,7 @@ Plug 'itchyny/lightline.vim'
 Plug 'tmsvg/pear-tree'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-commentary'
 Plug 'mbbill/undotree'
 Plug 'christoomey/vim-system-copy'
 call plug#end()
