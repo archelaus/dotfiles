@@ -1,27 +1,27 @@
 #!/usr/bin/env bash
 
 screenshot_directory="$HOME/Pictures/Screenshots"
-dt=$(date '+%Y-%m-%d_%H-%M')
+dt=$(date '+%d-%m-%Y_%H-%M')
 
 _rtc() {
   notify-send --app-name="screenshot" "Screenshot" "Select a region to capture"
-  maim -s -m 10 -f png | xclip -selection clipboard -t image/png
+  maim -s -m 1 | xclip -selection clipboard -t image/png
   notify-send --app-name="screenshot" "Screenshot" "Region copied to Clipboard!"
 }
 
 _rtf() {
   notify-send --app-name="screenshot" "Screenshot" "Select a region to capture"
-  maim -s -m 10 -f png "$screenshot_directory/$dt.png"
+  maim -s -m 1 "$screenshot_directory/$dt.png"
   notify-send --app-name="screenshot" "Screenshot" "Region saved to ${screenshot_directory//$HOME/'~'}!"
 }
 
 _stc() {
-  maim -i $(xdotool getactivewindow) -m 10 -f png | xclip -selection clipboard -t image/png
+  maim -d 2 -m 1 | xclip -selection clipboard -t image/png
   notify-send --app-name="screenshot" "Screenshot" "Screenshot copied to Clipboard!"
 }
 
 _stf() {
-  maim -i $(xdotool getactivewindow) -m 10 -f png "$screenshot_directory/$dt.png"
+  maim -d 2 -m 1 "$screenshot_directory/$dt.png"
   notify-send --app-name="screenshot" "Screenshot" "Saved to ${screenshot_directory//${HOME}/'~'}!"
 }
 
@@ -33,7 +33,7 @@ _rtcmac() {
 }
 
 _stcmac() {
-  maim -i $(xdotool getactivewindow) -m 10 -f png "$screenshot_directory/$dt.png"
+  maim -i $(xdotool getactivewindow) -d 2 -m 10 -f png "$screenshot_directory/$dt.png"
   ,drop-shadow "$screenshot_directory/$dt.png"
   notify-send --app-name="screenshot" "Screenshot" "Region copied to Clipboard!"
 }
@@ -63,7 +63,7 @@ main() {
   check_deps rofi
 
   # Get choice from rofi
-  choice=$( (get_options) | dmenu -i -p "Screenshot" )
+  choice=$( (get_options) | rofi -dmenu -i -fuzzy -theme arthur -p "Screenshot: " )
 
   # If user has not picked anything, exit
   if [[ -z "${choice// }" ]]; then
