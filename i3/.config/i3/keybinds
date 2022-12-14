@@ -100,3 +100,6 @@ bindsym Num_Lock mode "num"
 
 # -- Emoji picker using rofi
 bindsym $mod+grave exec ~/.local/bin/rofi-emoji
+
+# -- Calculations using rofi
+bindsym $mod+c exec --no-startup-id rofi -theme arthur -modi calc -show calc -calc-command 'xdotool type --clearmodifiers "{result}"' > /dev/null
