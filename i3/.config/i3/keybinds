@@ -43,7 +43,7 @@ bindsym $mod+Shift+r restart
 # bindsym $mod+Shift+e exec "rofi -show power-menu -modi power-menu:rofi-power-menu"
 # (Alt) powermenu
 # Source: https://github.com/BIBJAW/Final_Rice/blob/main/MYDE/i3/scripts/powermenu
-bindsym $mod+Shift+e exec powermenu
+bindsym $mod+Shift+e exec --no-startup-id ~/.config/rofi/scripts/rofi-powermenu-gruvbox
 
 # -- Enter resize mode
 bindsym $mod+r mode "resize"
@@ -51,14 +51,11 @@ bindsym $mod+r mode "resize"
 # -- Map power off button to dmenu/rofi
 # bindsym XF86PowerOff exec --no-startup-id "rofi -show power-menu -modi power-menu:rofi-power-menu"
 
-# -- Screenshot
+#-- Screenshot
 # bindsym Print exec --no-startup-id flameshot full
 # bindsym $mod+Insert exec --no-startup-id flameshot gui
 # Source: https://github.com/ceuk/rofi-screenshot
-bindsym $mod+Insert exec --no-startup-id rofi-screenshot
-
-# [NYI] Toggle clipboard
-# bindsym $mod+z exec --no-startup-id rofi -modi "Clipboard:greenclip print" -show Clipboard -run-command '{cmd}' -theme ~/.config/rofi/selmenu.rasi
+bindsym $mod+Insert exec --no-startup-id ~/.config/rofi/scripts/rofi-screenshot
 
 # -- Lock screen with betterlockscreen
 # bindsym $mod+x exec --no-startup-id betterlockscreen -l
@@ -99,10 +96,14 @@ mode "num" {
 bindsym Num_Lock mode "num"
 
 # -- Emoji picker using rofi
-bindsym $mod+grave exec ~/.local/bin/rofi-emoji
+bindsym $mod+grave exec ~/.config/rofi/scripts/rofi-emoji
 
 # -- Calculations using rofi
 bindsym $mod+Shift+c exec --no-startup-id rofi -theme arthur -modi calc -show calc -calc-command 'xdotool type --clearmodifiers "{result}"' > /dev/null
 
 # -- greenclip
+# bindsym $mod+g exec --no-startup-id greenclip print | grep . | dmenu -i -l 10 -p clipboard | xargs -r -d'\n' -I '{}' xdotool type '{}'
 bindsym $mod+c exec --no-startup-id greenclip print | grep . | dmenu -i -l 10 -p clipboard | xargs -r -d'\n' -I '{}' greenclip print '{}'
+# rofi -modi "clipboard:greenclip print" -show clipboard -run-command '{cmd}'
+# rofi -modi "clipboard:greenclip print" -show clipboard -run-command '{cmd}' ; sleep 0.5; xdotool type $(xclip -o -selection clipboard)
+# bindsym $mod+z exec --no-startup-id rofi -modi "Clipboard:greenclip print" -show Clipboard -run-command '{cmd}' -theme ~/.config/rofi/selmenu.rasi
