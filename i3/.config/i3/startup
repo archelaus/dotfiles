@@ -40,12 +40,11 @@ exec_always --no-startup-id ~/.config/polybar/launch.sh # alternative to i3bar
 exec --no-startup-id xidlehook --detect-sleep --not-when-fullscreen --not-when-audio --timer 120 'xrandr --output eDP1 --brightness .1' 'xrandr --output eDP1 --brightness 1' --timer 300 'xrandr --output eDP1 --brightness 1; ~/.config/i3/scripts/i3lock-extra' '' --timer 600 'systemctl suspend' '' &
 
 # -- Startup programs
-# exec --no-startup-id nemo &
-exec --no-startup-id alacritty &
-exec --no-startup-id brave-browser &
 exec --no-startup-id onboard &
 exec --no-startup-id kdeconnect-indicator &
+exec --no-startup-id brave-browser &
+exec --no-startup-id alacritty &
+exec --no-startup-id nemo &
 
 # -- Startup workspaces
-# exec --no-startup-id i3-msg 'workspace $ws3; append_layout ~/.config/i3/workspace-3.json; workspace $ws4; append_layout ~/.config/i3/workspace-4.json; workspace $ws7'
-exec_always --no-startup-id ~/.config/i3/scripts/per-workspace-layout.pl
+exec --no-startup-id i3-msg 'workspace $ws3; append_layout ~/.config/i3/workspace-3.json; workspace $ws4; append_layout ~/.config/i3/workspace-4.json; workspace $ws7'
