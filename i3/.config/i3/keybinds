@@ -31,7 +31,7 @@ bindsym $mod+Shift+q kill
 bindsym $mod+d exec --no-startup-id "rofi -show combi -combi-modi drun,window -icon-theme Papirus -show-icons"
 
 # -- Reload the configuration file
-bindsym $mod+Shift+c reload
+# bindsym $mod+Shift+c reload
 
 # -- Restart i3
 bindsym $mod+Shift+r restart
@@ -102,4 +102,7 @@ bindsym Num_Lock mode "num"
 bindsym $mod+grave exec ~/.local/bin/rofi-emoji
 
 # -- Calculations using rofi
-bindsym $mod+c exec --no-startup-id rofi -theme arthur -modi calc -show calc -calc-command 'xdotool type --clearmodifiers "{result}"' > /dev/null
+bindsym $mod+Shift+c exec --no-startup-id rofi -theme arthur -modi calc -show calc -calc-command 'xdotool type --clearmodifiers "{result}"' > /dev/null
+
+# -- greenclip
+bindsym $mod+c exec --no-startup-id greenclip print | grep . | dmenu -i -l 10 -p clipboard | xargs -r -d'\n' -I '{}' greenclip print '{}'
