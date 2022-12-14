@@ -27,7 +27,7 @@ exec --no-startup-id dex --autostart --environment i3
 exec --no-startup-id nm-applet
 
 # -- Startup scripts
-exec_always --no-startup-id "sleep 20; ~/.config/i3/scripts/silence"
+exec_always --no-startup-id "sleep 30; ~/.config/i3/scripts/silence"
 # exec_always --no-startup-id ~/.config/i3/scripts/i3-master-layout.py -e ws3,ws4,ws5
 # exec_always --no-startup-id ~/.config/i3/scripts/floating-terminal.py &
 exec_always --no-startup-id autotiling --w 1
