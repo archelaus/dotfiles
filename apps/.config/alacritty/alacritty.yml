@@ -2,8 +2,8 @@
 
 window:
   dimensions:
-    columns: 90
-    lines: 27
+    columns: 132
+    lines: 28
     
   padding:
     x: 10
