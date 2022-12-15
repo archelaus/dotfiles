@@ -97,7 +97,7 @@ bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
 
 # -- Split in horizontal orientation
-bindsym $mod+z split h
+bindsym $mod+Shift+z split h
 
 # -- Split in vertical orientation
 bindsym $mod+v split v
@@ -114,13 +114,13 @@ bindsym $mod+e layout toggle split
 bindsym $mod+space floating toggle
 
 # -- Change focus between tiling / floating windows
-bindsym $mod+a focus mode_toggle
+bindsym $mod+Shift+space focus mode_toggle
 
 # -- Focus the parent container
 bindsym $mod+p focus parent
 
 # -- Focus the child container
-# bindsym $mod+d focus child
+bindsym $mod+c focus child
 
 # -- Make focused window a scratchpad
 # bindsym $mod+Shift+minus move scratchpad
@@ -171,3 +171,9 @@ bindsym Mod1+Tab workspace prev
 
 # -- Resize and center focused window
 # bindsym $mod+y resize set 1200 px 800 px, move position center
+
+# -- Manage gaps
+bindsym $mod+z gaps inner current plus 5
+bindsym $mod+x gaps inner current minus 5
+bindsym $mod+a gaps inner current toggle 10
+bindsym $mod+Shift+a gaps inner all set 10
