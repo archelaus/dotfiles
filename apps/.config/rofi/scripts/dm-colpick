@@ -1,13 +1,15 @@
 #!/usr/bin/env bash
 #
-# Script name: dm-weather
-# Description: Simple graphical weather app
-# Dependencies: dmenu, curl, yad
+# Script name: dm-colpick
+# Description: Copy a color to your clipboard using dmenu, change the colors if needed
+# Dependencies: dmenu, xclip
 # GitLab: https://www.gitlab.com/dwt1/dmscripts
 # License: https://www.gitlab.com/dwt1/dmscripts/LICENSE
-# Contributors: HostGrady
+# Contributors: sloopy3333
+#               Simon Ingelsson
+#               HostGrady
 
-# Set with the flags "-e", "-u","-o pipefail" cause the script to fail
+# Set with the flags "-e", "-o pipefail" cause the script to fail
 # if certain things happen, which is a good thing.  Otherwise, we can
 # get hidden bugs that are hard to discover.
 set -euo pipefail
@@ -25,18 +27,13 @@ fi
 # shellcheck disable=SC1090
 source "$(get_config)"
 
+
 main() {
-  # Here we obtain the location from the list in the config
   # As this is loaded from other file it is technically not defined
   # shellcheck disable=SC2154
-  _location="$(printf '%s\n' "${!weather_location[@]}" | ${DMENU} "Where do you want to see the weather?")"
-
-  # If $weather_opts is unset, give it an empty value
-  weather_opts+=''
-
-  # Curl wttr.in, a CLI weather app.
-  # TODO: Replace YAD with some simplified notification
-  curl -s "https://wttr.in/\"${weather_location[${_location}]}\"?T&${weather_opts}" | yad --text-info
+  selected="$(printf '%s\n' "${!colpick_list[@]}" | ${DMENU} "color:" "$@")"
+  [ -z "${selected}" ] && exit 1
+  echo "${colpick_list["${selected}"]}" | cp2cb
 }
 
 [[ "${BASH_SOURCE[0]}" == "${0}" ]] && main "$@"

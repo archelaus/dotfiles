@@ -5,7 +5,7 @@ dt=$(date '+%d-%m-%Y_%H-%M')
 
 _rtc() {
   notify-send --app-name="screenshot" "Screenshot" "Select a region to capture"
-  maim -s -m 1 | xclip -selection clipboard -t image/png
+  maim -s | xclip -selection clipboard -t image/png
   notify-send --app-name="screenshot" "Screenshot" "Region copied to Clipboard!"
 }
 
@@ -16,7 +16,7 @@ _rtf() {
 }
 
 _stc() {
-  maim -d 2 -m 1 | xclip -selection clipboard -t image/png
+  maim -d 2 | xclip -selection clipboard -t image/png
   notify-send --app-name="screenshot" "Screenshot" "Screenshot copied to Clipboard!"
 }
 
@@ -27,13 +27,13 @@ _stf() {
 
 _rtcmac() {
   notify-send --app-name="screenshot" "Screenshot" "Select a region to capture"
-  maim -s -m 10 -f png "$screenshot_directory/$dt.png"
+  maim -s "$screenshot_directory/$dt.png"
   ,drop-shadow "$screenshot_directory/$dt.png"
   notify-send --app-name="screenshot" "Screenshot" "Region copied to Clipboard!"
 }
 
 _stcmac() {
-  maim -i $(xdotool getactivewindow) -d 2 -m 10 -f png "$screenshot_directory/$dt.png"
+  maim -i $(xdotool getactivewindow) -d 2 "$screenshot_directory/$dt.png"
   ,drop-shadow "$screenshot_directory/$dt.png"
   notify-send --app-name="screenshot" "Screenshot" "Region copied to Clipboard!"
 }

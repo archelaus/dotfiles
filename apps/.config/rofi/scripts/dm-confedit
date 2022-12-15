@@ -1,19 +1,18 @@
 #!/usr/bin/env bash
 #
-# Script name: dm-reddit
-# Description: Dmenu as a reddit viewer using reddio.
-# Dependencies: dmenu, reddio, yad
+# Script name: dm-confedit
+# Description: Choose from a list of configuration files to edit.
+# Dependencies: dmenu, emacsclient
 # GitLab: https://www.gitlab.com/dwt1/dmscripts
 # License: https://www.gitlab.com/dwt1/dmscripts/LICENSE
 # Contributors: Derek Taylor
-#               HostGrady
 #               Simon Ingelsson
+#               HostGrady
 
 # Set with the flags "-e", "-u","-o pipefail" cause the script to fail
 # if certain things happen, which is a good thing.  Otherwise, we can
 # get hidden bugs that are hard to discover.
 set -euo pipefail
-
 _path="$(cd "$(dirname "${BASH_SOURCE[0]}")" && cd "$(dirname "$(readlink "${BASH_SOURCE[0]}" || echo ".")")" && pwd)"
 if [[  -f "${_path}/_dm-helper.sh" ]]; then
   # shellcheck disable=SC1090,SC1091
@@ -28,20 +27,27 @@ fi
 source "$(get_config)"
 
 main() {
-  # Picking a subreddit from the above reddit_list.
+  # Clean options array making sure that the files exist
+  declare -A _clean_list
   # As this is loaded from other file it is technically not defined
   # shellcheck disable=SC2154
-  reddit_list+=( "Quit" )
-  _subreddit=$(printf '%s\n' "${reddit_list[@]}" | ${DMENU} "Choose a subreddit:" "$@") || exit 1
+  for i in "${!confedit_list[@]}"; do
+    [[ -f ${confedit_list["${i}"]} ]] && _clean_list["${i}"]=${confedit_list["${i}"]}
+  done
 
-  # Show the last 20 posts (titles and ids) from the chosen subreddit.
-  post_title=$(bash reddio print -f '$num. $title $id$nl' -l 20 "$_subreddit" | \
-  ${DMENU} 'Last 20 posts on '"$_subreddit" "$@")
+  # Piping the above array (cleaned) into dmenu.
+  # We use "printf '%s\n'" to format the array one item to a line.
+  choice=$(printf '%s\n' "${!_clean_list[@]}" | sort | ${DMENU} 'Edit config:' "$@")
 
-  # Display contents of chosen post in a yad text box.
-  post_id=$(printf '%s\n' "${post_title##* }")
-  bash reddio print -f ' TITLE: $title$nl SUBMITTED: $created_pretty$nl AUTHOR: $author$nl$nl$text' by_id/"$post_id" | \
-  yad --text-info --height=600 --width=600 || exit 1
+  # What to do when/if we choose a file to edit.
+  if [ "$choice" ]; then
+    cfg=$(printf '%s\n' "${_clean_list["${choice}"]}")
+    # shellcheck disable=SC2154
+    $DMEDITOR "$cfg"
+  # What to do if we just escape without choosing anything.
+  else
+      echo "Program terminated." && exit 0
+  fi
 }
 
 [[ "${BASH_SOURCE[0]}" == "${0}" ]] && main "$@"

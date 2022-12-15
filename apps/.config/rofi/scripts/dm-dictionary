@@ -1,15 +1,16 @@
 #!/usr/bin/env bash
 #
-# Script name: dm-weather
-# Description: Simple graphical weather app
-# Dependencies: dmenu, curl, yad
+# Script name: dm-dictionary
+# Description: uses the translate package as a dictionary
+# Dependencies: translate-shell, didyoumean
 # GitLab: https://www.gitlab.com/dwt1/dmscripts
 # License: https://www.gitlab.com/dwt1/dmscripts/LICENSE
-# Contributors: HostGrady
+# Contributors: Francesco Prem Solidoro
 
 # Set with the flags "-e", "-u","-o pipefail" cause the script to fail
 # if certain things happen, which is a good thing.  Otherwise, we can
 # get hidden bugs that are hard to discover.
+
 set -euo pipefail
 
 _path="$(cd "$(dirname "${BASH_SOURCE[0]}")" && cd "$(dirname "$(readlink "${BASH_SOURCE[0]}" || echo ".")")" && pwd)"
@@ -26,17 +27,24 @@ fi
 source "$(get_config)"
 
 main() {
-  # Here we obtain the location from the list in the config
-  # As this is loaded from other file it is technically not defined
-  # shellcheck disable=SC2154
-  _location="$(printf '%s\n' "${!weather_location[@]}" | ${DMENU} "Where do you want to see the weather?")"
 
-  # If $weather_opts is unset, give it an empty value
-  weather_opts+=''
+WORD="$(${DMENU} "Search:")"
+TESTWORD="$(dym -c -n=1 "$WORD")"
 
-  # Curl wttr.in, a CLI weather app.
-  # TODO: Replace YAD with some simplified notification
-  curl -s "https://wttr.in/\"${weather_location[${_location}]}\"?T&${weather_opts}" | yad --text-info
+if [ "$WORD" != "$TESTWORD" ]; then
+	KEYWORD=$(dym -c "$WORD" | ${DMENU} "was $WORD a misspelling?(select/no)")
+	if [ "$KEYWORD" = "no" ] || [ "$KEYWORD" = "n" ]; then
+		KEYWORD="$WORD"
+	fi
+else
+	KEYWORD="$WORD"
+fi
+
+if ! [ "${KEYWORD}" ]; then
+	printf 'No word inserted\n' >&2
+	exit 0
+fi
+$DMTERM trans -v -d "$WORD"
 }
 
 [[ "${BASH_SOURCE[0]}" == "${0}" ]] && main "$@"
