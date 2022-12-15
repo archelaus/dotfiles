@@ -3,18 +3,17 @@
 ###################################
 
 [global]
-  geometry = "300x5-30+20"
   monitor = 0
   shrink = no
-  padding = 20
-  horizontal_padding = 20
+  padding = 15
+  horizontal_padding = 15
 
-  width = 275
+  width = 300
   height = 100
-  offset = 10x50
-  origin = bottom-right
+  offset = 30x30
+  origin = top-right
 
-  frame_width = 2
+  frame_width = 3
   separator_height = 0
 
   sort = yes
@@ -32,7 +31,7 @@
   icon_position = left
   max_icon_size= 60
   sticky_history = no
-  history_length = 6
+  history_length = 10
   title = Dunst
   class = Dunst
   corner_radius = 5
@@ -41,6 +40,7 @@
   mouse_middle_click = do_action
   mouse_right_click = close_all
 
+  transparency = 20
 # Color schemes
 
 # # dracula
@@ -61,11 +61,13 @@
 [urgency_low]
   background = "#282828"
   foreground = "#ebdbb2"
-  frame_color = "#98971a"
+  # frame_color = "#98971a"
+  frame_color = "#D65D0E"
 [urgency_normal]
   background = "#282828"
   foreground = "#ebdbb2"
-  frame_color = "#98971a"
+  # frame_color = "#98971a"
+  frame_color = "#D65D0E"
 [urgency_critical]
   background = "#282828"
   foreground = "#ebdbb2"
