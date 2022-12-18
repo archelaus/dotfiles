@@ -134,4 +134,4 @@ fi
 eval "$(zoxide init bash)"
 eval "$(starship init bash)"
 
-export PATH="$HOME/.config/rofi/scripts:$PATH"
+# nix related
