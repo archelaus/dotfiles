@@ -124,6 +124,13 @@ mode "$mode_gaps_left" {
 }
 
 gaps inner 10
+gaps outer 5
 smart_borders on
-# smart_gaps on
+smart_gaps on
 hide_edge_borders smart_no_gaps
+
+# -- Manage gaps
+bindsym $mod+z gaps inner current plus 5
+bindsym $mod+x gaps inner current minus 5
+bindsym $mod+a gaps inner all set 10; gaps outer all set 5    
+bindsym $mod+Shift+a gaps inner all set 0; gaps outer all set 0
