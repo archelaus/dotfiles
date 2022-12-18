@@ -14,3 +14,5 @@ notes/.notes/quick.md
 !scripts/.local/bin/tilix-backup
 !scripts/.local/bin/backup-appdata
 !scripts/.local/bin/rofi-screenshot
+!scripts/.local/bin/tmux-cht.sh
+!scripts/.local/bin/se
