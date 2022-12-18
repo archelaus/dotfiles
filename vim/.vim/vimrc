@@ -108,6 +108,7 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-commentary'
 Plug 'mbbill/undotree'
 Plug 'christoomey/vim-system-copy'
+Plug 'scrooloose/syntastic'
 call plug#end()
 
 " https://www.youtube.com/watch?v=DogKdiRx7ls
@@ -135,3 +136,12 @@ endfunction
 
 " https://vi.stackexchange.com/a/479
 cnoremap w!! w !sudo tee %
+
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
