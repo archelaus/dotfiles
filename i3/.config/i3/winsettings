@@ -44,7 +44,7 @@ for_window [class="^.*"] border pixel 5
 
 # -- Floating windows
 for_window [class="Onboard"] floating enable, border none
-for_window [class="scratchpad"] floating enable, move scratchpad
+# for_window [class="scratchpad"] floating enable, move scratchpad
 
 # -- Move apps to specific workspaces
 for_window [class="Alacritty"] move to workspace $ws1
