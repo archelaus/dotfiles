@@ -122,7 +122,7 @@ websearch[googlenews]="https://news.google.com/search?q="
 websearch[wikipedia]="https://en.wikipedia.org/w/index.php?search="
 websearch[wiktionary]="https://en.wiktionary.org/w/index.php?search="
 # Social Media
-websearch[reddit]="https://www.reddit.com/search/?q="
+websearch[reddit]="https://duckduckgo.com/?q=site%3Areddit.com+"
 websearch[odysee]="https://odysee.com/$/search?q="
 websearch[youtube]="https://www.youtube.com/results?search_query="
 # Online Shopping
@@ -137,7 +137,7 @@ websearch[archwiki]="https://wiki.archlinux.org/index.php?search="
 websearch[debianpkg]="https://packages.debian.org/search?suite=default&section=all&arch=any&searchon=names&keywords="
 websearch[nixpkgs]="https://search.nixos.org/packages?channel=22.11&from=0&size=50&sort=relevance&type=packages&query="
 # Development
-websearch[github]="https://github.com/search?q="
+websearch[github]="https://duckduckgo.com/?q=site%3Agithub.com+"
 websearch[gitlab]="https://gitlab.com/search?search="
 websearch[googleOpenSource]="https://opensource.google/projects/search?q="
 websearch[sourceforge]="https://sourceforge.net/directory/?q="
