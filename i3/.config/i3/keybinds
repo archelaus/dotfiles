@@ -1,4 +1,4 @@
-###############################################################
+##############################################################
 # ----------------------- KEYBINDINGS ----------------------- #
 ###############################################################
 
@@ -27,7 +27,8 @@ bindsym $mod+Shift+q kill
 # ? bindsym $mod+q
 
 # -- Launch app menu
-bindsym $mod+d exec --no-startup-id "rofi -show combi -combi-modi drun,window -icon-theme Papirus -show-icons"
+# bindsym $mod+d exec --no-startup-id "rofi -show combi -combi-modi drun,window -icon-theme Papirus -show-icons"
+bindsym $mod+d exec --no-startup-id j4-dmenu-desktop
 
 # -- dmenu
 bindsym $mod+n exec --no-startup-id ~/.config/rofi/scripts/dm-hub
@@ -59,7 +60,7 @@ bindsym $mod+r mode "resize"
 # bindsym Print exec --no-startup-id flameshot full
 # bindsym $mod+Insert exec --no-startup-id flameshot gui
 # Source: https://github.com/ceuk/rofi-screenshot
-# bindsym exec --no-startup-id ~/.config/rofi/scripts/rofi-screenshot
+bindsym $mod+Home exec --no-startup-id ~/.config/rofi/scripts/rofi-screenshot
 
 # -- Lock screen with betterlockscreen
 # bindsym $mod+x exec --no-startup-id betterlockscreen -l
@@ -81,7 +82,7 @@ bindsym $mod+Shift+semicolon exec --no-startup-id ~/.config/i3/scripts/silence
 mode "caps" {
     bindsym Caps_Lock mode "default"
 }
-bindsym Caps_Lock mode "caps"
+# bindsym Caps_Lock mode "caps"
 
 # -- Num Lock indicator
 mode "num" {
@@ -103,4 +104,14 @@ bindsym $mod+Insert exec --no-startup-id greenclip print | grep . | dmenu -i -l 
 # bindsym $mod+z exec --no-startup-id rofi -modi "Clipboard:greenclip print" -show Clipboard -run-command '{cmd}' -theme ~/.config/rofi/selmenu.rasi
 
 # -- Scratchpad(s)
-bindsym $mod+b [class="scratchpad"] scratchpad show
+# bindsym $mod+b [class="scratchpad"] scratchpad show
+
+# -- Resize and center focused window
+# bindsym $mod+y resize set 1200 px 800 px, move position center
+
+# -- Make focused window a scratchpad
+# bindsym $mod+Shift+minus move scratchpad
+
+# -- Show first scratchpad
+# bindsym $mod+minus scratchpad show
+
