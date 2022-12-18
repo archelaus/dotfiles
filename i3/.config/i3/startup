@@ -36,14 +36,14 @@ exec_always --no-startup-id autotiling --w 1
 exec --no-startup-id greenclip daemon >/dev/null # clipboard
 exec_always --no-startup-id dunst & # notifications
 exec_always --no-startup-id picom & # compositor
-exec --no-startup-id pactl set-sink-volume 0 200% # set default volume
+exec --no-startup-id pactl set-sink-volume 0 100% # set default volume
 exec_always --no-startup-id ~/.config/polybar/launch.sh # alternative to i3bar
-exec --no-startup-id xidlehook --detect-sleep --not-when-fullscreen --not-when-audio --timer 120 'xrandr --output eDP1 --brightness .1' 'xrandr --output eDP1 --brightness 1' --timer 300 'xrandr --output eDP1 --brightness 1; ~/.config/i3/scripts/i3lock-extra' '' --timer 600 'systemctl suspend' '' &
+exec --no-startup-id xidlehook --detect-sleep --not-when-audio --timer 180 'xrandr --output eDP1 --brightness .1' 'xrandr --output eDP1 --brightness 1' --timer 300 'xrandr --output eDP1 --brightness 1; ~/.config/i3/scripts/i3lock-extra' '' --timer 600 'systemctl suspend' '' &
 
 # -- Startup programs
+exec --no-startup-id alacritty &
 exec --no-startup-id onboard &
 exec --no-startup-id kdeconnect-indicator &
-exec --no-startup-id alacritty &
 exec --no-startup-id qutebrowser &
 
 # -- Startup workspaces
@@ -51,4 +51,4 @@ exec --no-startup-id qutebrowser &
 exec --no-startup-id i3-msg 'workspace $ws7'
 
 # -- Scratchpad(s)
-exec_always --no-startup-id alacritty --class "scratchpad" --title "LF | File manager" -e lf &
+# exec_always --no-startup-id alacritty --class "scratchpad" --title "LF | File manager" -e lf &
