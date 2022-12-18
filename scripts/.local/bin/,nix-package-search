@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+
+usage() {
+  echo "Usage: ${0##*/} [OPTION]... SEARCH_TERM"
+  exit 1
+}
+
+CACHE="$HOME/.cache/nix/nixpkgs.cache"
+
+check_cache() {
+  if ! [[ -s $CACHE && $(stat -c %Y $CACHE) -gt $(( $(date +%s) - 3600*24*7 )) ]]; then
+    read x MEM_AVAIL_KB UNIT < <(grep MemAvailable: /proc/meminfo) 
+    if [[ $UNIT != "kB" || $MEM_AVAIL_KB -lt 1000000 ]]; then
+      # nix-env can easily use up to 1GB during -qa
+      echo "Refusing to update cache due to low memory ($((MEM_AVAIL_KB/1000))MB)"
+      echo "Searching in old cache.. ♻️"
+    else
+      echo -n "Caching packages.."
+      nice nix-env -qaP --meta --json >| /tmp/nixpkgs.cache
+      mv /tmp/nixpkgs.cache "$CACHE" && echo " 🏁"
+    fi
+  fi
+}
+
+if [[ $# -gt 0 ]]; then
+  if [[ $# -ne 1 ]]; then
+    echo "${0##*/}: A single search term is required"
+    exit 1
+  else
+    check_cache
+    jq -r '(["Name (Version)", "Package", "Description"] | (., map(length*"="))), (to_entries | .[] | [.value.pname+" ("+.value.version+")", .key, .value.meta.description]) | @tsv' < "$CACHE" |
+    # https://stackoverflow.com/a/47873421
+    awk -v term="$1" 'NR<3 || tolower($0) ~ term' |
+    column --separator $'\t' \
+      --table \
+      --table-noheadings \
+      --table-columns C1,C2,C3 \
+      --table-wrap C1,C2,C3
+  fi
+else
+  usage
+fi
