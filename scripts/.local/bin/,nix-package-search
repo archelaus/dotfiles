@@ -30,7 +30,7 @@ if [[ $# -gt 0 ]]; then
     check_cache
     jq -r '(["Name (Version)", "Package", "Description"] | (., map(length*"="))), (to_entries | .[] | [.value.pname+" ("+.value.version+")", .key, .value.meta.description]) | @tsv' < "$CACHE" |
     # https://stackoverflow.com/a/47873421
-    awk -v term="$1" 'NR<3 || tolower($0) ~ term' |
+    awk -F'\t' -v term="$1" 'NR<3 || tolower($2) ~ term' |
     column --separator $'\t' \
       --table \
       --table-noheadings \
