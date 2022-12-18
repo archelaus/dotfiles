@@ -122,12 +122,6 @@ bindsym $mod+p focus parent
 # -- Focus the child container
 bindsym $mod+c focus child
 
-# -- Make focused window a scratchpad
-# bindsym $mod+Shift+minus move scratchpad
-
-# -- Show first scratchpad
-# bindsym $mod+minus scratchpad show
-
 # -- Resize window
 mode "resize" {
         bindsym h resize shrink width 10 px or 10 ppt
@@ -168,12 +162,3 @@ mode "move" {
 # -- Switch between workspaces (next, prev)
 bindsym $mod+Tab workspace next
 bindsym Mod1+Tab workspace prev
-
-# -- Resize and center focused window
-# bindsym $mod+y resize set 1200 px 800 px, move position center
-
-# -- Manage gaps
-bindsym $mod+z gaps inner current plus 5
-bindsym $mod+x gaps inner current minus 5
-bindsym $mod+a gaps inner current toggle 10
-bindsym $mod+Shift+a gaps inner all set 10
