@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+source $HOME/.config/dmscripts/config
+
+declare -A _clean_list
+for i in "${!confedit_list[@]}"; do
+  [[ -f ${confedit_list[$i]} ]] && _clean_list[$i]=${confedit_list[$i]}
+done
+
+choice=$(printf '%s\n' "${_clean_list[@]}" | fzf --bind 'J:preview-down,K:preview-up' --reverse --header-first --header="fzf-confedit" --preview="bat --color always {}")
+
+if [[ $choice ]]; then
+  # cfg=$(printf '%s\n' "${_clean_list["$choice"]}")
+  # $DMEDITOR "$cfg"
+  $DMEDITOR "$choice"
+else
+    echo "[✓] Program exited"
+    exit 0
+fi
+
