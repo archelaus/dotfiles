@@ -55,17 +55,17 @@ generateHistory() {
   echo -n "" > "${_cache_file}"
   echo -n "" > "${_cache_file}.sorted"
 
-  _chromium_history="${HOME}/.config/chromium/Default/History"
-  if [[ -f ${_chromium_history} ]]; then
-    SQL="SELECT 'Chromium', title, url FROM urls where url like 'http%';"
-    cacheHistory "${_chromium_history}" "${SQL}" "chromium"
-  fi
+  # _chromium_history="${HOME}/.config/chromium/Default/History"
+  # if [[ -f ${_chromium_history} ]]; then
+  #   SQL="SELECT 'Chromium', title, url FROM urls where url like 'http%';"
+  #   cacheHistory "${_chromium_history}" "${SQL}" "chromium"
+  # fi
 
-  _brave_history="${HOME}/.config/BraveSoftware/Brave-Browser/Default/History"
-  if [[ -f ${_brave_history} ]]; then
-    SQL="SELECT 'Brave', title, url FROM urls where url like 'http%';"
-    cacheHistory "${_brave_history}" "${SQL}" "brave"
-  fi
+  # _brave_history="${HOME}/.config/BraveSoftware/Brave-Browser/Default/History"
+  # if [[ -f ${_brave_history} ]]; then
+  #   SQL="SELECT 'Brave', title, url FROM urls where url like 'http%';"
+  #   cacheHistory "${_brave_history}" "${SQL}" "brave"
+  # fi
 
   _qutebrowser_history="${HOME}/.local/share/qutebrowser/history.sqlite"
   if [[ -f ${_qutebrowser_history} ]]; then
@@ -73,14 +73,14 @@ generateHistory() {
     cacheHistory "${_qutebrowser_history}" "${SQL}" "qutebrowser"
   fi
 
-  if [[ -d "${HOME}/.mozilla/firefox" ]]; then 
-    SQL="PRAGMA encoding='UTF-8'; select 'Firefox', p.title,p.url from moz_historyvisits as h, moz_places as p where p.id == h.place_id order by url"
-    cd "${HOME}/.mozilla/firefox"
-    for db in */places.sqlite; do
-      DB=$(realpath "${db}")
-      cacheHistory "${DB}" "${SQL}" "firefox"
-    done
-  fi
+  # if [[ -d "${HOME}/.mozilla/firefox" ]]; then 
+  #   SQL="PRAGMA encoding='UTF-8'; select 'Firefox', p.title,p.url from moz_historyvisits as h, moz_places as p where p.id == h.place_id order by url"
+  #   cd "${HOME}/.mozilla/firefox"
+  #   for db in */places.sqlite; do
+  #     DB=$(realpath "${db}")
+  #     cacheHistory "${DB}" "${SQL}" "firefox"
+  #   done
+  # fi
 
   # Merge .data-files
   find "${_cache_dir}" -iname "*.data" -print0 | xargs -0 cat > "${_cache_file}"
