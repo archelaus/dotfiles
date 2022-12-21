@@ -16,7 +16,7 @@ else
 fi
 
 # OSARCH=$(uname -m)
-# case $OSARCH in 
+# case $OSARCH in
 #     x86_64)
 #         BINTAG=Linux_x86_64
 #         ;;
@@ -36,7 +36,7 @@ fi
 # esac
 
 # if [[ $(id -u) -ne 0 ]]; then
-#    echo "This script must be run as root" 
+#    echo "This script must be run as root"
 #    exit 1
 # fi
 
@@ -204,7 +204,7 @@ mv how2* "$TEMPD"/how2 && chmod +x "$TEMPD"/how2
 
 # topgrade
 curl -s https://api.github.com/repos/topgrade-rs/topgrade/releases/latest |
-	jq -r '.assets[] | select(.name|match("linux-musl")) | .browser_download_url' |
+	jq -r '.assets[] | select(.name|match("x86_64-unknown-linux-musl")) | .browser_download_url' |
 	wget -i- -qO- | bsdtar x -C"$TEMPD"
 chmod +x "$TEMPD"/topgrade
 
@@ -226,7 +226,7 @@ pipx install https://github.com/ytdl-patched/ytdl-patched/archive/master.tar.gz
 set +x
 
 sudo mv "$TEMPD"/* /usr/local/bin/
-# sudo rm /usr/local/bin/LICENSE /usr/local/bin/README.md 
+# sudo rm /usr/local/bin/LICENSE /usr/local/bin/README.md
 
 # Make sure the temp directory gets removed on script exit.
 trap "exit 1"           HUP INT PIPE QUIT TERM

@@ -127,7 +127,7 @@ format = '[$symbol \[$name\]]($style) '
 symbol = " "
 
 [directory]
-truncation_length = 3 
+truncation_length = 3
 read_only = " "
 truncation_symbol = " "
 
@@ -203,7 +203,7 @@ symbol = "🅢 "
 [status]
 format = "[$symbol $status]($style) "
 symbol = "✖ "
-success_symbol = ""	
+success_symbol = ""
 not_executable_symbol = "🚫"
 not_found_symbol = "🔍"
 sigint_symbol = "🧱"
@@ -332,7 +332,7 @@ disabled = false
 description = "Show a terminal symbol, if in a Bash shell"
 shell = ["fish", "--no-config"]
 # shell = ["bash", "--noprofile", "--norc"]
-command = "echo  " 
+command = "echo  "
 when = "test $STARSHIP_SHELL = bash"
 format = "$output "
 ignore_timeout = true
