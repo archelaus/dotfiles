@@ -23,12 +23,22 @@
 
     # cli
     atuin
+    bunnyfetch
+    cava
     cht-sh
+    cowsay
+    cmatrix
+    figlet
     fzf
+    hollywood
     jdupes
-    mcfly
-    nodePackages_latest.insect
     maim
+    nodePackages_latest.insect
+    pfetch
+    pipes-rs
+    slop
+    tmux
+    vimv-rs
     ytfzf
     zoxide
 
@@ -39,6 +49,8 @@
     pup
 
     # files
+    broot
+    ueberzug
     feh
     lf
     lsd
