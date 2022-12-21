@@ -1,0 +1,375 @@
+# ____            _
+# | __ )  __ _ ___(_) ___  __   ____ _ _ __ ___
+# |  _ \ / _` / __| |/ __| \ \ / / _` | '__/ __|
+# | |_) | (_| \__ \ | (__   \ V / (_| | |  \__ \
+# |____/ \__,_|___/_|\___|   \_/ \__,_|_|  |___/
+
+set shell bash
+set shellopts '-eu'
+set ifs "\n"
+set drawbox
+set icons
+set reverse
+set sortby time
+set scrolloff 10
+set previewer ctpv
+
+set cleaner ctpvclear
+&ctpv -s $id
+&ctpvquit $id
+
+# set autoquit on
+# set hiddenfiles ".*:*.aux:*.log:*.bbl:*.bcf:*.blg:*.run.xml"
+
+# =============================================================================
+
+#  ____                                          _
+# / ___|___  _ __ ___  _ __ ___   __ _ _ __   __| |___
+#| |   / _ \| '_ ` _ \| '_ ` _ \ / _` | '_ \ / _` / __|
+#| |__| (_) | | | | | | | | | | | (_| | | | | (_| \__ \
+# \____\___/|_| |_| |_|_| |_| |_|\__,_|_| |_|\__,_|___/
+
+cmd bulkrename ${{
+    vimv --git -- $(basename -a -- $fx)
+    lf -remote "send $id load"
+    lf -remote "send $id unselect"
+}}
+
+cmd open ${{
+    case $(file --mime-type "$(readlink -f $f)" -b) in
+    application/vnd.openxmlformats-officedocument.spreadsheetml.sheet)
+        localc $fx
+        ;;
+    image/vnd.djvu|application/pdf|application/octet-stream|application/postscript)
+        setsid -f zathura $fx >/dev/null 2>&1
+        ;;
+    text/*|application/json|inode/x-empty)
+        $EDITOR $fx
+        ;;
+    image/x-xcf)
+        setsid -f gimp $f >/dev/null 2>&1
+        ;;
+    image/svg+xml)
+        display -- $f
+        ;;
+    image/*)
+        rotdir $f | grep -i "\.\(png\|jpg\|jpeg\|gif\|webp\|tif\|ico\)\(_large\)*$" |
+		setsid -f sxiv -aio 2>/dev/null | while read -r file; do
+			[ -z "$file" ] && continue
+			lf -remote "send select \"$file\""
+			lf -remote "send toggle"
+		done &
+		;;
+    audio/*)
+        mpv --audio-display=no $f
+        ;;
+    video/*|application/vnd.rn-realmedia)
+        setsid -f mpv $f -quiet >/dev/null 2>&1
+        ;;
+    application/pdf|application/vnd.djvu|application/epub*)
+        setsid -f zathura $fx >/dev/null 2>&1
+        ;;
+    application/pgp-encrypted)
+        $EDITOR $fx
+        ;;
+    application/vnd.openxmlformats-officedocument.wordprocessingml.document|application/vnd.oasis.opendocument.text)
+        setsid -f lowriter $fx >/dev/null 2>&1
+        ;;
+    application/vnd.openxmlformats-officedocument.spreadsheetml.sheet|application/octet-stream|application/vnd.oasis.opendocument.spreadsheet|application/vnd.oasis.opendocument.spreadsheet-template)
+        setsid -f localc $fx >/dev/null 2>&1
+        ;;
+    application/vnd.openxmlformats-officedocument.presentationml.presentation|application/vnd.oasis.opendocument.presentation-template|application/vnd.oasis.opendocument.presentation|application/vnd.ms-powerpoint)
+        setsid -f loimpress $fx >/dev/null 2>&1
+        ;;
+    application/vnd.oasis.opendocument.graphics|application/vnd.oasis.opendocument.graphics-template)
+        setsid -f lodraw $fx >/dev/null 2>&1
+        ;;
+    application/vnd.oasis.opendocument.formula)
+        setsid -f lomath $fx >/dev/null 2>&1
+        ;;
+    application/vnd.oasis.opendocument.database)
+        setsid -f lobase $fx >/dev/null 2>&1
+        ;;
+    *)
+        for f in $fx; do setsid -f $OPENER $f >/dev/null 2>&1; done
+        ;;
+    esac
+}}
+
+cmd mkdir %mkdir -p -- "$@"
+# cmd mkdir %{{
+#     IFS=" "
+#     mkdir -p -- "$*"
+#     lf -remote "send $id select \"$*\""
+# }}
+
+cmd extract ${{
+    clear; tput cup $(($(tput lines)/3)); tput bold
+    set -f
+    printf "%s\n\t" "$fx"
+    printf "Extract? [y/N]"
+    read ans
+    [ $ans = "y" ] && bsdtar -xvf $fx
+}}
+
+cmd delete ${{
+    clear; tput cup $(($(tput lines)/3)); tput bold
+    set -f
+    printf "%s\n\t" "$fx"
+    printf "Delete? [y/N]"
+    read ans
+    [ $ans = "y" ] && trash-put -- $fx
+}}
+
+
+# Dynamically set columns
+cmd recol ${{
+    w=$(tput cols)
+    if [ $w -le 80 ]; then
+        lf -remote "send $id set ratios 1:2"
+    else
+        lf -remote "send $id set ratios 1:2:3"
+        lf -remote "send $id set info size:time"
+    fi
+}}
+
+cmd follow_link %{{
+  lf -remote "send ${id} select '$(readlink $f)'"
+}}
+
+cmd newfold ${{
+    set -f
+    read newd
+    printf "Directory name: "
+    mkdir -- "$newd"
+    mv -- $fx "$newd"
+}}
+
+cmd yank-dirname $dirname -- "$f" | head -c-1 | xclip -i -selection clipboard
+cmd yank-path $printf '%s' "$fx" | xclip -i -selection clipboard
+cmd yank-basename $basename -a -- $fx | head -c-1 | xclip -i -selection clipboard
+cmd yank-basename-without-extension &basename -a -- $fx | rev | cut -d. -f2- | rev | head -c-1 | xclip -i -selection clipboard
+cmd share $curl -F"file=@$fx" https://0x0.st | xclip -selection c
+
+# Select all files or directories
+cmd select-files ${{
+    { echo "$fs"; find -L "$(pwd)" -mindepth 1 -maxdepth 1 -type f; } |
+        if [ "$lf_hidden" = "false" ]; then
+          # remove any hidden files so you only select files you can see.
+          grep -v '/\.[^/]\+$'
+        else
+          cat
+        fi |
+        sed '/^$/d' | sort | uniq -u |
+        xargs -d '\n' -r -I{} lf -remote "send $id toggle {}"
+}}
+
+cmd select-dirs ${{
+    { echo "$fs"; find -L "$(pwd)" -mindepth 1 -maxdepth 1 -type d; } |
+        if [ "$lf_hidden" = "false" ]; then
+          grep -v '/\.[^/]\+$'
+        else
+          cat
+        fi |
+        sed '/^$/d' | sort | uniq -u |
+        xargs -d '\n' -r -I{} lf -remote "send $id toggle {}"
+}}
+
+cmd on-cd &{{
+    # '&' commands run silently in background (which is what we want here),
+    # but are not connected to stdout.
+    # To make sure our escape sequence still reaches stdout we pipe it to /dev/tty
+    printf "\033]0; $(pwd | sed "s|$HOME|~|") - lf\007" > /dev/tty
+}}
+
+# NYI
+
+# cmd bookmark_jump ${{
+#     res="$(cat $LF_BOOKMARK_PATH/$(ls $LF_BOOKMARK_PATH | fzf))"
+#     lf -remote "send $id cd \"$res\""
+# }}
+
+# cmd bookmark_create ${{
+#     read ans
+#     echo $PWD > $LF_BOOKMARK_PATH/$ans
+# }}
+
+# cmd on-cd &{{
+#     case "$PWD" in
+#         /mnt/movies*)
+#             lf -remote "send $id set user_prev_sortby $lf_sortby"
+#             lf -remote "send $id set sortby natural"
+#             lf -remote "send $id set noreverse"
+#             lf -remote "send $id echomsg changed sort to natural"
+#             ;;
+#         *)
+#             # restore sorting on directory exit
+#             if [[ "$lf_user_prev_sortby" != "" ]]; then
+#                 lf -remote "send $id set sortby $lf_user_prev_sortby"
+#                 lf -remote "send $id set reverse"
+#                 lf -remote "send $id echomsg restored sort to $lf_user_prev_sortby"
+#                 lf -remote "send $id set user_prev_sortby ''"
+#             fi
+#             ;;
+#     esac
+# }}
+
+# cmd paste &{{
+#     set -- $(cat ~/.local/share/lf/files)
+#     mode="$1"
+#     shift
+#     case "$mode" in
+#         copy)
+#             rsync -av --ignore-existing --progress -- "$@" . |
+#             stdbuf -i0 -o0 -e0 tr '\r' '\n' |
+#             while IFS= read -r line; do
+#                 lf -remote "send $id echo $line"
+#             done
+#             ;;
+#         move) mv -n -- "$@" .;;
+#     esac
+#     rm ~/.local/share/lf/files
+#     lf -remote "send clear"
+# }}
+
+# cmd setbg "$1"
+
+# cmd moveto ${{
+#     clear; tput cup $(($(tput lines)/3)); tput bold
+#     set -f
+#     clear; echo "Move to where?"
+#     dest="$(sed -e 's/\s*#.*//' -e '/^$/d' -e 's/^\S*\s*//' ${XDG_CONFIG_HOME:-$HOME/.config}/shell/bm-dirs | fzf | sed 's|~|$HOME|')" &&
+#     for x in $fx; do
+#     	eval mv -iv \"$x\" \"$dest\"
+#     done &&
+#     notify-send "🚚 File(s) moved." "File(s) moved to $dest."
+# }}
+
+# cmd copyto ${{
+#     clear; tput cup $(($(tput lines)/3)); tput bold
+#     set -f
+#     clear; echo "Copy to where?"
+#     dest="$(sed -e 's/\s*#.*//' -e '/^$/d' -e 's/^\S*\s*//' ${XDG_CONFIG_HOME:-$HOME/.config}/shell/bm-dirs | fzf | sed 's|~|$HOME|')" &&
+#     for x in $fx; do
+#     	eval cp -ivr \"$x\" \"$dest\"
+#     done &&
+#     notify-send "📋 File(s) copied." "File(s) copies to $dest."
+# }}
+
+# ============================================================================= ___       _                       _   _
+
+# |_ _|_ __ | |_ ___  __ _ _ __ __ _| |_(_) ___  _ __  ___
+#  | || '_ \| __/ _ \/ _` | '__/ _` | __| |/ _ \| '_ \/ __|
+#  | || | | | ||  __/ (_| | | | (_| | |_| | (_) | | | \__ \
+# |___|_| |_|\__\___|\__, |_|  \__,_|\__|_|\___/|_| |_|___/
+#                    |___/
+
+# fzf
+# map f $vi $(fzf)
+
+# # Combine fzf with find
+# cmd fzf $vi $(find . -name "$1" | fzf)
+# map f push :fzf<space>
+
+# Jump in directories using fzf
+cmd fzf_jump ${{
+    res="$(find . -maxdepth 1 | fzf --reverse --header='Jump to location' | sed 's/\\/\\\\/g;s/"/\\"/g')"
+    if [ -d "$res" ] ; then
+        cmd="cd"
+    elif [ -f "$res" ] ; then
+        cmd="select"
+    else
+        exit 0
+    fi
+    lf -remote "send $id $cmd \"$res\""
+}}
+
+# # Git
+# cmd git_branch ${{
+#     git branch | fzf | xargs git checkout
+#     pwd_shell=$(pwd)
+#     lf -remote "send $id updir"
+#     lf -remote "send $id cd \"$pwd_shell\""
+# }}
+# map gb :git_branch
+# map gp ${{clear; git pull --rebase || true; echo "press ENTER"; read ENTER}}
+# map gs ${{clear; git status; echo "press ENTER"; read ENTER}}
+# map gl ${{clear; git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit}}
+
+# ripgrep (Search file contents)
+cmd fzf_search ${{
+    res="$( \
+        RG_PREFIX="rg --column --line-number --no-heading --color=always \
+            --smart-case "
+        FZF_DEFAULT_COMMAND="$RG_PREFIX ''" \
+            fzf --bind "change:reload:$RG_PREFIX {q} || true" \
+            --ansi --layout=reverse --header 'Search in files' \
+            | cut -d':' -f1
+    )"
+    [ ! -z "$res" ] && lf -remote "send $id select \"$res\""
+}}
+
+# trash-cli
+cmd trash %trash-put $fx
+
+# zoxide
+cmd z %{{
+    result="$(zoxide query --exclude "${PWD}" -- "$@")"
+    lf -remote "send ${id} cd '${result}'"
+}}
+
+cmd zi ${{
+    result="$(zoxide query -i -- "$@")"
+    lf -remote "send ${id} cd '${result}'"
+}}
+
+# =============================================================================
+
+#  ____  _           _ _
+# | __ )(_)_ __   __| (_)_ __   __ _ ___
+# |  _ \| | '_ \ / _` | | '_ \ / _` / __|
+# | |_) | | | | | (_| | | | | | (_| \__ \
+# |____/|_|_| |_|\__,_|_|_| |_|\__, |___/
+#                              |___/
+
+map <c-f> :fzf_jump
+map gs :fzf_search
+map <a-n> newfold
+map gL follow_link
+map D delete
+map E extract
+map <c-n> push :mkdir<space>
+map . set hidden!
+map <enter> shell
+
+map A rename # at the very end
+map c push A<c-u> # new rename
+map I push A<c-a> # at the very beginning
+map i push A<a-b><a-b><a-f> # before extension
+map a push A<a-b> # after extension
+map p $$PAGER "$f"
+map B bulkrename
+map V push :!vim<space>
+map Y $printf "%s" "$fx" | xclip -selection clipboard
+
+# Put lf into background
+map <c-z> $ kill -STOP $PPID
+# fzf current dir
+map <c-f> $lf -remote "send $id select \"$(fzf)\""
+
+# TEST
+# map x $$f
+# map X !$f
+# map o &mimeopen "$f"
+# map O $mimeopen --ask "$f"
+# NYI
+# map b $setbg $f
+# map C copyto
+# map M moveto
+# map J $lf -remote "send $id cd $(sed -e 's/\s*#.*//' -e '/^$/d' -e 's/^\S*\s*//' ${XDG_CONFIG_HOME:-$HOME/.config}/shell/bm-dirs | fzf)"
+# map W $setsid -f $TERMINAL >/dev/null 2>&1
+
+# Source Bookmarks
+# source "~/.config/lf/shortcutrc"
+recol
+on-cd
