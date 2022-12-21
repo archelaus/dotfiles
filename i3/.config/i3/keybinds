@@ -61,6 +61,7 @@ bindsym $mod+r mode "resize"
 # bindsym $mod+Insert exec --no-startup-id flameshot gui
 # Source: https://github.com/ceuk/rofi-screenshot
 bindsym $mod+Home exec --no-startup-id ~/.config/rofi/scripts/rofi-screenshot
+bindsym $mod+End exec --no-startup-id ~/.config/rofi/scripts/rofi-screenshot -s
 
 # -- Lock screen with betterlockscreen
 # bindsym $mod+x exec --no-startup-id betterlockscreen -l
@@ -72,7 +73,7 @@ bindsym $mod+Home exec --no-startup-id ~/.config/rofi/scripts/rofi-screenshot
 # bindsym $mod+F11 exec --no-startup-id alacritty -e btop
 
 # -- Swap master
-bindsym $mod+m exec --no-startup-id ~/.config/i3/scripts/i3-swap-master.py
+# bindsym $mod+m exec --no-startup-id ~/.config/i3/scripts/i3-swap-master.py
 
 # -- Silent urgent windows
 bindsym $mod+semicolon [urgent="latest"] focus
@@ -114,4 +115,3 @@ bindsym $mod+Insert exec --no-startup-id greenclip print | grep . | dmenu -i -l 
 
 # -- Show first scratchpad
 # bindsym $mod+minus scratchpad show
-
