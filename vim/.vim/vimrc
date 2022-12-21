@@ -1,6 +1,14 @@
+" A customized .vimrc for vim (https://www.vim.org/)
+
+set nocompatible               " disable compatibility to old-time vi
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => vim-plug for managing plugins
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
 let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
 if empty(glob(data_dir . '/autoload/plug.vim'))
-    silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+    silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
     autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
@@ -15,20 +23,32 @@ autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
     \| PlugInstall --sync | source $MYVIMRC
 \| endif
 
-set nocompatible            " disable compatibility to old-time vi
-set showmatch               " show matching brackets.
-set ignorecase              " case insensitive matching
-set mouse=v                 " middle-click paste with mouse
-set autoindent              " indent a new line the same amount as the line just typed
-set number                  " add line numbers
-set wildmode=longest,list   " get bash-like tab completions
-filetype plugin indent on   " allows auto-indenting depending on file type
-set tabstop=4               " number of columns occupied by a tab character
-set expandtab               " converts tabs to white space
-set shiftwidth=4            " width for autoindents
-set softtabstop=4           " see multiple spaces as tabstops so <BS> does the right thing
+call plug#begin('~/.vim/plugged')
+Plug 'itchyny/lightline.vim'
+Plug 'tmsvg/pear-tree'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-commentary'
+Plug 'mbbill/undotree'
+Plug 'christoomey/vim-system-copy'
+Plug 'romainl/vim-cool'
+Plug 'junegunn/vim-easy-align'
+Plug 'tpope/vim-sleuth'
+Plug 'vim-airline/vim-airline'
+call plug#end()
 
-syntax on 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => General Settings
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+set showmatch                  " show matching brackets.
+set ignorecase                 " case insensitive matching
+set autoindent                 " indent a new line the same amount as the line just typed
+set number                     " add line numbers
+filetype plugin indent on      " allows auto-indenting depending on file type
+set wildmode=longest,list,full " get bash-like tab completions
+
+syntax on
 set modelines=0
 set clipboard=unnamedplus
 
@@ -41,9 +61,10 @@ set clipboard=unnamedplus
 set encoding=utf-8
 " set scrolloff=3
 set smartindent
-set showmode "show which mode currently on 
-set showcmd "show command running bottom right
+set showmode " show which mode currently on
+set showcmd  " show command running bottom right
 set hidden
+set smartcase
 set wildmenu
 set cursorline
 set ttyfast
@@ -51,23 +72,33 @@ set ruler
 set backspace=indent,eol,start
 set laststatus=2
 set relativenumber
-set undofile
+set gdefault " applies substitutions globally on lines
+set incsearch
+set wrap
 let mapleader = ","
-" nnoremap <tab> %
-" vnoremap <tab> %
+nnoremap <tab> %
+vnoremap <tab> %
 au FocusLost * :wa
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Text, tab and indent related
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+set expandtab                   " Use spaces instead of tabs.
+set smarttab                    " Be smart using tabs ;)
+set shiftwidth=2                " One tab == four spaces.
+set tabstop=2                   " One tab == four spaces.
+set shiftround
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Remap Keys
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
 inoremap jj <ESC>
 nnoremap / /\v
 vnoremap / /\v
-set gdefault
-set incsearch
 nnoremap <leader><space> :noh<cr>
-set wrap
 nnoremap <leader>w <C-w>v<C-w>l
-nnoremap <C-h> <C-w>h
-nnoremap <C-j> <C-w>j
-nnoremap <C-k> <C-w>k
-nnoremap <C-l> <C-w>l
 nnoremap <up> <nop>
 nnoremap <down> <nop>
 nnoremap <left> <nop>
@@ -78,49 +109,61 @@ inoremap <left> <nop>
 inoremap <right> <nop>
 nnoremap j gj
 nnoremap k gk
-inoremap <F1> <ESC>
-nnoremap <F1> <ESC>
-vnoremap <F1> <ESC>
 nnoremap ; :
 au FocusLost * :wa
 inoremap jj <Esc>
-
-" fast saving
-" nmap <leader>w :w!<cr>
+nnoremap <leader>v V`]
 
 " map space to search
 map <space> /
 map <C-space> ?
 
-" Useful mappings for managing tabs 
-map <leader>tn :tabnew<cr> 
-map <leader>to :tabonly<cr> 
-map <leader>tc :tabclose<cr> 
-map <leader>tm :tabmove<cr>    
-map <leader>t :tabnext<cr> 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Splits and Tabbed Files
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+set splitbelow splitright
+
+" Remap splits navigation to just CTRL + hjkl
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+
+" Make adjusing split sizes a bit more friendly
+noremap <silent> <C-Left> :vertical resize +3<CR>
+noremap <silent> <C-Right> :vertical resize -3<CR>
+noremap <silent> <C-Up> :resize +3<CR>
+noremap <silent> <C-Down> :resize -3<CR>
+
+" Change 2 split windows from vert to horiz or horiz to vert
+map <Leader>th <C-w>t<C-w>H
+map <Leader>tk <C-w>t<C-w>K
+
+" Removes pipes | that act as seperators on splits
+set fillchars+=vert:\
+
+" Useful mappings for managing tabs
+map <leader>tn :tabnew<cr>
+map <leader>to :tabonly<cr>
+map <leader>tc :tabclose<cr>
+map <leader>tm :tabmove<cr>
+map <leader>t :tabnext<cr>
 map <leader>te :tabedit <C-r>=expand("%:p:h")<cr>/
 
-call plug#begin('~/.vim/plugged')
-Plug 'itchyny/lightline.vim'
-Plug 'tmsvg/pear-tree'
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-commentary'
-Plug 'mbbill/undotree'
-Plug 'christoomey/vim-system-copy'
-Plug 'dense-analysis/ale'
-call plug#end()
+" Change 2 split windows from vert to horiz or horiz to vert
+map <Leader>th <C-w>t<C-w>H
+map <Leader>tk <C-w>t<C-w>K
 
 " https://www.youtube.com/watch?v=DogKdiRx7ls
-set nohlsearch
+" set nohlsearch
 set noswapfile
 set nobackup
-set undodir=~/.vim/undo//
-set undofile
 set scrolloff=8
 set signcolumn=yes
 
-nnoremap <F5> :UndotreeToggle<CR>
+" Show the undo viewer
+nnoremap <leader>u :UndotreeToggle<cr>
 
 " auto set paste on copy from system
 let &t_SI .= "\<Esc>[?2004h"
@@ -135,4 +178,105 @@ function! XTermPasteBegin()
 endfunction
 
 " https://vi.stackexchange.com/a/479
-cnoremap w!! w !sudo tee %
+" cnoremap w!! w !sudo tee %
+
+" Remember position of last edit and return on reopen
+if has("autocmd")
+  au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+endif
+
+" https://old.reddit.com/r/vim/comments/t1qoma/what_are_some_of_the_unique_functions_you_use_in/
+nnoremap <Space><Space> :%s/\<<C-r>=expand("<cword>")<CR>\>/
+nnoremap J <PageDown>
+nnoremap K <PageUp>
+" Shift+J / Shift+K to move upward or downward an entire visual selection. Insanely useful.
+vnoremap J :m '>+1<CR>gv=gv
+vnoremap K :m '<-2<CR>gv=gv
+" Use curl to upload visual selection to ix.io to easily share i
+vnoremap <Leader>pp :w !curl -F "f:1=<-" ix.io<CR>
+augroup Mkdir
+  autocmd!
+  autocmd BufWritePre * call mkdir(expand("<afile>:p:h"), "p")
+augroup END
+
+" Set filetype to json and apply correct formatting
+nnoremap =j :set ft=json<CR>:%!python -m json.tool<CR>
+" Sort like a boss
+vnoremap <C-s> :sort<CR>
+
+" edit vimrc from vim
+nmap <leader>vimrc :tabe ~/.vim/vimrc<CR>
+autocmd! BufWritePost vimrc,.vimrc source $MYVIMRC | echom "Reloaded vimrc"
+
+" Go to first and last char of current line easier
+noremap H ^
+noremap L $
+" Yank from the cursor to the end of the line, to be consistent with C and D.
+nnoremap Y y$
+" save bash shebang as a macro in register b. use @b to get it in vim
+let @b='i#!/usr/bin/env bashq'
+"5 dashes or equal signs followed by space or enter creates a line trigger
+abbrev ===== ============================================================================
+abbrev ----- ----------------------------------------------------------------------------
+
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
+
+" Source: https://github.com/henrebotha/dotfiles/blob/c1244f36e0406b4e2326096f137668091d268353/vim/.vimrc#L473
+" Copy the file name, Git repo name, and commit hash along with whatever's
+" selected.
+function! CopyWithRef()
+  let gitTopLevel=Find_repo_root()
+  let filePathFull=expand('%:p')
+  let filePathRelative=substitute(filePathFull, gitTopLevel.'/', '', '')
+  let @+=trim(system("git remote -v | head -n1 | awk '{print $2}' | sed 's/^\\w\\+\\(\\@\\|\\/\\/\\).\\+:\\/\\?//'"))
+  let @+=@+.'@'
+  let @+=@+.trim(system("git rev-parse --short=8 HEAD"))
+  let @+=@+.':'
+  let @+=@+.filePathRelative
+  let @+=@+."\n\n"
+  let @+=@+.VisualSelection()
+endfunction
+
+" Persist undo state across sessions
+" https://www.reddit.com/r/vim/comments/2ib9au/why_does_exiting_vim_make_the_next_prompt_appear/cl0zb7m/
+let s:vim_cache = expand("$HOME/.vim/undo") " TODO: change for nvim? Or keep across Vim installs?
+if filewritable(s:vim_cache) == 0 && exists("*mkdir")
+  call mkdir(s:vim_cache, "p", 0700)
+endif
+set undofile
+let &undodir=s:vim_cache
+set undolevels=1000
+set undoreload=10000
+
+set cmdwinheight=1
+
+" Disables automatic commenting on newline:
+autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+" Check file in shellcheck:
+map <leader>s :!clear && shellcheck -x %<CR>
+" Save file as sudo on files that require root permission:
+cabbrev w!! execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
+" Automatically deletes all trailing whitespace and newlines at end of file on
+" save & reset cursor position:
+autocmd BufWritePre * let currPos = getpos(".")
+autocmd BufWritePre * %s/\s\+$//e
+autocmd BufWritePre * %s/\n\+\%$//e
+autocmd BufWritePre *.[ch] %s/\%$/\r/e
+autocmd BufWritePre * cal cursor(currPos[1], currPos[2])
+" Run xrdb whenever Xdefaults or Xresources are updated.
+autocmd BufRead,BufNewFile Xresources,Xdefaults,xresources,xdefaults set filetype=xdefaults
+autocmd BufWritePost Xresources,Xdefaults,xresources,xdefaults !xrdb %
+
+" Spellcheck .txt files
+autocmd BufRead *.txt set spell
+" Perform dot commands over visual blocks:
+vnoremap . :normal .<CR>
+" Replace all is aliased to S.
+nnoremap S :%s//g<Left><Left>
+
+autocmd FileType fish setlocal commentstring=#\ %s
+autocmd FileType lfrc setlocal commentstring=#\ %s
