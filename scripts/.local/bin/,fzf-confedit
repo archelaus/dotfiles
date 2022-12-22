@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+source $HOME/.config/dmscripts/config
+
+declare -A _clean_list
+for i in "${!confedit_list[@]}"; do
+  [[ -f ${confedit_list[$i]} ]] && _clean_list[$i]=${confedit_list[$i]}
+done
+
+d0=("${_clean_list[@]}")
+d1=(~/.local/bin/,*)
+d2=(~/.config/rofi/scripts/*)
+d3=(~/.notes/*.md)
+files=("${d0[@]}" "${d1[@]}" "${d2[@]}" "${d3[@]}")
+
+choice=$(printf '%s\n' "${files[@]}" | fzf --bind 'J:preview-down,K:preview-up' --reverse --header-first --header="fzf-confedit" --preview="bat --color always {}")
+
+if [[ $choice ]]; then
+  # cfg=$(printf '%s\n' "${_clean_list["$choice"]}")
+  # $DMEDITOR "$cfg"
+  $DMEDITOR "$choice" &
+  # choice=$( printf "$choice" | sed "s|$HOME|~|" )
+  # xdotool type --delay 0 "vim $choice"
+else
+    echo "[✓] Program exited"
+    exit 0
+fi

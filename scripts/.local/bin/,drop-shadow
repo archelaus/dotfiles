@@ -78,6 +78,5 @@ convert "${output_dir}/${filename}_shadow.${extension}" -bordercolor none -borde
 
 # copy generated image to clipboard
 cp "${output_dir}/${filename}_shadow.${extension}" "${HOME}/Pictures/Shadow"
-
-xclip -selection clipboard -t image/"$extension" -i "${output_dir}/${filename}_shadow.${extension}" &&
+xclip -selection clipboard -t image/"$extension" -i "${output_dir}/${filename}_shadow.${extension}"
 printer "${colors[green]}Copied to clipboard 👍"
