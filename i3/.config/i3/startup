@@ -15,7 +15,7 @@ set $ws9 9
 set $ws10 10
 
 # -- Set wallpaper with feh
-exec_always --no-startup-id feh --bg-scale ~/Pictures/gundam.png
+exec_always --no-startup-id feh --bg-scale ~/.local/share/wallpaper
 
 # -- Start XDG autostart .desktop files using dex
 exec --no-startup-id dex --autostart --environment i3
