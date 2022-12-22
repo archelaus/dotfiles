@@ -34,6 +34,7 @@
     jdupes
     maim
     nodePackages_latest.insect
+    pacvim
     pfetch
     pipes-rs
     slop
@@ -44,8 +45,8 @@
 
     # development
     fx
-    glow
     gron
+    mdcat
     pup
 
     # files
