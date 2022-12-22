@@ -5,15 +5,16 @@
 # |____/ \__,_|___/_|\___|   \_/ \__,_|_|  |___/
 
 set shell bash
-set shellopts '-eu'
 set ifs "\n"
 set drawbox
 set icons
 set reverse
 set sortby time
 set scrolloff 10
-set previewer ctpv
+set relativenumber
+set truncatechar *
 
+set previewer ctpv
 set cleaner ctpvclear
 &ctpv -s $id
 &ctpvquit $id
@@ -33,6 +34,59 @@ cmd bulkrename ${{
     vimv --git -- $(basename -a -- $fx)
     lf -remote "send $id load"
     lf -remote "send $id unselect"
+}}
+
+cmd chmod ${{
+  for file in "$fx"; do
+    chmod +x $file
+  done
+  lf -remote 'send reload'
+}}
+
+cmd delete ${{
+    set -f
+    printf "%s\n" "$fx" | sed "s|^$HOME|~|"
+    tput bold
+    read -p "Delete (y/n)? " choice
+    [[ $choice =~ ^[Yy]$ ]] && trash-put $fx
+}}
+
+# cmd extract ${{
+#     clear; tput bold; set -f
+#     printf "%s\n" "$fx" | sed "s|$HOME|~|"
+#     read -p "Extract (y/n)? " choice
+#     [[ $choice =~ ^[Yy]$ ]] && bsdtar -xvf "$fx"
+# }}
+cmd extract $bsdtar -xvf $f
+
+cmd follow_link %{{
+  lf -remote "send ${id} select '$(readlink $f)'"
+}}
+
+cmd mkfile ${{
+  printf "File name: "
+  read ans
+  $EDITOR $ans
+}}
+cmd mkdir ${{
+  printf "Directory name: "
+  read ans
+  mkdir $ans
+}}
+
+cmd newfold ${{
+    set -f
+    read newd
+    printf "Directory name: "
+    mkdir -- "$newd"
+    mv -- $fx "$newd"
+}}
+
+cmd on-cd &{{
+    # '&' commands run silently in background (which is what we want here),
+    # but are not connected to stdout.
+    # To make sure our escape sequence still reaches stdout we pipe it to /dev/tty
+    printf "\033]0; $(pwd | sed "s|$HOME|~|") - lf\007" > /dev/tty
 }}
 
 cmd open ${{
@@ -96,32 +150,6 @@ cmd open ${{
     esac
 }}
 
-cmd mkdir %mkdir -p -- "$@"
-# cmd mkdir %{{
-#     IFS=" "
-#     mkdir -p -- "$*"
-#     lf -remote "send $id select \"$*\""
-# }}
-
-cmd extract ${{
-    clear; tput cup $(($(tput lines)/3)); tput bold
-    set -f
-    printf "%s\n\t" "$fx"
-    printf "Extract? [y/N]"
-    read ans
-    [ $ans = "y" ] && bsdtar -xvf $fx
-}}
-
-cmd delete ${{
-    clear; tput cup $(($(tput lines)/3)); tput bold
-    set -f
-    printf "%s\n\t" "$fx"
-    printf "Delete? [y/N]"
-    read ans
-    [ $ans = "y" ] && trash-put -- $fx
-}}
-
-
 # Dynamically set columns
 cmd recol ${{
     w=$(tput cols)
@@ -132,24 +160,6 @@ cmd recol ${{
         lf -remote "send $id set info size:time"
     fi
 }}
-
-cmd follow_link %{{
-  lf -remote "send ${id} select '$(readlink $f)'"
-}}
-
-cmd newfold ${{
-    set -f
-    read newd
-    printf "Directory name: "
-    mkdir -- "$newd"
-    mv -- $fx "$newd"
-}}
-
-cmd yank-dirname $dirname -- "$f" | head -c-1 | xclip -i -selection clipboard
-cmd yank-path $printf '%s' "$fx" | xclip -i -selection clipboard
-cmd yank-basename $basename -a -- $fx | head -c-1 | xclip -i -selection clipboard
-cmd yank-basename-without-extension &basename -a -- $fx | rev | cut -d. -f2- | rev | head -c-1 | xclip -i -selection clipboard
-cmd share $curl -F"file=@$fx" https://0x0.st | xclip -selection c
 
 # Select all files or directories
 cmd select-files ${{
@@ -175,12 +185,12 @@ cmd select-dirs ${{
         xargs -d '\n' -r -I{} lf -remote "send $id toggle {}"
 }}
 
-cmd on-cd &{{
-    # '&' commands run silently in background (which is what we want here),
-    # but are not connected to stdout.
-    # To make sure our escape sequence still reaches stdout we pipe it to /dev/tty
-    printf "\033]0; $(pwd | sed "s|$HOME|~|") - lf\007" > /dev/tty
-}}
+cmd share $curl -F"file=@$fx" https://0x0.st | xclip -selection c
+
+cmd yank-dirname $dirname -- "$f" | head -c-1 | xclip -i -selection clipboard
+cmd yank-path $printf '%s' "$fx" | xclip -i -selection clipboard
+cmd yank-basename $basename -a -- $fx | head -c-1 | xclip -i -selection clipboard
+cmd yank-basename-without-extension &basename -a -- $fx | rev | cut -d. -f2- | rev | head -c-1 | xclip -i -selection clipboard
 
 # NYI
 
@@ -256,7 +266,7 @@ cmd on-cd &{{
 #     notify-send "📋 File(s) copied." "File(s) copies to $dest."
 # }}
 
-# ============================================================================= ___       _                       _   _
+# =============================================================================
 
 # |_ _|_ __ | |_ ___  __ _ _ __ __ _| |_(_) ___  _ __  ___
 #  | || '_ \| __/ _ \/ _` | '__/ _` | __| |/ _ \| '_ \/ __|
@@ -310,7 +320,7 @@ cmd fzf_search ${{
 }}
 
 # trash-cli
-cmd trash %trash-put $fx
+cmd trash %trash-put $f
 
 # zoxide
 cmd z %{{
@@ -340,22 +350,32 @@ map D delete
 map E extract
 map <c-n> push :mkdir<space>
 map . set hidden!
-map <enter> shell
 
 map A rename # at the very end
-map c push A<c-u> # new rename
+map r push A<c-u> # new rename
 map I push A<c-a> # at the very beginning
-map i push A<a-b><a-b><a-f> # before extension
+map i push A<a-b><c-b> # before extension
 map a push A<a-b> # after extension
-map p $$PAGER "$f"
+
+map P $bat --paging=always -p "$f"
 map B bulkrename
 map V push :!vim<space>
 map Y $printf "%s" "$fx" | xclip -selection clipboard
 
+map m
+map mf mkfile
+map md mkdir
+map R reload
+
+# Movement
+map gD cd ~/Documents
+map gd cd ~/Downloads
+map gp cd ~/Pictures
+map gc cd ~/.config
+map gb cd ~/.local/bin
+
 # Put lf into background
 map <c-z> $ kill -STOP $PPID
-# fzf current dir
-map <c-f> $lf -remote "send $id select \"$(fzf)\""
 
 # TEST
 # map x $$f
