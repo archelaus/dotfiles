@@ -9,10 +9,3 @@ scripts/.local/bin/*
 !scripts/.local/bin/t.py
 !scripts/.local/bin/mi.py
 notes/.notes/quick.md
-!scripts/.local/bin/rofi-emoji
-!scripts/.local/bin/rofi-power-menu
-!scripts/.local/bin/tilix-backup
-!scripts/.local/bin/backup-appdata
-!scripts/.local/bin/rofi-screenshot
-!scripts/.local/bin/tmux-cht.sh
-!scripts/.local/bin/se
