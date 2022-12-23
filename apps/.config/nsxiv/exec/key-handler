@@ -1,0 +1,45 @@
+#!/bin/sh
+
+case "$1" in
+    "w") ,setbg "$file" ;;
+    "r")
+        while read -r file; do
+            convert -rotate 90 "$file" "$file"
+        done
+        ;;
+    "R")
+        while read -r file; do
+            convert -rotate 90 "$file" "$file"
+        done
+        ;;
+    "f")
+        while read -r file; do
+            convert -flop "$file" "$file"
+        done
+        ;;
+    "y")
+        xclip -selection clipboard -target image/png "$file"
+        notify-send "$file has been copied to clipboard"
+        ;;
+    "d")
+        if [ "$(printf "No\\nYes" | dmenu -i -p "Really delete $file?")" = "Yes" ]; then
+            rm "$file"
+            notify-send "$file deleted."
+        fi
+        ;;
+    "i")
+        alacritty --title ExifTool -e sh -c "exiftool '$file' | less" &
+        ;;
+esac
+
+# NYI
+# "c")
+#     [ -z "$destdir" ] && destdir="$(sed "s/#.*$//;/^\s*$/d" ${XDG_CONFIG_HOME:-$HOME/.config}/shell/bm-dirs | awk '{print $2}' | dmenu -l 20 -i -p "Copy file(s) to where?" | sed "s|~|^$HOME|")"
+    # [ ! -d "$destdir" ] && notify-send "$destdir is not a directory, cancelled." && exit
+    # cp "$file" "$destdir" && notify-send -i "$(readlink -f "$file")" "$file copied to $destdir." &
+    # ;;
+# "m")
+    # [ -z "$destdir" ] && destdir="$(sed "s/#.*$//;/^\s*$/d" ${XDG_CONFIG_HOME:-$HOME/.config}/shell/bm-dirs | awk '{print $2}' | dmenu -l 20 -i -p "Move file(s) to where?" | sed "s|~|$HOME|g")"
+    # [ ! -d "$destdir" ] && notify-send "$destdir is not a directory, cancelled." && exit
+    # mv "$file" "$destdir" && notify-send -i "$(readlink -f "$file")" "$file moved to $destdir." &
+    # ;;
