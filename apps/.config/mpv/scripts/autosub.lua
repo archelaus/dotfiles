@@ -3,7 +3,7 @@
 --=============================================================================
 --          This script uses Subliminal to download subtitles,
 --          so make sure to specify your system's Subliminal location below:
-local subliminal = '/home/aayu/.local/bin/subliminal'
+local subliminal = '$HOME/.local/bin/subliminal'
 --=============================================================================
 -->>    SUBTITLE LANGUAGE:
 --=============================================================================
@@ -53,16 +53,12 @@ local excludes = {
     -- will be excluded from auto-downloading subtitles.
     -- Full paths are also allowed, e.g.:
     -- '/home/david/Videos',
-    'no-subs-dl',
 }
 local includes = {
     -- If anything is defined here, only the movies with a path
     -- containing any of these strings/paths will auto-download subtitles.
     -- Full paths are also allowed, e.g.:
-    -- '/home/david/Videos',
-    '/mnt/1. Movies',
-    '/mnt/2. TV Shows'
-    
+    -- '/home/david/Videos', 
 }
 --=============================================================================
 local utils = require 'mp.utils'
@@ -257,6 +253,6 @@ function log(string, secs)
 end
 
 
-mp.add_key_binding('F1', 'download_subs', download_subs)
-mp.add_key_binding('F2', 'download_subs2', download_subs2)
+# mp.add_key_binding('b', 'download_subs2', download_subs)
+mp.add_key_binding('n', 'download_subs', download_subs2)
 mp.register_event('file-loaded', control_downloads)

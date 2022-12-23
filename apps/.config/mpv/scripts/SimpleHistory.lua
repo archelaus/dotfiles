@@ -2,7 +2,7 @@
 -- License: BSD 2-Clause License
 -- Creator: Eisa AlAwadhi
 -- Project: SimpleHistory
--- Version: 1.1.1
+-- Version: 1.1.5
 
 local o = {
 ---------------------------USER CUSTOMIZATION SETTINGS---------------------------
@@ -11,6 +11,7 @@ local o = {
 
 	-----Script Settings----
 	auto_run_list_idle = 'recents', --Auto run the list when opening mpv and there is no video / file loaded. 'none' for disabled. Or choose between: 'all', 'recents', 'distinct', 'protocols', 'fileonly', 'titleonly', 'timeonly', 'keywords'.
+	startup_idle_behavior = 'none', --The behavior when mpv launches and nothing is loaded. 'none' for disabled. 'resume' to automatically resume your last played item. 'resume-notime' to resume your last played item but starts from the beginning.
 	toggle_idlescreen = false, --hides OSC idle screen message when opening and closing menu (could cause unexpected behavior if multiple scripts are triggering osc-idlescreen off)
 	resume_offset = -0.65, --change to 0 so item resumes from the exact position, or decrease the value so that it gives you a little preview before loading the resume point
 	osd_messages = true, --true is for displaying osd messages when actions occur. Change to false will disable all osd messages generated from this script
@@ -20,7 +21,7 @@ local o = {
 	invert_history_blacklist = false, --true so that blacklist becomes a whitelist, resulting in stuff such as paths / websites that are added to history_blacklist to be saved into history
 	history_blacklist=[[
 	[""]
-	]], --Paths / URLs / Websites / Files / Protocols / Extensions, that wont be added to history automatically, e.g.: ["c:\\users\\eisa01\\desktop", "c:\\temp\\naruto-01.mp4", "youtube.com", "https://dailymotion.com/", "avi", "https://www.youtube.com/watch?v=e8YBesRKq_U", ".jpeg", "magnet:", "https://", "ftp"]
+	]], --Paths / URLs / Websites / Files / Protocols / Extensions, that wont be added to history automatically, e.g.: ["c:\\users\\eisa01\\desktop", "c:\\users\\eisa01\\desktop\\*", "c:\\temp\\naruto-01.mp4", "youtube.com", "https://dailymotion.com/", "avi", "https://www.youtube.com/watch?v=e8YBesRKq_U", ".jpeg", "magnet:", "https://", "ftp"]
 	history_resume_keybind=[[
 	["ctrl+r", "ctrl+R"]
 	]], --Keybind that will be used to immediately load and resume last item when no video is playing. If video is playing it will resume to the last found position
@@ -277,6 +278,7 @@ local incognito_mode = false
 local autosaved_entry = false
 local incognito_auto_run_triggered = false
 
+local loadTriggered = false --1.1.5# to identify if load is triggered atleast once for idle option
 local resume_selected = false
 local list_contents = {}
 local list_start = 0
@@ -286,6 +288,7 @@ local list_drawn = false
 local list_pages = {}
 local filePath, fileTitle, fileLength
 local seekTime = 0
+local logTime = 0 --1.3# use logTime since seekTime is used in multiple places
 local filterName = 'all'
 local sortName
 
@@ -1966,6 +1969,13 @@ function history_blacklist_check()
 		has_value(o.history_blacklist, "."..filePath:match('%.([^%.]+)$'), nil) then
 			msg.info(blacklist_msg)
 			return invertable_return[1]
+		else --1.1.2# check to add any subfolder after /* to blacklist. issue #70
+			for i=1, #o.history_blacklist do --1.1.2# loop through blacklisted items, if the blacklist ends with * and it is a match after subbing of the current filePath then log it. #and additionally if it is the exact same path then ignore it.
+				if string.lower(filePath):match(string.lower(o.history_blacklist[i])) and o.history_blacklist[i]:sub(-1,#o.history_blacklist[i]) == '*' and string.lower(o.history_blacklist[i]:sub(1,-2)) ~= string.lower(filePath):match("(.*[\\/])") then
+					msg.info(blacklist_msg)
+					return invertable_return[1]
+				end
+			end
 		end
 	elseif starts_protocol(protocols, filePath) then
 		if has_value(o.history_blacklist, filePath:match('(.-)(:)'), nil) or
@@ -2092,6 +2102,7 @@ end
 function history_resume_option()
 	if o.resume_option == 'notification' or o.resume_option == 'force' then
 		local video_time = mp.get_property_number('time-pos')
+		local video_path = mp.get_property('path') --1.1.4# local variable instead of filePath
 		if video_time > 0 then return end
 		local logged_time = 0
 		local percentage = 0
@@ -2099,7 +2110,7 @@ function history_resume_option()
 		list_contents = read_log_table()
 		if not list_contents or not list_contents[1] then return end
 		for i = #list_contents, 1, -1 do
-			if list_contents[i].found_path == filePath and tonumber(list_contents[i].found_time) > 0 then
+			if list_contents[i].found_path == video_path and tonumber(list_contents[i].found_time) > 0 then --1.1.4# instead of filePath in case it is causing issue
 				logged_time = tonumber(list_contents[i].found_time) + o.resume_offset
 				break
 			end
@@ -2123,12 +2134,12 @@ function history_resume_option()
 	end
 end
 
-function history_save()
+function history_save(target_time)
 	if filePath ~= nil then
 		if history_blacklist_check() then
 			return
 		end
-		write_log(false, false, o.same_entry_limit)
+		write_log(target_time, false, o.same_entry_limit)
 		if list_drawn then
 			get_list_contents()
 			select(0)
@@ -2197,11 +2208,12 @@ end
 mp.register_event('file-loaded', function()
 	list_close_and_trash_collection()
 	filePath, fileTitle, fileLength = get_file()
+	loadTriggered = true --1.1.5# for resume and resume-notime startup behavior (so that it only triggers if started as idle and only once)
 	if (resume_selected == true and seekTime > 0) then
 		mp.commandv('seek', seekTime, 'absolute', 'exact')
 		resume_selected = false
 	end
-	mp.add_timeout(0,history_resume_option)
+	history_resume_option() --1.1.4# remove timeout, cant remember why I put it in first place
 	mark_chapter()
 	if not incognito_mode then
 		history_fileonly_save()
@@ -2209,16 +2221,28 @@ mp.register_event('file-loaded', function()
 	end
 end)
 
-mp.add_hook('on_unload', 50, function()
+mp.add_hook('on_unload', 9, function()--1.1.3# get the LogTime only when using on_unload because big functions do not run fully in here
+	logTime = (mp.get_property_number('time-pos') or 0)
+end)
+mp.register_event('end-file', function()--1.1.3# use end-file instead so that it doesn't cause crash while seeking ( i am able to run big functions here)
 	if not incognito_mode then
 		if autosaved_entry == true then delete_log_entry_specific('last', filePath, 0) end
-		history_save()
+		history_save(logTime) --1.1.3# get the updated time from on_unload since it will still be preserved
 	end
 	autosaved_entry = false
+	logTime = 0 --1.1.3# reset logTime to 0
 end)
 
 mp.observe_property("idle-active", "bool", function(_, v)
-	if v and has_value(available_filters, o.auto_run_list_idle) then
+	if v then --1.1.2# if idle is triggered
+		filePath, fileTitle, fileLength = nil --1.1.2# set it back to nil if idle is triggered for better trash collection. issue #69
+	end
+	
+	if v and o.startup_idle_behavior == 'resume' and not loadTriggered then --1.1.5# option to resume on startup
+		history_resume()
+	elseif v and o.startup_idle_behavior == 'resume-notime' and not loadTriggered then --1.1.5# option to load last item on startup
+		history_load_last()
+	elseif v and has_value(available_filters, o.auto_run_list_idle) then
 		display_list(o.auto_run_list_idle, nil, 'hide-osd')
 	end
 	

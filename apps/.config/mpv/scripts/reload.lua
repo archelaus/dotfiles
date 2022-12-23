@@ -71,7 +71,7 @@ local settings = {
   demuxer_cache_timer_interval = 2,
   demuxer_cache_timer_timeout = 20,
   reload_eof_enabled = false,
-  reload_key_binding = "Ctrl+r",
+  reload_key_binding = "Ctrl+l",
 }
 
 -- global state stores properties between reloads
