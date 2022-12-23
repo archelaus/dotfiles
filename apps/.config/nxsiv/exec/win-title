@@ -1,0 +1,5 @@
+#!/bin/sh
+
+filename=$(basename "$1")
+
+echo "nsxiv - ${filename}"
