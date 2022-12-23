@@ -40,7 +40,6 @@
     slop
     tmux
     vimv-rs
-    ytfzf
     zoxide
 
     # development
@@ -51,10 +50,11 @@
 
     # files
     broot
-    ueberzug
     feh
     lf
     lsd
+    nsxiv
+    ueberzug
     zathura
 
     # i3wm
@@ -74,11 +74,10 @@
     mat2
 
     # overview
-    bottom
     btop
+    glances
     lazydocker
     lazygit
-    procs
 
     # shell related
     babelfish
