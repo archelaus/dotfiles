@@ -1,6 +1,8 @@
 " A customized .vimrc for vim (https://www.vim.org/)
 
-set nocompatible               " disable compatibility to old-time vi
+set nomodeline nocompatible secure
+syntax on
+filetype plugin indent on
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => vim-plug for managing plugins
@@ -34,28 +36,51 @@ Plug 'christoomey/vim-system-copy'
 Plug 'romainl/vim-cool'
 Plug 'junegunn/vim-easy-align'
 Plug 'tpope/vim-sleuth'
-Plug 'vim-airline/vim-airline'
 call plug#end()
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => General Settings
+" => Plugin related settings
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Smart pairs
+let g:pear_tree_smart_openers = 1
+let g:pear_tree_smart_closers = 1
+let g:pear_tree_smart_backspace = 1
+
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
+
+" Show the undo viewer
+nnoremap <F5> :UndotreeToggle<cr>
+
+" auto set paste on copy from system
+let &t_SI .= "\<Esc>[?2004h"
+let &t_EI .= "\<Esc>[?2004l"
+
+inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
+
+function! XTermPasteBegin()
+    set pastetoggle=<Esc>[201~
+    set paste
+    return ""
+endfunction
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => General settings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 set showmatch                  " show matching brackets.
 set number                     " add line numbers
-filetype plugin indent on      " allows auto-indenting depending on file type
 set wildmode=longest,list,full " get bash-like tab completions
 
-syntax on
-set modelines=0
-set clipboard=unnamedplus
-
-" https://stackoverflow.com/a/15317146
+" From: https://stackoverflow.com/a/15317146
 " set backupdir=~/.vim/backup//
 " set directory=~/.vim/swap//
 " set undodir=~/.vim/undo//
 
-" https://stevelosh.com/blog/2010/09/coming-home-to-vim/
+" From: https://stevelosh.com/blog/2010/09/coming-home-to-vim/
 set encoding=utf-8
 set backspace=indent,eol,start
 set laststatus=2
@@ -63,7 +88,8 @@ set smartindent
 set showmode " show which mode currently on
 set showcmd  " show command running bottom right
 set hidden
-set ignorecase
+" set ignorecase
+set infercase
 set smartcase
 set wildmenu
 set cursorline
@@ -72,11 +98,10 @@ set ruler
 set relativenumber
 set incsearch
 set showmatch
-set hlsearch
+" set hlsearch
 set wrap
 
-" https://www.youtube.com/watch?v=DogKdiRx7ls
-" set nohlsearch
+" From: https://www.youtube.com/watch?v=DogKdiRx7ls
 set noswapfile
 set nobackup
 set scrolloff=8
@@ -88,11 +113,11 @@ set cmdwinheight=1
 " => Text, tab and indent related
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-set expandtab                   " Use spaces instead of tabs.
-set smarttab                    " Be smart using tabs ;)
-set shiftwidth=2                " One tab == four spaces.
-set tabstop=2                   " One tab == four spaces.
-set shiftround
+" set expandtab                   " Use spaces instead of tabs.
+" set smarttab                    " Be smart using tabs ;)
+" set shiftwidth=2                " One tab == four spaces.
+" set tabstop=2                   " One tab == four spaces.
+" set shiftround
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Remap Keys
@@ -120,20 +145,6 @@ nnoremap <leader>v v`]
 nnoremap <leader>W :%s/\s\+$//<cr>:let @/=''<CR>
 " open a new vertical split and switch over to it
 nnoremap <leader>w <C-w>v<C-w>l
-" Show the undo viewer
-nnoremap <leader>u :UndotreeToggle<cr>
-
-" auto set paste on copy from system
-let &t_SI .= "\<Esc>[?2004h"
-let &t_EI .= "\<Esc>[?2004l"
-
-inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
-
-function! XTermPasteBegin()
-    set pastetoggle=<Esc>[201~
-    set paste
-    return ""
-endfunction
 
 " https://vi.stackexchange.com/a/479
 " cnoremap w!! w !sudo tee %
@@ -154,9 +165,9 @@ nnoremap =j :set ft=json<CR>:%!python -m json.tool<CR>
 " Sort like a boss
 vnoremap <C-s> :sort<CR>
 
-nmap <silent> <leader>ev :e ~/.vim/vimrc<CR>
-nmap <silent> <leader>eb :e ~/.bashrc<CR>
-nmap <silent> <leader>ef :e ~/.config/fish/config.fish<CR>
+nmap <silent> <leader>ev :tabe ~/.vim/vimrc<CR>
+nmap <silent> <leader>eb :tabe ~/.bashrc<CR>
+nmap <silent> <leader>ef :tabe ~/.config/fish/config.fish<CR>
 
 " Go to first and last char of current line easier
 noremap H ^
@@ -169,16 +180,29 @@ map <leader>s :!clear && shellcheck -x %<CR>
 
 " Perform dot commands over visual blocks:
 vnoremap . :normal .<CR>
+
 " Replace all is aliased to S.
 nnoremap S :%s//g<Left><Left>
 
 " save bash shebang as a macro in register b. use @b to get it in vim
 let @b='i#!/usr/bin/env bash'
+
 " 5 dashes or equal signs followed by space or enter creates a line trigger
 abbrev ===== ============================================================================
 abbrev ----- ----------------------------------------------------------------------------
 
 nnoremap cw ciw
+
+" noremap <silent> <expr> j (v:count == 0 ? 'gj' : 'j')
+" noremap <silent> <expr> k (v:count == 0 ? 'gk' : 'k')
+nnoremap <expr> j v:count ? 'j' : 'gj'
+nnoremap <expr> k v:count ? 'k' : 'gk'
+
+" From: https://bluz71.github.io/2017/05/15/vim-tips-tricks.html
+" Line completion
+inoremap <C-l> <C-x><C-l
+" Execute a macro over visual line selections
+xnoremap Q :'<,'>:normal @q<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Splits and Tabbed Files
@@ -232,14 +256,9 @@ augroup Mkdir
   autocmd BufWritePre * call mkdir(expand("<afile>:p:h"), "p")
 augroup END
 
-autocmd! BufWritePost vimrc,.vimrc source $MYVIMRC | echom "Reloaded vimrc"
+autocmd! BufWritePost $MYVIMRC source $MYVIMRC | echom "Reloaded vimrc"
 
-" Start interactive EasyAlign in visual mode (e.g. vipga)
-xmap ga <Plug>(EasyAlign)
-" Start interactive EasyAlign for a motion/text object (e.g. gaip)
-nmap ga <Plug>(EasyAlign)
-
-" Source: https://github.com/henrebotha/dotfiles/blob/c1244f36e0406b4e2326096f137668091d268353/vim/.vimrc#L473
+" From: https://github.com/henrebotha/dotfiles/blob/c1244f36e0406b4e2326096f137668091d268353/vim/.vimrc#L473
 " Copy the file name, Git repo name, and commit hash along with whatever's selected
 function! CopyWithRef()
   let gitTopLevel=Find_repo_root()
@@ -288,3 +307,9 @@ autocmd BufRead *.txt set spell
 
 autocmd FileType fish setlocal commentstring=#\ %s
 autocmd FileType lfrc setlocal commentstring=#\ %s
+
+" Improve scrolling performance
+augroup syntaxSyncMinLines
+    autocmd!
+    autocmd Syntax * syntax sync minlines=2000
+augroup END
