@@ -67,6 +67,10 @@ function! XTermPasteBegin()
     return ""
 endfunction
 
+" undotree window width
+let g:undotree_SplitWidth = 40
+let g:undotree_SetFocusWhenToggle = 1
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General settings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
