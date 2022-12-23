@@ -99,7 +99,7 @@ set wildmenu
 set cursorline
 set ttyfast
 set ruler
-set relativenumber
+" set relativenumber
 set incsearch
 set showmatch
 " set hlsearch
@@ -309,8 +309,8 @@ autocmd BufWritePost Xresources,Xdefaults,xresources,xdefaults !xrdb %
 " Spellcheck .txt files
 autocmd BufRead *.txt set spell
 
+set commentstring=#\ %s
 autocmd FileType fish setlocal commentstring=#\ %s
-autocmd FileType lfrc setlocal commentstring=#\ %s
 
 " Improve scrolling performance
 augroup syntaxSyncMinLines
