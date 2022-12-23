@@ -42,8 +42,6 @@ call plug#end()
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 set showmatch                  " show matching brackets.
-set ignorecase                 " case insensitive matching
-set autoindent                 " indent a new line the same amount as the line just typed
 set number                     " add line numbers
 filetype plugin indent on      " allows auto-indenting depending on file type
 set wildmode=longest,list,full " get bash-like tab completions
@@ -59,26 +57,32 @@ set clipboard=unnamedplus
 
 " https://stevelosh.com/blog/2010/09/coming-home-to-vim/
 set encoding=utf-8
-" set scrolloff=3
+set backspace=indent,eol,start
+set laststatus=2
 set smartindent
 set showmode " show which mode currently on
 set showcmd  " show command running bottom right
 set hidden
+set ignorecase
 set smartcase
 set wildmenu
 set cursorline
 set ttyfast
 set ruler
-set backspace=indent,eol,start
-set laststatus=2
 set relativenumber
-set gdefault " applies substitutions globally on lines
 set incsearch
+set showmatch
+set hlsearch
 set wrap
-let mapleader = ","
-nnoremap <tab> %
-vnoremap <tab> %
-au FocusLost * :wa
+
+" https://www.youtube.com/watch?v=DogKdiRx7ls
+" set nohlsearch
+set noswapfile
+set nobackup
+set scrolloff=8
+set signcolumn=yes
+
+set cmdwinheight=1
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Text, tab and indent related
@@ -94,10 +98,12 @@ set shiftround
 " => Remap Keys
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-inoremap jj <ESC>
+let mapleader = ","
+nnoremap <tab> %
+vnoremap <tab> %
 nnoremap / /\v
 vnoremap / /\v
-nnoremap <leader><space> :noh<cr>
+inoremap jj <ESC>
 nnoremap <leader>w <C-w>v<C-w>l
 nnoremap <up> <nop>
 nnoremap <down> <nop>
@@ -107,16 +113,72 @@ inoremap <up> <nop>
 inoremap <down> <nop>
 inoremap <left> <nop>
 inoremap <right> <nop>
-nnoremap j gj
-nnoremap k gk
 nnoremap ; :
-au FocusLost * :wa
-inoremap jj <Esc>
-nnoremap <leader>v V`]
+" reselect the text that was just pasted
+nnoremap <leader>v v`]
+" strip all trailing whitespace in the current file
+nnoremap <leader>W :%s/\s\+$//<cr>:let @/=''<CR>
+" open a new vertical split and switch over to it
+nnoremap <leader>w <C-w>v<C-w>l
+" Show the undo viewer
+nnoremap <leader>u :UndotreeToggle<cr>
 
-" map space to search
-map <space> /
-map <C-space> ?
+" auto set paste on copy from system
+let &t_SI .= "\<Esc>[?2004h"
+let &t_EI .= "\<Esc>[?2004l"
+
+inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
+
+function! XTermPasteBegin()
+    set pastetoggle=<Esc>[201~
+    set paste
+    return ""
+endfunction
+
+" https://vi.stackexchange.com/a/479
+" cnoremap w!! w !sudo tee %
+
+" https://old.reddit.com/r/vim/comments/t1qoma/what_are_some_of_the_unique_functions_you_use_in/
+" double space over word to find and replace
+nnoremap <Space><Space> :%s/\<<C-r>=expand("<cword>")<CR>\>/
+" Shift+J / Shift+K to move upward or downward an entire visual selection. Insanely useful.
+nnoremap J <PageDown>
+nnoremap K <PageUp>
+" Shift+J / Shift+K to move upward or downward an entire visual selection
+vnoremap J :m '>+1<CR>gv=gv
+vnoremap K :m '<-2<CR>gv=gv
+" Use curl to upload visual selection to ix.io to easily share i
+vnoremap <Leader>pp :w !curl -F "f:1=<-" ix.io<CR>
+" Set filetype to json and apply correct formatting
+nnoremap =j :set ft=json<CR>:%!python -m json.tool<CR>
+" Sort like a boss
+vnoremap <C-s> :sort<CR>
+
+nmap <silent> <leader>ev :e ~/.vim/vimrc<CR>
+nmap <silent> <leader>eb :e ~/.bashrc<CR>
+nmap <silent> <leader>ef :e ~/.config/fish/config.fish<CR>
+
+" Go to first and last char of current line easier
+noremap H ^
+noremap L $
+" Yank from the cursor to the end of the line, to be consistent with C and D.
+nnoremap Y y$
+
+" Check file in shellcheck:
+map <leader>s :!clear && shellcheck -x %<CR>
+
+" Perform dot commands over visual blocks:
+vnoremap . :normal .<CR>
+" Replace all is aliased to S.
+nnoremap S :%s//g<Left><Left>
+
+" save bash shebang as a macro in register b. use @b to get it in vim
+let @b='i#!/usr/bin/env bash'
+" 5 dashes or equal signs followed by space or enter creates a line trigger
+abbrev ===== ============================================================================
+abbrev ----- ----------------------------------------------------------------------------
+
+nnoremap cw ciw
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Splits and Tabbed Files
@@ -155,79 +217,30 @@ map <leader>te :tabedit <C-r>=expand("%:p:h")<cr>/
 map <Leader>th <C-w>t<C-w>H
 map <Leader>tk <C-w>t<C-w>K
 
-" https://www.youtube.com/watch?v=DogKdiRx7ls
-" set nohlsearch
-set noswapfile
-set nobackup
-set scrolloff=8
-set signcolumn=yes
-
-" Show the undo viewer
-nnoremap <leader>u :UndotreeToggle<cr>
-
-" auto set paste on copy from system
-let &t_SI .= "\<Esc>[?2004h"
-let &t_EI .= "\<Esc>[?2004l"
-
-inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
-
-function! XTermPasteBegin()
-    set pastetoggle=<Esc>[201~
-    set paste
-    return ""
-endfunction
-
-" https://vi.stackexchange.com/a/479
-" cnoremap w!! w !sudo tee %
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Commands/Functions
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " Remember position of last edit and return on reopen
 if has("autocmd")
   au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 endif
 
-" https://old.reddit.com/r/vim/comments/t1qoma/what_are_some_of_the_unique_functions_you_use_in/
-nnoremap <Space><Space> :%s/\<<C-r>=expand("<cword>")<CR>\>/
-nnoremap J <PageDown>
-nnoremap K <PageUp>
-" Shift+J / Shift+K to move upward or downward an entire visual selection. Insanely useful.
-vnoremap J :m '>+1<CR>gv=gv
-vnoremap K :m '<-2<CR>gv=gv
-" Use curl to upload visual selection to ix.io to easily share i
-vnoremap <Leader>pp :w !curl -F "f:1=<-" ix.io<CR>
+" mkdir -p when :e
 augroup Mkdir
   autocmd!
   autocmd BufWritePre * call mkdir(expand("<afile>:p:h"), "p")
 augroup END
 
-" Set filetype to json and apply correct formatting
-nnoremap =j :set ft=json<CR>:%!python -m json.tool<CR>
-" Sort like a boss
-vnoremap <C-s> :sort<CR>
-
-" edit vimrc from vim
-nmap <leader>vimrc :tabe ~/.vim/vimrc<CR>
 autocmd! BufWritePost vimrc,.vimrc source $MYVIMRC | echom "Reloaded vimrc"
-
-" Go to first and last char of current line easier
-noremap H ^
-noremap L $
-" Yank from the cursor to the end of the line, to be consistent with C and D.
-nnoremap Y y$
-" save bash shebang as a macro in register b. use @b to get it in vim
-let @b='i#!/usr/bin/env bashq'
-"5 dashes or equal signs followed by space or enter creates a line trigger
-abbrev ===== ============================================================================
-abbrev ----- ----------------------------------------------------------------------------
 
 " Start interactive EasyAlign in visual mode (e.g. vipga)
 xmap ga <Plug>(EasyAlign)
-
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
 
 " Source: https://github.com/henrebotha/dotfiles/blob/c1244f36e0406b4e2326096f137668091d268353/vim/.vimrc#L473
-" Copy the file name, Git repo name, and commit hash along with whatever's
-" selected.
+" Copy the file name, Git repo name, and commit hash along with whatever's selected
 function! CopyWithRef()
   let gitTopLevel=Find_repo_root()
   let filePathFull=expand('%:p')
@@ -252,14 +265,12 @@ let &undodir=s:vim_cache
 set undolevels=1000
 set undoreload=10000
 
-set cmdwinheight=1
-
 " Disables automatic commenting on newline:
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
-" Check file in shellcheck:
-map <leader>s :!clear && shellcheck -x %<CR>
+
 " Save file as sudo on files that require root permission:
 cabbrev w!! execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
+
 " Automatically deletes all trailing whitespace and newlines at end of file on
 " save & reset cursor position:
 autocmd BufWritePre * let currPos = getpos(".")
@@ -267,16 +278,13 @@ autocmd BufWritePre * %s/\s\+$//e
 autocmd BufWritePre * %s/\n\+\%$//e
 autocmd BufWritePre *.[ch] %s/\%$/\r/e
 autocmd BufWritePre * cal cursor(currPos[1], currPos[2])
+
 " Run xrdb whenever Xdefaults or Xresources are updated.
 autocmd BufRead,BufNewFile Xresources,Xdefaults,xresources,xdefaults set filetype=xdefaults
 autocmd BufWritePost Xresources,Xdefaults,xresources,xdefaults !xrdb %
 
 " Spellcheck .txt files
 autocmd BufRead *.txt set spell
-" Perform dot commands over visual blocks:
-vnoremap . :normal .<CR>
-" Replace all is aliased to S.
-nnoremap S :%s//g<Left><Left>
 
 autocmd FileType fish setlocal commentstring=#\ %s
 autocmd FileType lfrc setlocal commentstring=#\ %s
