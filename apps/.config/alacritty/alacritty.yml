@@ -4,7 +4,7 @@ window:
   dimensions:
     columns: 132
     lines: 28
-    
+
   padding:
     x: 10
     y: 10
@@ -24,7 +24,7 @@ scrolling:
   history: 100000
   multiplier: 3
   auto_scroll: true
-  
+
 ##################################################
 
 # colors: *DoomOne
@@ -94,7 +94,7 @@ colors:
     white:   '#ebdbb2'
 
   transparent_background_colors: false
-  
+
 schemes:
   ### Doom One ###
   DoomOne: &DoomOne
@@ -435,7 +435,7 @@ schemes:
       cyan:    '#54ced6'
       white:   '#282a2e'
 
-  
+
 ##################################################
 
 font:
@@ -464,26 +464,25 @@ draw_bold_text_with_bright_colors: true
 ##################################################
 
 key_bindings:
-  - { key: Return, mods: Control|Shift, action: SpawnNewInstance }
-  - { key: J, mods: Alt, action: ScrollLineDown }
-  - { key: K, mods: Alt, action: ScrollLineUp }
-  - { key: Down, mods: Alt, action: ScrollLineDown }
-  - { key: Up, mods: Alt, action: ScrollLineUp }
-  - { key: U, mods: Alt, action: ScrollHalfPageUp }
-  - { key: D, mods: Alt, action: ScrollHalfPageDown }
-  - { key: K, mods: Alt|Shift, action: IncreaseFontSize }
-  - { key: J, mods: Alt|Shift, action: DecreaseFontSize }
-  - { key: Up, mods: Alt|Shift, action: IncreaseFontSize }
-  - { key: Down, mods: Alt|Shift, action: DecreaseFontSize }
-  - { key: V, mods: Alt, action: Paste }
-  - { key: C, mods: Alt, action: Copy }
-  - { key: Insert, mods: Shift, action: PasteSelection }
-  - { key: Home, mods: Alt, action: ScrollToTop }
-  - { key: End, mods: Alt, action: ScrollToBottom }
-  - { key: Plus, mods: Control, action: IncreaseFontSize }
-  - { key: Minus, mods: Control, action: DecreaseFontSize }
-  - { key: Key0, mods: Control, action: ResetFontSize }
-  
+  - { key: J,        mods: Alt,       action: ScrollLineDown }
+  - { key: K,        mods: Alt,       action: ScrollLineUp }
+  - { key: Down,     mods: Alt,       action: ScrollLineDown }
+  - { key: Up,       mods: Alt,       action: ScrollLineUp }
+  - { key: V,        mods: Alt,       action: Paste }
+  - { key: C,        mods: Alt,       action: Copy }
+  - { key: Home,     mods: Alt,       action: ScrollToTop }
+  - { key: End,      mods: Alt,       action: ScrollToBottom }
+  - { key: PageUp,   mods: Alt,       action: ScrollPageUp }
+  - { key: PageDown, mods: Alt,       action: ScrollPageDown }
+  - { key: Insert,   mods: Shift,     action: PasteSelection }
+  - { key: K,        mods: Alt|Shift, action: IncreaseFontSize }
+  - { key: J,        mods: Alt|Shift, action: DecreaseFontSize }
+  - { key: Up,       mods: Alt|Shift, action: IncreaseFontSize }
+  - { key: Down,     mods: Alt|Shift, action: DecreaseFontSize }
+  - { key: Plus,     mods: Control,   action: IncreaseFontSize }
+  - { key: Minus,    mods: Control,   action: DecreaseFontSize }
+  - { key: Key0,     mods: Control,   action: ResetFontSize }
+
 ##################################################
 
 live_config_reload: true
@@ -500,7 +499,7 @@ hints:
       mouse:
         enabled: true
         mods: Control
-      
+
     - regex: "(ipfs:|ipns:|magnet:|mailto:|gemini:|gopher:|https:|http:|news:|file:|git:|ssh:|ftp:)\
               [^\u0000-\u001F\u007F-\u009F<>\"\\s{-}\\^⟨⟩`]+"
       action: Copy
@@ -510,5 +509,3 @@ hints:
         enabled: true
 
 ##################################################
-
-
