@@ -15,8 +15,8 @@ bindsym XF86AudioMute        exec --no-startup-id pactl set-sink-mute @DEFAULT_S
 
 # -- Brightness (Fn) keybinds
 # Requirement: brightnessctl
-bindsym XF86MonBrightnessUp exec --no-startup-id ~/.config/i3/scripts/brightness-control up
-bindsym XF86MonBrightnessDown exec --no-startup-id ~/.config/i3/scripts/brightness-control down
+# bindsym XF86MonBrightnessUp exec --no-startup-id ~/.config/i3/scripts/brightness-control up
+# bindsym XF86MonBrightnessDown exec --no-startup-id ~/.config/i3/scripts/brightness-control down
 
 # -- Start a terminal
 bindsym $mod+Return exec --no-startup-id alacritty
