@@ -8,8 +8,8 @@ set shell bash
 set ifs "\n"
 set drawbox
 set icons
-set reverse
-set sortby time
+# set reverse
+# set sortby time
 set scrolloff 10
 set relativenumber
 set truncatechar *
@@ -83,10 +83,7 @@ cmd newfold ${{
 }}
 
 cmd on-cd &{{
-    # '&' commands run silently in background (which is what we want here),
-    # but are not connected to stdout.
-    # To make sure our escape sequence still reaches stdout we pipe it to /dev/tty
-    printf "\033]0; $(pwd | sed "s|$HOME|~|") - lf\007" > /dev/tty
+  printf "\033]0; $(pwd | sed "s|$HOME|~|") - lf\007" > /dev/tty
 }}
 
 cmd open ${{
@@ -202,26 +199,6 @@ cmd yank-basename-without-extension &basename -a -- $fx | rev | cut -d. -f2- | r
 # cmd bookmark_create ${{
 #     read ans
 #     echo $PWD > $LF_BOOKMARK_PATH/$ans
-# }}
-
-# cmd on-cd &{{
-#     case "$PWD" in
-#         /mnt/movies*)
-#             lf -remote "send $id set user_prev_sortby $lf_sortby"
-#             lf -remote "send $id set sortby natural"
-#             lf -remote "send $id set noreverse"
-#             lf -remote "send $id echomsg changed sort to natural"
-#             ;;
-#         *)
-#             # restore sorting on directory exit
-#             if [[ "$lf_user_prev_sortby" != "" ]]; then
-#                 lf -remote "send $id set sortby $lf_user_prev_sortby"
-#                 lf -remote "send $id set reverse"
-#                 lf -remote "send $id echomsg restored sort to $lf_user_prev_sortby"
-#                 lf -remote "send $id set user_prev_sortby ''"
-#             fi
-#             ;;
-#     esac
 # }}
 
 # cmd paste &{{
