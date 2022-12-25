@@ -3,15 +3,12 @@
 # Script name: dm-ip
 # Description: Get IP from interface (or external)
 # Dependencies: dmenu, dig, ip, jq
-# GitLab: https://www.gitlab.com/dwt1/dmscripts
-# License: https://www.gitlab.com/dwt1/dmscripts/LICENSE
-# Contributors: Simon Ingelsson
 
 set -euo pipefail
-_path="$(cd "$(dirname "${BASH_SOURCE[0]}")" && cd "$(dirname "$(readlink "${BASH_SOURCE[0]}" || echo ".")")" && pwd)"
-if [[  -f "${_path}/_dm-helper.sh" ]]; then
+_path="$(cd "$(dirname "$BASH_SOURCE")" && cd "$(dirname "$(readlink "$BASH_SOURCE" || echo ".")")" && pwd)"
+if [[  -f "${_path}/_dm-helper" ]]; then
   # shellcheck disable=SC1090,SC1091
-  source "${_path}/_dm-helper.sh"
+  source "${_path}/_dm-helper"
 else
   # shellcheck disable=SC1090
   echo "No helper-script found"
@@ -31,10 +28,10 @@ main() {
     _ips[${_iface%:*}]="${_iface##*:}"
   done
 
-  selected="$(printf '%s\n' "${!_ips[@]}" | ${DMENU} "ips:" "$@")"
-  [ -z "${selected}" ] && exit 1
-  echo "${_ips["${selected}"]}" | cp2cb 
-  notify-send "IP (in clipboard)" " ${selected}: ${_ips["${selected}"]}"
+  selected="$(printf '%s\n' "${!_ips[@]}" | $DMENU "ips:" "$@")"
+  [ -z "$selected" ] && exit 1
+  echo "${_ips["$selected"]}" | cp2cb
+  notify-send "IP (in clipboard)" " $selected: ${_ips["$selected"]}"
 }
 
-[[ "${BASH_SOURCE[0]}" == "${0}" ]] && main "$@"
+[[ "$BASH_SOURCE" == "$0" ]] && main "$@"

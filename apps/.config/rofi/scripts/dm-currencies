@@ -1,21 +1,15 @@
 #!/usr/bin/env bash
-#
+
 # Script name: dm-currencies
 # Description: Convert prices between currencies using https://rate.sx
 # Dependencies: dmenu and curl
-# GitLab: https://www.gitlab.com/dwt1/dmscripts
-# License: https://www.gitlab.com/dwt1/dmscripts/LICENSE
-# Contributors: ifrendas
 
-# Set with the flags "-e", "-u","-o pipefail" cause the script to fail
-# if certain things happen, which is a good thing.  Otherwise, we can
-# get hidden bugs that are hard to discover.
 set -euo pipefail
 
-_path="$(cd "$(dirname "${BASH_SOURCE[0]}")" && cd "$(dirname "$(readlink "${BASH_SOURCE[0]}" || echo ".")")" && pwd)"
-if [[  -f "${_path}/_dm-helper.sh" ]]; then
+_path="$(cd "$(dirname "$BASH_SOURCE")" && cd "$(dirname "$(readlink "$BASH_SOURCE" || echo ".")")" && pwd)"
+if [[  -f "${_path}/_dm-helper" ]]; then
   # shellcheck disable=SC1090,SC1091
-  source "${_path}/_dm-helper.sh"
+  source "${_path}/_dm-helper"
 else
   # shellcheck disable=SC1090
   echo "No helper-script found"
@@ -38,19 +32,19 @@ main() {
 
   # If $currency_names is not codes use currency names, else use currency codes
   if [[ "${currency_names:-names}" != "codes" ]]; then
-    from_name=$(printf '%s\n' "${!currencies[@]}" | sort | ${DMENU} 'Convert from:') "$@" || exit 1
-    to_name=$(printf '%s\n' "${!currencies[@]}" | sort | ${DMENU} 'Convert to:') "$@" || exit 1
+    from_name=$(printf '%s\n' "${!currencies[@]}" | sort | $DMENU 'Convert from:') "$@" || exit 1
+    to_name=$(printf '%s\n' "${!currencies[@]}" | sort | $DMENU 'Convert to:') "$@" || exit 1
     from_code=${currencies[$from_name]}
     to_code=${currencies[$to_name]}
   else
-    from_name=$(printf '%s\n' "${currencies[@]}" | sort | ${DMENU} 'Convert from:') "$@" || exit 1
-    to_name=$(printf '%s\n' "${currencies[@]}" | sort | ${DMENU} 'Convert to:') "$@" || exit 1
-    from_code=${from_name}
-    to_code=${to_name}
+    from_name=$(printf '%s\n' "${currencies[@]}" | sort | $DMENU 'Convert from:') "$@" || exit 1
+    to_name=$(printf '%s\n' "${currencies[@]}" | sort | $DMENU 'Convert to:') "$@" || exit 1
+    from_code=$from_name
+    to_code=$to_name
   fi
 
   # Get amount and convert it
-  amount=$(echo "" | ${DMENU} "Amount (${from_code} -> ${to_code}):")
+  amount=$(echo "" | $DMENU "Amount ($from_code -> $to_code):")
   converted=$(curl -Ss "https://${to_code}.rate.sx/${amount}${from_code}")
 
   # Copy amount to clipboard and send notification
@@ -58,4 +52,4 @@ main() {
   notify-send "Converted amount (in clipboard)" "$converted $to_code"
 }
 
-[[ "${BASH_SOURCE[0]}" == "${0}" ]] && main "$@"
+[[ "$BASH_SOURCE" = "$0" ]] && main "$@"

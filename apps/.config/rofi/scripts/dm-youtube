@@ -3,17 +3,13 @@
 # Script name: dm-youtube
 # Description: Youtube subscription manager without API access
 # Dependencies: dmenu, curl, a browser (brave by default)
-# Gitlab: https://www.gitlab.com/dwt1/dmscripts
-# License: https://www.gitlab.com/dwt1/dmscripts/LICENSE
-# Contributors: HostGrady
 
-# pipefail setup
 set -euo pipefail
 
-_path="$(cd "$(dirname "${BASH_SOURCE[0]}")" && cd "$(dirname "$(readlink "${BASH_SOURCE[0]}" || echo ".")")" && pwd)"
-if [[  -f "${_path}/_dm-helper.sh" ]]; then
+_path="$(cd "$(dirname "$BASH_SOURCE")" && cd "$(dirname "$(readlink "$BASH_SOURCE" || echo ".")")" && pwd)"
+if [[  -f "${_path}/_dm-helper" ]]; then
   # shellcheck disable=SC1090,SC1091
-  source "${_path}/_dm-helper.sh"
+  source "${_path}/_dm-helper"
 else
   # shellcheck disable=SC1090
   echo "No helper-script found"
@@ -30,7 +26,7 @@ main() {
   # Sorts the array and lets you select a channel with dmenu
   # As this is loaded from other file it is technically not defined
   # shellcheck disable=SC2154
-  _channel=$(printf '%s\n' "${!youtube_channels[@]}" | sort | ${DMENU} 'Select Channel:' "$@")
+  _channel=$(printf '%s\n' "${!youtube_channels[@]}" | sort | $DMENU 'Select Channel:' "$@")
 
   # The way it's done here is most effective, it searchs for "=" then it takes
   # everything before the = sign and leaves us with our variable used in the
@@ -40,14 +36,14 @@ main() {
   # parse rss
   _video_list=$(parse_rss "$(curl -s "${_feed_url}")" )
 
-  _video=$(printf '%s\n' "${_video_list}" | sort -r | ${DMENU} 'Select Video' "$@")
+  _video=$(printf '%s\n' "${_video_list}" | sort -r | $DMENU 'Select Video' "$@")
   _video_id=$(echo "${_video}" | cut -d'|' -f2 | sed -e 's/^[ \t]*//')
 
   if [[ -n ${_video_id} ]]; then
     # After the video is chosen, run it in your web browser
     # shellcheck disable=SC2154
-    ${DMBROWSER} "https://www.youtube.com/watch?v=${_video_id}"
+    $DMBROWSER "https://www.youtube.com/watch?v=${_video_id}"
   fi
 }
 
-[[ "${BASH_SOURCE[0]}" == "${0}" ]] && main "$@"
+[[ "$BASH_SOURCE" == "$0" ]] && main "$@"

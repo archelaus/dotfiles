@@ -4,7 +4,7 @@ DMENU="dmenu -i -l 20 -p"
 PDF_VIEWER="zathura"
 DMBROWSER="qutebrowser"
 DMTERM="alacritty -e"
-DMEDITOR="${DMTERM} vim"
+DMEDITOR="$DMTERM vim"
 
 # TODO: Rename this variable to something more traditional
 logout_locker='~/.config/i3/scripts/i3lock-extra'
@@ -27,7 +27,7 @@ esac
 # last dash. This gives us the word after the - which is what we are searching for in the case
 # statement. ie dm-man -> man
 
-# An awk equivalent is: 
+# An awk equivalent is:
 # awk -F"-" '{print $NF}'
 # Sadly cut has no easy equivalent
 
@@ -35,14 +35,8 @@ esac
 # TODO: Make some of the more useful ones general variables
 # IE a pictures directory, an audio directory, config locations, etc
 
-# dm-bookman 
+# dm-bookman
 bookman_show_source=1
-
-# dm-sounds
-sounds_dir="${HOME}/.config/dmscripts/dmsounds"
-
-# dm-setbg
-setbg_dir="${HOME}/Pictures/Wallpapers"
 
 # dm-maim
 maim_dir="${HOME}/Pictures/Screenshots"
@@ -71,25 +65,22 @@ confedit_list[qutebrowser quickmarks]="$HOME/.config/qutebrowser/quickmarks"
 confedit_list[qutebrowser config.py]="$HOME/.config/qutebrowser/config.py"
 confedit_list[vim]="$HOME/.vim/vimrc"
 confedit_list[nix]="$HOME/.config/nixpkgs/home.nix"
+confedit_list[lf]="$HOME/.config/lf/lfrc"
+confedit_list[sxiv]="$HOME/.config/sxiv/exec/key-handler"
 
 # dm-reddit config
 declare -a reddit_list=(
-"r/archlinux"
 "r/bash"
 "r/commandline"
-"r/emacs"
-"r/freesoftware"
 "r/linux"
 "r/linux4noobs"
 "r/linuxmasterrace"
 "r/linuxquestions"
-"r/suckless"
-"r/Ubuntu"
 "r/unixporn"
 "r/vim"
 )
 
-# Search engine config 
+# Search engine config
 declare -A websearch
 # Syntax:
 # websearch[name]="https://www.example.com/search?q="
@@ -108,7 +99,7 @@ websearch[youtube]="https://www.youtube.com/results?search_query="
 websearch[amazon]="https://www.amazon.com/s?k="
 # Linux
 websearch[nixpkgs]="https://search.nixos.org/packages?channel=22.11&from=0&size=50&sort=relevance&type=packages&query="
-# TODO: Add more sites below 
+# TODO: Add more sites below
 # Development
 websearch[github]="https://duckduckgo.com/?q=site%3Agithub.com+"
 websearch[stackoverflow]="https://stackoverflow.com/search?q="
@@ -118,8 +109,86 @@ websearch[stackoverflow]="https://stackoverflow.com/search?q="
 # Think of these as your "subscribed channels", name the channel in the square brackets then put the channel URL in the quotation marks
 # Syntax: youtube_channels[name]="https://www.youtube.com/link/to/channel"
 
-# declare -A youtube_channels
-# youtube_channels[]=""
+declare -A youtube_channels
+youtube_channels[Future Proof]="http://www.youtube.com/channel/UC-OJ-24roEfQ_-PCnLJSckg"
+youtube_channels[Techquickie]="http://www.youtube.com/channel/UC0vBXGSyV14uvJ4hECDOl0Q"
+youtube_channels[NileBlue]="http://www.youtube.com/channel/UC1D3yD4wlPMico0dss264XA"
+youtube_channels[Sam O\'Nella Academy]="http://www.youtube.com/channel/UC1DTYW241WD64ah5BFWn4JA"
+youtube_channels[The Action Lab]="http://www.youtube.com/channel/UC1VLQPn9cYSqx8plbk9RxxQ"
+youtube_channels[Mathologer]="http://www.youtube.com/channel/UC1_uAIS3r8Vu6JjXWvastJg"
+youtube_channels[Traversy Media]="http://www.youtube.com/channel/UC29ju8bIPH5as8OGnQzwJyA"
+youtube_channels[CGP Grey]="http://www.youtube.com/channel/UC2C_jShtL725hvbm1arSV9w"
+youtube_channels[Luke Smith]="http://www.youtube.com/channel/UC2eYFnH61tmytImy1mTYvhA"
+youtube_channels[The Film Theorists]="http://www.youtube.com/channel/UC3sznuotAs2ohg_U__Jzj_Q"
+youtube_channels[ColdFusion]="http://www.youtube.com/channel/UC4QZ_LsYcvcq7qOsOhpAX4A"
+youtube_channels[SmarterEveryDay]="http://www.youtube.com/channel/UC6107grRI4m0o2-emgoDnAA"
+youtube_channels[Vsauce]="http://www.youtube.com/channel/UC6nSFpj9HTCZ5t-N3Rm3-HA"
+youtube_channels[Physics Girl]="http://www.youtube.com/channel/UC7DdEm33SyaTDtWYGO2CwdA"
+youtube_channels[IBRACORP]="http://www.youtube.com/channel/UC7aW7chIafJG6ECYAd3N5uQ"
+youtube_channels[ThePrimeagen]="http://www.youtube.com/channel/UC8ENHE5xdFSwx71u3fDH5Xw"
+youtube_channels[N N Taleb\'s Probability Moocs]="http://www.youtube.com/channel/UC8uY6yLP9BS4BUc9BSc0Jww"
+youtube_channels[Computerphile]="http://www.youtube.com/channel/UC9-y-6csu5WGm29I7JiwpnA"
+youtube_channels[The Cinema Cartography Extra]="http://www.youtube.com/channel/UCAGkSxTlleqxRauEqupyVPw"
+youtube_channels[Tom Scott]="http://www.youtube.com/channel/UCBa659QWEk1AI4Tg--mrJ2A"
+youtube_channels[AsapSCIENCE]="http://www.youtube.com/channel/UCC552Sd-3nyi_tk2BudLUzA"
+youtube_channels[Corey Schafer]="http://www.youtube.com/channel/UCCezIgC97PvUuR4_gbFUs5g"
+youtube_channels[Steve Mould]="http://www.youtube.com/channel/UCEIwxahdLz7bap-VDs9h35A"
+youtube_channels[Captain Disillusion]="http://www.youtube.com/channel/UCEOXxzW2vU0P-0THehuIIeg"
+youtube_channels[Lessons from the Screenplay]="http://www.youtube.com/channel/UCErSSa3CaP_GJxmFpdjG9Jw"
+youtube_channels[FilmJoy]="http://www.youtube.com/channel/UCEtB-nx5ngoNJWEzYa-yXBg"
+youtube_channels[Coding Adventures]="http://www.youtube.com/channel/UCGpMFLPZNWbxtkJ4R8R6j7Q"
+youtube_channels[Be Smart]="http://www.youtube.com/channel/UCH4BNI0-FOK2dMXoFtViWHw"
+youtube_channels[iFixit]="http://www.youtube.com/channel/UCHbx9IUW7eCeJsC4sBCTNBA"
+youtube_channels[Veritasium]="http://www.youtube.com/channel/UCHnyfMqiRRG1u-2MsSQLbXA"
+youtube_channels[Nerdwriter1]="http://www.youtube.com/channel/UCJkMlOu7faDgqh4PfzbpLdg"
+youtube_channels[Ctrl Shift Face]="http://www.youtube.com/channel/UCKpH0CKltc73e4wh0_pgL3g"
+youtube_channels[Practical Engineering]="http://www.youtube.com/channel/UCMOqf8ab-42UUQIdVoKwjlQ"
+youtube_channels[Binkov\'s Battlegrounds]="http://www.youtube.com/channel/UCPdk3JuQGxOCMlZLLt4drhw"
+youtube_channels[Real Engineering]="http://www.youtube.com/channel/UCR1IuLEqb6UEA_zQ81kwXfg"
+youtube_channels[MrMobile [Michael Fisher]]="http://www.youtube.com/channel/UCSOpcUkE-is7u7c4AkLgqTw"
+youtube_channels[Corridor Crew]="http://www.youtube.com/channel/UCSpFnDQr88xCZ80N-X7t0nQ"
+youtube_channels[Bloomberg Quicktake: Explained]="http://www.youtube.com/channel/UCU1Pp4a-TwbrB40ja-4JG_Q"
+youtube_channels[Girl With The Dogs]="http://www.youtube.com/channel/UCUFnGWHIQvybwmR7XDh7-9A"
+youtube_channels[The Slow Mo Guys]="http://www.youtube.com/channel/UCUK0HBIBWgM2c4vsPhkYY4w"
+youtube_channels[Thomas Flight]="http://www.youtube.com/channel/UCUyvQV2JsICeLZP4c_h40kA"
+youtube_channels[DistroTube]="http://www.youtube.com/channel/UCVls1GmFKf6WlTraIb_IaJg"
+youtube_channels[JerryRigEverything]="http://www.youtube.com/channel/UCWFKCr40YwOZQx8FHU_ZqqQ"
+youtube_channels[The Royal Ocean Film Society]="http://www.youtube.com/channel/UCWq-qJSudqKrzquTVep9Jwg"
+youtube_channels[See Data Visually]="http://www.youtube.com/channel/UCWrLZAEcsxoZGws3phqJnbw"
+youtube_channels[Nerdstalgic]="http://www.youtube.com/channel/UCXjmz8dFzRJZrZY8eFiXNUQ"
+youtube_channels[Linus Tech Tips]="http://www.youtube.com/channel/UCXuqSBlHAE6Xw-yeJA0Tunw"
+youtube_channels[Abdul Bari]="http://www.youtube.com/channel/UCZCFT11CWBi3MHNlGf019nw"
+youtube_channels[Magnus Midtbø]="http://www.youtube.com/channel/UC_gSotrFVZ_PiAxo3fTQVuQ"
+youtube_channels[Tim Schofield]="http://www.youtube.com/channel/UCbR6jJpva9VIIAHTse4C3hw"
+youtube_channels[ExplainingComputers]="http://www.youtube.com/channel/UCbiGcwDWZjz05njNPrJU7jA"
+youtube_channels[Key & Peele]="http://www.youtube.com/channel/UCdN4aXTrHAtfgbVG9HjBmxQ"
+youtube_channels[Branch Education]="http://www.youtube.com/channel/UCdp4_l1vPmpN-gDbUwhaRUQ"
+youtube_channels[ATHLEAN-X™]="http://www.youtube.com/channel/UCe0TLA0EsQbE-MjuHXevj2A"
+youtube_channels[Chris Titus Tech]="http://www.youtube.com/channel/UCg6gPGh8HU2U01vaFCAsvmQ"
+youtube_channels[Elvis The Alien]="http://www.youtube.com/channel/UChc-m3saf8K2oJHDSsnsj_A"
+youtube_channels[Sideways]="http://www.youtube.com/channel/UCi7l9chXMljpUft67vw78qw"
+youtube_channels[Adam Savage’s Tested]="http://www.youtube.com/channel/UCiDJtJKMICpb9B1qf7qjEOA"
+youtube_channels[Kallmekris]="http://www.youtube.com/channel/UCiciOsypkXcqSFqSPd-NRVA"
+youtube_channels[Every Frame a Painting]="http://www.youtube.com/channel/UCjFqcJQXGZ6T6sxyFB-5i6A"
+youtube_channels[Python In 1 Minute]="http://www.youtube.com/channel/UCjZ6DEtNXNIL1sgvuSE9gFg"
+youtube_channels[iBSD]="http://www.youtube.com/channel/UCk9NvmsPBC3lTn_L9kFaylA"
+youtube_channels[Brodie Robertson]="http://www.youtube.com/channel/UCld68syR8Wi-GY_n4CaoJGA"
+youtube_channels[D!NG]="http://www.youtube.com/channel/UClq42foiSgl7sSpLupnugGA"
+youtube_channels[Thunderf00t]="http://www.youtube.com/channel/UCmb8hO2ilV9vRa8cilis88A"
+youtube_channels[Numberphile]="http://www.youtube.com/channel/UCoxcjq-8xIDTYp3uz647V5A"
+youtube_channels[Half-Asleep Chris]="http://www.youtube.com/channel/UCq4qiifOaFGW3a2oljSfxUg"
+youtube_channels[penguinz0]="http://www.youtube.com/channel/UCq6VFHwMzcMXbuKyG7SQYIg"
+youtube_channels[Dan Golding - Video Essays]="http://www.youtube.com/channel/UCqnos76uuqYRZ-zI2MRNGnA"
+youtube_channels[Fireship]="http://www.youtube.com/channel/UCsBjURrPoezykLs9EqgamOA"
+youtube_channels[FightSmartTrav]="http://www.youtube.com/channel/UCsUbFOUqtrU4oRSDfjb78ig"
+youtube_channels[Kurzgesagt – In a Nutshell]="http://www.youtube.com/channel/UCsXVk37bltHxD1rDPwtNM8Q"
+youtube_channels[Wolfgang\'s Channel]="http://www.youtube.com/channel/UCsnGwSIHyoYN0kiINAGUKxg"
+youtube_channels[videogamedunkey]="http://www.youtube.com/channel/UCsvn_Po0SmunchJYOWpOxMg"
+youtube_channels[TechAltar]="http://www.youtube.com/channel/UCtZO3K2p8mqFwiKWb9k7fXA"
+youtube_channels[Science Channel]="http://www.youtube.com/channel/UCvJiYiBUbw4tmpRSZT2r1Hw"
+youtube_channels[Anton Fomenko]="http://www.youtube.com/channel/UCyU97yKDHCf4Jqj6ME_qLKA"
+youtube_channels[9to5Google]="http://www.youtube.com/channel/UCzIO0iX4yKW2P4NkmmKq1PA"
+youtube_channels[PBS Eons]="http://www.youtube.com/channel/UCzR-rom72PHN9Zg7RML9EbA"
 
 # dm-colpick config
 declare -A colpick_list
@@ -143,7 +212,7 @@ colpick_list[purple]="#bd9cf9"
 # If you want more languages (or need a specific language not in the Argos library) you should chose Lingva Translate.
 # If you want to get away from Google and/or want a fully free software implementation you should use LibreTranslate.
 # The choice is yours...
-translate_service="libre"
+translate_service="libretranslate"
 # translate_service="lingva"
 libretranslate_instance="https://libretranslate.de"
 lingva_instance="https://lingva.ml"
@@ -162,7 +231,7 @@ lingva_instance="https://lingva.ml"
 # dm-weather config
 declare -A weather_location
 # weather_location[New York]="New+York"
-# weather_opts="m" # Always use metric units (celsius)
+weather_opts="m" # Always use metric units (celsius)
 # weather_opts="u" # Always use US units (fahrenheit)
 # see: https://github.com/chubin/wttr.in
 

@@ -1,12 +1,10 @@
 #!/usr/bin/env bash
 
+# https://github.com/LukeSmithxyz/voidrice/blob/master/.local/bin/dmenurecord
+
 # Script name: dm-record
 # Description: Dmenu script to record video,audio,webcam.
 # Dependencies: dmenu, ffmpeg, pulseaudio, alsa, slop (for recording a specific area)
-# GitLab: https://www.gitlab.com/dwt1/dmscripts
-# License: https://www.gitlab.com/dwt1/dmscripts/LICENSE
-# Contributors: ashincoder
-#               HostGrady
 
 # Usage:
 # `$0`: Ask for recording type via dmenu
@@ -16,6 +14,19 @@
 # `$0 kill`: Kill existing recording
 #
 # If there is already a running instance, user will be prompted to end it.
+
+_path="$(cd "$(dirname "$BASH_SOURCE")" && cd "$(dirname "$(readlink "$BASH_SOURCE" || echo ".")")" && pwd)"
+if [[  -f "${_path}/_dm-helper" ]]; then
+  # shellcheck disable=SC1090,SC1091
+  source "${_path}/_dm-helper"
+else
+  # shellcheck disable=SC1090
+  echo "No helper-script found"
+fi
+
+# script will not hit this if there is no config-file to load
+# shellcheck disable=SC1090
+source "$(get_config)"
 
 killrecording() {
 	recpid="$(cat /tmp/recordingpid)"
@@ -81,7 +92,7 @@ audio() { \
 # TODO: deprecate or rewrite
 
 askrecording() { \
-	choice=$(printf "screencast\\nvideo\\nvideo selected\\naudio\\nwebcam\\nwebcam (hi-def)" | ${DMENU} "Select recording style:")
+	choice=$(printf "screencast\\nvideo\\nvideo selected\\naudio\\nwebcam\\nwebcam (hi-def)" | $DMENU "Select recording style:")
 	case "$choice" in
 		screencast) screencast;;
 		audio) audio;;
@@ -121,4 +132,3 @@ case "$1" in
 	kill) killrecording;;
 	*) ([ -f /tmp/recordingpid ] && asktoend && exit) || askrecording;;
 esac
-

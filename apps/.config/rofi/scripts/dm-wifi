@@ -1,15 +1,16 @@
 #!/usr/bin/env bash
-#
+
 # script name: dm-wifi
 # Description: Connect to wifi using dmenu
 # Dependencies: dmenu, nmcli, Any Nerd Font
 # Contributor: WitherCubes
 
 set -euo pipefail
-_path="$(cd "$(dirname "${BASH_SOURCE[0]}")" && cd "$(dirname "$(readlink "${BASH_SOURCE[0]}" || echo ".")")" && pwd)"
-if [[  -f "${_path}/_dm-helper.sh" ]]; then
+
+_path="$(cd "$(dirname "$BASH_SOURCE")" && cd "$(dirname "$(readlink "$BASH_SOURCE" || echo ".")")" && pwd)"
+if [[  -f "${_path}/_dm-helper" ]]; then
   # shellcheck disable=SC1090,SC1091
-  source "${_path}/_dm-helper.sh"
+  source "${_path}/_dm-helper"
 else
   # shellcheck disable=SC1090
   echo "No helper-script found"
@@ -21,8 +22,8 @@ source "$(get_config)"
 
 main() {
   # TODO: Fix cut line at some point
-  bssid=$(nmcli device wifi list | sed -n '1!p' | cut -b 9- | ${DMENU} "Select Wifi  :" | cut -d' ' -f1)
-  pass=$(echo "" | ${DMENU} "Enter Password  :")
+  bssid=$(nmcli device wifi list | sed -n '1!p' | cut -b 9- | $DMENU "Select Wifi  :" | cut -d' ' -f1)
+  pass=$(echo "" | $DMENU "Enter Password  :")
   # We are disabling a shellcheck warning about using && and || as it doesn't apply here.
   # shellcheck disable=SC2015
   [ -n "$pass" ] && nmcli device wifi connect "$bssid" password "$pass" || nmcli device wifi connect "$bssid"
@@ -34,4 +35,4 @@ main() {
   fi
 }
 
-[[ "${BASH_SOURCE[0]}" == "${0}" ]] && main "$@"
+[[ "$BASH_SOURCE" = "$0" ]] && main "$@"
