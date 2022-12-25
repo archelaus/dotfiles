@@ -35,7 +35,6 @@ Plug 'mbbill/undotree'
 Plug 'christoomey/vim-system-copy'
 Plug 'romainl/vim-cool'
 Plug 'junegunn/vim-easy-align'
-Plug 'tpope/vim-sleuth'
 call plug#end()
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -92,14 +91,13 @@ set smartindent
 set showmode " show which mode currently on
 set showcmd  " show command running bottom right
 set hidden
-" set ignorecase
-set infercase
+set ignorecase
 set smartcase
 set wildmenu
 set cursorline
 set ttyfast
 set ruler
-" set relativenumber
+set relativenumber
 set incsearch
 set showmatch
 " set hlsearch
@@ -117,11 +115,11 @@ set cmdwinheight=1
 " => Text, tab and indent related
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" set expandtab                   " Use spaces instead of tabs.
-" set smarttab                    " Be smart using tabs ;)
-" set shiftwidth=2                " One tab == four spaces.
-" set tabstop=2                   " One tab == four spaces.
-" set shiftround
+set expandtab                   " Use spaces instead of tabs.
+set smarttab                    " Be smart using tabs ;)
+set shiftwidth=2                " One tab == four spaces.
+set tabstop=2                   " One tab == four spaces.
+set shiftround
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Remap Keys
