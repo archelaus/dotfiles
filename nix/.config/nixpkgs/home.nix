@@ -10,37 +10,36 @@
 
   home.packages = with pkgs; [
     # Go!
+    curlie
+    f2
     gdu
 
     # Rust CLI tools
     bat
     du-dust
     fd
+    lsd
     ripgrep
+    vimv-rs
 
     # dependencies
     rlwrap # cht.sh
+    playerctl # polybar spotify module
+    pulseaudio-ctl # polybar
 
     # cli
-    atuin
     bunnyfetch
-    cava
     cht-sh
-    cowsay
-    cmatrix
-    figlet
+    didyoumean
     fzf
-    hollywood
     jdupes
     maim
     nodePackages_latest.insect
-    pacvim
+    pdd
     pfetch
-    pipes-rs
     slop
     tmux
-    vimv-rs
-    zoxide
+    translate-shell
 
     # development
     fx
@@ -49,12 +48,7 @@
     pup
 
     # files
-    broot
-    feh
     lf
-    lsd
-    nsxiv
-    ueberzug
     zathura
 
     # i3wm
@@ -64,14 +58,24 @@
     haskellPackages.greenclip
     j4-dmenu-desktop
     picom-next
-    playerctl
-    pulseaudio-ctl
     xorg.xbacklight
     xidlehook
 
     # media
     exiftool
+    feh
     mat2
+    nsxiv
+
+    # misc
+    cava
+    cmatrix
+    cowsay
+    figlet
+    hollywood
+    pacvim
+    pipes-rs
+    toilet
 
     # overview
     btop
@@ -80,7 +84,11 @@
     lazygit
 
     # shell related
+    atuin
     babelfish
+    ueberzug
+    yad
+    zoxide
   ];
 
   programs.bat = {
