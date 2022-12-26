@@ -47,7 +47,7 @@ bindsym $mod+Shift+r restart
 # bindsym $mod+Shift+e exec "rofi -show power-menu -modi power-menu:rofi-power-menu"
 # (Alt) powermenu
 # Source: https://github.com/BIBJAW/Final_Rice/blob/main/MYDE/i3/scripts/powermenu
-bindsym $mod+Shift+e exec --no-startup-id ~/.config/rofi/scripts/rofi-powermenu-gruvbox
+bindsym $mod+Shift+e exec --no-startup-id ~/.config/rofi/powermenu/rofi-powermenu-gruvbox
 # ? bindsym $mod+e
 
 # -- Enter resize mode
@@ -98,11 +98,10 @@ bindsym $mod+Shift+grave exec ~/.config/rofi/scripts/rofi-emoji
 bindsym $mod+grave exec --no-startup-id rofi -theme arthur -modi calc -show calc -calc-command 'xdotool type --clearmodifiers "{result}"' > /dev/null
 
 # -- greenclip
-# bindsym $mod+g exec --no-startup-id greenclip print | grep . | dmenu -i -l 10 -p clipboard | xargs -r -d'\n' -I '{}' xdotool type '{}'
 bindsym $mod+Insert exec --no-startup-id greenclip print | grep . | dmenu -i -l 10 -p clipboard | xargs -r -d'\n' -I '{}' greenclip print '{}'
 # rofi -modi "clipboard:greenclip print" -show clipboard -run-command '{cmd}'
 # rofi -modi "clipboard:greenclip print" -show clipboard -run-command '{cmd}' ; sleep 0.5; xdotool type $(xclip -o -selection clipboard)
-# bindsym $mod+z exec --no-startup-id rofi -modi "Clipboard:greenclip print" -show Clipboard -run-command '{cmd}' -theme ~/.config/rofi/selmenu.rasi
+# bindsym $mod+Insert exec --no-startup-id rofi -modi "Clipboard:greenclip print" -show Clipboard -run-command '{cmd}' -theme ~/.config/rofi/selmenu.rasi
 
 # -- Scratchpad(s)
 # bindsym $mod+b [class="scratchpad"] scratchpad show

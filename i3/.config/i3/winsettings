@@ -17,7 +17,7 @@ set $ws10 10
 # -- Define colors variables
 set $color1     #08052b
 # bg tab mode
-set $color2     #282828 
+set $color2     #282828
 set $color3     #D65D0E
 set $color4     #EBDBB2
 set $color5     #D65D0E
@@ -53,7 +53,6 @@ for_window [class="Nemo"] move to workspace $ws4
 for_window [class="TelegramDesktop"] move to workspace $ws5
 for_window [class="Spotify"] move to workspace $ws6
 for_window [class="qutebrowser"] move to workspace $ws3
-for_window [class="mpv"] move to workspace $ws4
 
 # -- Workspace specific preferences
 focus_follows_mouse no
