@@ -4,6 +4,7 @@ apps/.config/mpv/mpvHistory.log
 vim/.vim/swap/
 vim/.vim/undo/
 vim/.vim/.netrwhist
+vim/.vim/viminfo
 scripts/.local/bin/*
 !scripts/.local/bin/*,*
 !scripts/.local/bin/t.py
