@@ -31,7 +31,7 @@ bindsym $mod+Shift+q kill
 bindsym $mod+d exec --no-startup-id j4-dmenu-desktop
 
 # -- dmenu
-bindsym $mod+n exec --no-startup-id ~/.config/rofi/scripts/dm-hub
+bindsym $mod+m exec --no-startup-id ~/.config/rofi/scripts/dm-hub
 
 # -- Reload the configuration file
 # bindsym $mod+Shift+c reload
