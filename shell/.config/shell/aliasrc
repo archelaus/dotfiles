@@ -1,0 +1,104 @@
+#!/bin/sh
+
+# sudo not required for some system commands
+for command in mount umount nala updatedb su shutdown poweroff reboot ; do
+	alias $command="sudo $command"
+done; unset command
+
+# Verbosity and settings that you pretty much just always are going to want.
+alias \
+	cp="cp -iv" \
+	mv="mv -iv" \
+	rm="rm -vI" \
+	mkd="mkdir -pv"
+# TODO
+	# ffmpeg="ffmpeg -hide_banner"
+
+# Colorize commands when possible
+alias \
+  diff="diff --color=auto" \
+  ip="ip -color=auto" \
+  grep="grep --color=auto" \
+  fgrep="fgrep --color=auto" \
+  egrep="egrep --color=auto"
+  # TODO
+  # ls="ls --color=auto"
+  # ls="ls -hN --color=auto --group-directories-first"
+
+# ref="shortcuts >/dev/null; source ${XDG_CONFIG_HOME:-$HOME/.config}/shell/shortcutrc ; source ${XDG_CONFIG_HOME:-$HOME/.config}/shell/zshnameddirrc"
+
+# Managed my mmega
+alias \
+  mmega_create="/home/aayu/Downloads/mmega_pg/mmega_create.sh" \
+  mmega_update="/home/aayu/Downloads/mmega_pg/mmega_update.sh" \
+  mmega_query="/home/aayu/Downloads/mmega_pg/mmega_query.sh" \
+  mmega_rc="/home/aayu/Downloads/mmega_pg/mmega_query.sh set_rc" \
+  mmega_sync="/home/aayu/Downloads/mmega_pg/mmega_sync.sh"
+
+# Adding flags
+alias \
+  df="df -h" \
+  free="free -m"
+
+# Functions
+alias \
+  tb="nc termbin.com 9999" \
+  psa="ps auxf" \
+  psgrep="ps aux | grep -v grep | grep -i -e VSZ -e" \
+  psmem="ps auxf | sort -nr -k 4" \
+  pscpu="ps auxf | sort -nr -k 3" \
+  jctl="journalctl -p 3 -xb" # get error messages from journactl
+  alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+  # TODO
+  # yta-aac="yt-dlp --extract-audio --audio-format aac " \
+  # yta-best="yt-dlp --extract-audio --audio-format best " \
+  # yta-flac="yt-dlp --extract-audio --audio-format flac " \
+  # yta-m4a="yt-dlp --extract-audio --audio-format m4a " \
+  # yta-mp3="yt-dlp --extract-audio --audio-format mp3 " \
+  # yta-opus="yt-dlp --extract-audio --audio-format opus " \
+  # yta-vorbis="yt-dlp --extract-audio --audio-format vorbis " \
+  # yta-wav="yt-dlp --extract-audio --audio-format wav " \
+  # ytv-best="yt-dlp -f bestvideo+bestaudio " \
+
+extract () {
+  if [ -f "$1" ] ; then
+    case $1 in
+      *.tar.bz2)   tar xjf $1   ;;
+      *.tar.gz)    tar xzf $1   ;;
+      *.bz2)       bunzip2 $1   ;;
+      *.rar)       unrar x $1   ;;
+      *.gz)        gunzip $1    ;;
+      *.tar)       tar xf $1    ;;
+      *.tbz2)      tar xjf $1   ;;
+      *.tgz)       tar xzf $1   ;;
+      *.zip)       unzip $1     ;;
+      *.Z)         uncompress $1;;
+      *.7z)        7z x $1      ;;
+      *.deb)       ar x $1      ;;
+      *.tar.xz)    tar xf $1    ;;
+      *.tar.zst)   unzstd $1    ;;
+      *)           echo "'$1' cannot be extracted via ex()" ;;
+    esac
+  else
+    echo "'$1' is not a valid file"
+  fi
+}
+
+up () {
+  local d=""
+  local limit="$1"
+
+  # Default to limit of 1
+  if [ -z "$limit" ] || [ "$limit" -le 0 ]; then
+    limit=1
+  fi
+
+  for ((i=1;i<=limit;i++)); do
+    d="../$d"
+  done
+
+  # perform cd. Show error if cd fails
+  if ! cd "$d"; then
+    echo "Couldn't go up $limit dirs.";
+  fi
+}
