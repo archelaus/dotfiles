@@ -55,7 +55,6 @@
     autotiling
     dunst
     font-awesome
-    haskellPackages.greenclip
     j4-dmenu-desktop
     picom-next
     xorg.xbacklight
