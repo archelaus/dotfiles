@@ -111,6 +111,8 @@ set signcolumn=yes
 
 set cmdwinheight=1
 
+set viminfo+=n~/.vim/viminfo
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Text, tab and indent related
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
