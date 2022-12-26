@@ -1,4 +1,3 @@
-//@theme "/usr/share/rofi/themes/Paper.rasi"
 configuration {
 	modi: "window,drun,ssh,combi";
 	font: "Hack Nerd Font Regular 12";

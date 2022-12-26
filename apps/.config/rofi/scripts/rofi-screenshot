@@ -1,115 +1,149 @@
 #!/usr/bin/env bash
 
+## Usage:
+##    show the menu with rofi-screenshot
+##    stop recording with rofi-screenshot -s
+
 screenshot_directory="$HOME/Pictures/Screenshots"
-dt=$(date '+%d-%m-%Y_%H-%M')
+dt=$(date '+%H-%M-%S_%d-%m-%Y')
+# Use --tolerance=9999999 (alias => t) to force a window selection
+# -d is --delay
+maim_args="--capturebackground --hidecursor"
+app_name="$0"
 
-_rtc() {
-  notify-send --app-name="screenshot" "Screenshot" "Select a region to capture"
-  maim -s | xclip -selection clipboard -t image/png
-  notify-send --app-name="screenshot" "Screenshot" "Region copied to Clipboard!"
-}
-
-_rtf() {
-  notify-send --app-name="screenshot" "Screenshot" "Select a region to capture"
-  maim -s -m 1 "$screenshot_directory/$dt.png"
-  notify-send --app-name="screenshot" "Screenshot" "Region saved to ${screenshot_directory//$HOME/'~'}!"
-}
-
-_stc() {
-  maim -d 2 | xclip -selection clipboard -t image/png
-  notify-send --app-name="screenshot" "Screenshot" "Screenshot copied to Clipboard!"
-}
-
-_stf() {
-  maim -d 2 -m 1 "$screenshot_directory/$dt.png"
-  notify-send --app-name="screenshot" "Screenshot" "Saved to ${screenshot_directory//${HOME}/'~'}!"
-}
-
-_rtcmac() {
-  notify-send --app-name="screenshot" "Screenshot" "Select a region to capture"
-  maim -s "$screenshot_directory/$dt.png"
-  ,drop-shadow "$screenshot_directory/$dt.png"
-  notify-send --app-name="screenshot" "Screenshot" "Region copied to Clipboard!"
-}
-
-_stcmac() {
-  maim -i $(xdotool getactivewindow) -d 2 "$screenshot_directory/$dt.png"
-  ,drop-shadow "$screenshot_directory/$dt.png"
-  notify-send --app-name="screenshot" "Screenshot" "Region copied to Clipboard!"
-}
-
-
-get_options() {
-  echo "1. Region  Clip"
-  echo "2. Region  File"
-  echo "3. Screen  Clip"
-  echo "4. Screen  File"
-  echo "5. Region  Clip (Mac)"
-  echo "6. Screen  Clip (Mac)"
+usage() {
+cat << EOF
+Usage: ${0##*/} [-s] [-h]..
+  (no option) show the screenshot menu
+  -s  stop recording
+  -h  display help and exit
+EOF
 }
 
 check_deps() {
-  if ! hash "$1" 2>/dev/null; then
-    echo "Error: This script requires $1"
-    exit 1
-  fi
+  for i in $1; do
+    command -v $i >/dev/null || { echo "[!] This script requires $i"; exit 1; }
+  done
 }
 
-main() {
-  # check dependencies
-  check_deps maim
-  check_deps ffmpeg
-  check_deps xclip
-  check_deps rofi
+# set ffmpeg defaults
+ffmpeg() {
+  # https://superuser.com/questions/326629/how-can-i-make-ffmpeg-be-quieter-less-verbose
+  command ffmpeg -hide_banner -loglevel error -nostdin "$@"
+}
 
-  # Get choice from rofi
-  choice=$( (get_options) | rofi -dmenu -i -fuzzy -theme arthur -p "Screenshot: " )
+video_to_gif() {
+  ffmpeg -i "$1" -vf palettegen -f image2 -c:v png - |
+  ffmpeg -i "$1" -i - -filter_complex paletteuse "$2"
+}
 
-  # If user has not picked anything, exit
-  if [[ -z "${choice// }" ]]; then
+notify() {
+  notify-send -a "$app_name" "Screenshot" "$@"
+}
+
+countdown() {
+  for i in {3..1}; do
+    notify "Recording in $i" -t 1000
+    sleep 1
+  done
+}
+
+crtc() {
+  notify "Select a region to capture"
+  maim -s $maim_args | xclip -selection clipboard -t image/png
+  notify "Region copied to clipboard"
+}
+
+crtf() {
+  notify "Select a region to capture"
+  maim -s $maim_args "$screenshot_directory/$dt.png"
+  notify "Region saved to ${screenshot_directory//$HOME/\~}"
+}
+
+cstc() {
+  maim --delay 2 --quality 1 $maim_args | xclip -selection clipboard -t image/png
+  notify "Screenshot copied to clipboard"
+}
+
+cstf() {
+  maim --delay 2 --quality 1 $maim_args "$screenshot_directory/$dt.png"
+  notify "Region saved to ${screenshot_directory//$HOME/\~}"
+}
+
+wtc() {
+  maim -i $(xdotool getactivewindow) --delay 2 --quality 1 $maim_args | xclip -selection clipboard -t image/png
+  notify "Screenshot copied to clipboard"
+}
+
+wtf() {
+  maim -i $(xdotool getactivewindow) --delay 2 --quality 1 $maim_args "$screenshot_directory/$dt.png"
+  notify "Region saved to ${screenshot_directory//$HOME/\~}"
+}
+
+mwtcf() {
+  maim -s --delay 2 --quality 1 $maim_args /tmp/"$dt.png"
+  ,drop-shadow /tmp/"$dt.png"
+  notify "Screenshot copied to clipboard"
+}
+
+rgrtf() {
+  notify "Select a region to record"
+  read -r W H X Y <<<"$(slop -f "%w %h %x %y")" && countdown
+  ffmpeg -f x11grab -framerate 15 -video_size "$W"x"$H" -i :0.0+"$X","$Y" /tmp/screenshot_gif.mp4
+  notify "Converting to gif… (can take a while)"
+  video_to_gif /tmp/screenshot_gif.mp4 "$screenshot_directory/$dt.gif"
+  notify "Saved to ${screenshot_directory//$HOME/\~}"
+}
+
+rgstf() {
+  countdown
+  ffmpeg -f x11grab -i :0.0 -f pulse -ac 2 -i default /tmp/screenshot_gif.mp4
+  notify "Converting to gif… (can take a while)"
+  video_to_gif /tmp/screenshot_gif.mp4 "$screenshot_directory/$dt.gif"
+  notify "Saved to ${screenshot_directory//$HOME/\~}"
+}
+
+rvrtf() {
+  notify "Select a region to record"
+  read -r W H X Y <<<"$(slop -f "%w %h %x %y")" && countdown
+  ffmpeg -f x11grab -framerate 15 -video_size "$W"x"$H" -i :0.0+"$X","$Y" "$screenshot_directory/$dt.mp4"
+  notify "Saved to ${screenshot_directory//$HOME/\~}"
+}
+
+rvstf() {
+  countdown
+  ffmpeg -f x11grab -i :0.0 -f pulse -ac 2 -i default "$screenshot_directory/$dt.mp4"
+  notify "Saved to ${screenshot_directory//$HOME/\~}"
+}
+
+declare -A options
+options=( ["  Region  Clip"]=crtc ["  Region  File"]=crtf ["  Screen  Clip"]=cstc ["  Screen  File"]=cstf \
+["  Region  File (GIF)"]=rgrtf ["  Screen  File (GIF)"]=rgstf ["  Region  File (MP4)"]=rvrtf ["  Screen  File (MP4)"]=rvstf \
+["  Window  Clip"]=wtc ["  Window  File"]=wtf ["  Window  Clip (Mac)"]=mwtcf )
+
+check_deps "slop maim ffmpeg xclip rofi"
+
+while getopts ":hs" opt; do
+  case $opt in
+    h)
+      usage
+      exit 0
+      ;;
+    s)
+      pkill -fxn '(/\S+)*ffmpeg\s.*\sx11grab\s.*'
       exit 1
-  fi
-
-  # run the selected command
-  case $choice in
-    '1. Region  Clip')
-      _rtc
       ;;
-    '2. Region  File')
-      _rtf
-      ;;
-    '3. Screen  Clip')
-      _stc
-      ;;
-    '4. Screen  File')
-      _stf
-      ;;
-    '  Region  File (GIF)')
-      rgrtf
-      ;;
-    '  Screen  File (GIF)')
-      rgstf
-      ;;
-    '  Region  File (MP4)')
-      rvrtf
-      ;;
-    '  Screen  File (MP4)')
-      rvstf
-      ;;
-    '5. Region  Clip (Mac)')
-      _rtcmac
-      ;;
-    '6. Screen  Clip (Mac)')
-      _stcmac
+    ?)
+      echo "Invalid option: -$OPTARG"
+      usage
+      exit 1
       ;;
   esac
+done
 
-  # done
-  set -e
-}
+# Get choice from rofi
+choice=$( printf "%s\n" "${!options[@]}" | sort | rofi -dmenu -i -theme arthur-modified -fuzzy -p "Screenshot" )
 
-main $1 &
+${options["$choice"]}
 
 exit 0
-
-! /bin/bash

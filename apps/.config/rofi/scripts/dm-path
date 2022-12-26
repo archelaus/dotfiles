@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+# ~/.config/rofi/scripts/
+
+dirs=(
+~/.local/share/applications
+~/.nix-profile/share/applications/
+/usr/share/applications/
+/var/lib/flatpak/exports/share/applications
+)
+
+printf '%s\n' "${dirs[@]}" |
+uniq |
+xargs ls -lu --time-style=+%s |
+grep .desktop |
+awk '/^(-|l)/ { print $6, $7 }' |
+sort -rn |
+cut -d' ' -f 2 |
+dmenu
