@@ -27,7 +27,6 @@ scrolling:
 
 ##################################################
 
-# colors: *DoomOne
 colors:
   primary:
     background: '#282828'
@@ -435,6 +434,16 @@ schemes:
       cyan:    '#54ced6'
       white:   '#282a2e'
 
+# colors: *DoomOne
+# colors: *Dracula
+# colors: *GruvboxDark
+# colors: *MonokaiPro
+# colors: *Nord
+# colors: *OceanicNext
+# colors: *Palenight
+# colors: *SolarizedLight
+# colors: *SolarizedDark
+# colors: *TomorrowNight
 
 ##################################################
 
