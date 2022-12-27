@@ -50,7 +50,7 @@ export ANSIBLE_CONFIG="$XDG_CONFIG_HOME/ansible/ansible.cfg"
 export HISTFILE="$XDG_DATA_HOME/history"
 
 # Other program settings:
-# export FZF_DEFAULT_OPTS="--layout=reverse --height 40%"
+export FZF_DEFAULT_OPTS="--layout=reverse"
 export LESS=-R
 export QT_QPA_PLATFORMTHEME="gtk2" # Have QT use gtk2 theme.
 
