@@ -29,7 +29,7 @@ bindsym $mod+Shift+q kill
 bindsym $mod+d exec --no-startup-id j4-dmenu-desktop
 
 # -- dmenu
-bindsym $mod+Shift+d exec --no-startup-id ~/.config/rofi/scripts/dm-hub
+bindsym $mod+q exec --no-startup-id ~/.config/rofi/scripts/dm-hub
 
 # -- Reload the configuration file
 bindsym $mod+Shift+c reload
@@ -108,7 +108,6 @@ bindsym $mod+Insert exec --no-startup-id greenclip print | grep . | dmenu -i -l 
 # bindsym $mod+minus scratchpad show
 
 # Keys available for binding
-# bindsym $mod+q
 # bindsym $mod+Shift+w
 # bindsym $mod+Shift+r
 # bindsym $mod+t
@@ -122,8 +121,10 @@ bindsym $mod+Insert exec --no-startup-id greenclip print | grep . | dmenu -i -l 
 # bindsym $mod+o
 # bindsym $mod+Shift+o
 # bindsym $mod+Shift+p
-# bindsym $mod+Shift+s
+# bindsym $mod+Shift+d
 # bindsym $mod+Shift+f
+# bindsym $mod+g
+# bindsym $mod+Shift+g
 # bindsym $mod+Shift+x
 # bindsym $mod+Shift+v
 # bindsym $mod+b
