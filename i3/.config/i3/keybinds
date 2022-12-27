@@ -20,22 +20,19 @@ bindsym XF86AudioMute        exec --no-startup-id pactl set-sink-mute @DEFAULT_S
 
 # -- Start a terminal
 bindsym $mod+Return exec --no-startup-id alacritty
-# ? bindsym $mod+Shift+Return
 
 # -- Kill focused window
 bindsym $mod+Shift+q kill
-# ? bindsym $mod+q
 
 # -- Launch app menu
 # bindsym $mod+d exec --no-startup-id "rofi -show combi -combi-modi drun,window -icon-theme Papirus -show-icons"
 bindsym $mod+d exec --no-startup-id j4-dmenu-desktop
 
 # -- dmenu
-bindsym $mod+m exec --no-startup-id ~/.config/rofi/scripts/dm-hub
+bindsym $mod+Shift+d exec --no-startup-id ~/.config/rofi/scripts/dm-hub
 
 # -- Reload the configuration file
-# bindsym $mod+Shift+c reload
-# ? bindstm $mod+c
+bindsym $mod+Shift+c reload
 
 # -- Restart i3
 bindsym $mod+Shift+r restart
@@ -48,7 +45,6 @@ bindsym $mod+Shift+r restart
 # (Alt) powermenu
 # Source: https://github.com/BIBJAW/Final_Rice/blob/main/MYDE/i3/scripts/powermenu
 bindsym $mod+Shift+e exec --no-startup-id ~/.config/rofi/powermenu/rofi-powermenu-gruvbox
-# ? bindsym $mod+e
 
 # -- Enter resize mode
 bindsym $mod+r mode "resize"
@@ -59,21 +55,17 @@ bindsym $mod+r mode "resize"
 #-- Screenshot
 # bindsym Print exec --no-startup-id flameshot full
 # bindsym $mod+Insert exec --no-startup-id flameshot gui
-# Source: https://github.com/ceuk/rofi-screenshot
-bindsym $mod+Home exec --no-startup-id ~/.config/rofi/scripts/rofi-screenshot
-bindsym $mod+End exec --no-startup-id ~/.config/rofi/scripts/rofi-screenshot -s
+# bindsym $mod+Home exec --no-startup-id ~/.config/rofi/scripts/rofi-screenshot
+# bindsym $mod+End exec --no-startup-id ~/.config/rofi/scripts/rofi-screenshot -s
 
 # -- Lock screen with betterlockscreen
 # bindsym $mod+x exec --no-startup-id betterlockscreen -l
 
 # -- Lock screen with modified i3lock
-# bindsym $mod+x exec --no-startup-id ~/.config/i3/scripts/i3lock-extra
+bindsym $mod+Shift+x exec --no-startup-id ~/.config/i3/scripts/i3lock-extra
 
 # [NYI] Launch btop
 # bindsym $mod+F11 exec --no-startup-id alacritty -e btop
-
-# -- Swap master
-# bindsym $mod+m exec --no-startup-id ~/.config/i3/scripts/i3-swap-master.py
 
 # -- Silent urgent windows
 bindsym $mod+semicolon [urgent="latest"] focus
@@ -103,14 +95,40 @@ bindsym $mod+Insert exec --no-startup-id greenclip print | grep . | dmenu -i -l 
 # rofi -modi "clipboard:greenclip print" -show clipboard -run-command '{cmd}' ; sleep 0.5; xdotool type $(xclip -o -selection clipboard)
 # bindsym $mod+Insert exec --no-startup-id rofi -modi "Clipboard:greenclip print" -show Clipboard -run-command '{cmd}' -theme ~/.config/rofi/selmenu.rasi
 
-# -- Scratchpad(s)
-# bindsym $mod+b [class="scratchpad"] scratchpad show
-
 # -- Resize and center focused window
 # bindsym $mod+y resize set 1200 px 800 px, move position center
+
+# -- Scratchpad(s)
+# bindsym $mod+b [class="scratchpad"] scratchpad show
 
 # -- Make focused window a scratchpad
 # bindsym $mod+Shift+minus move scratchpad
 
 # -- Show first scratchpad
 # bindsym $mod+minus scratchpad show
+
+# Keys available for binding
+# bindsym $mod+q
+# bindsym $mod+Shift+w
+# bindsym $mod+Shift+r
+# bindsym $mod+t
+# bindsym $mod+Shift+t
+# bindsym $mod+y
+# bindsym $mod+Shift+y
+# bindsym $mod+u
+# bindsym $mod+Shift+u
+# bindsym $mod+i
+# bindsym $mod+Shift+i
+# bindsym $mod+o
+# bindsym $mod+Shift+o
+# bindsym $mod+Shift+p
+# bindsym $mod+Shift+s
+# bindsym $mod+Shift+f
+# bindsym $mod+Shift+x
+# bindsym $mod+Shift+v
+# bindsym $mod+b
+# bindsym $mod+Shift+b
+# bindsym $mod+n
+# bindsym $mod+Shift+n
+# bindsym $mod+m
+# bindsym $mod+Shift+m
