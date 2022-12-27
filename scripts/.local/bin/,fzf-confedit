@@ -11,7 +11,9 @@ d0=("${_clean_list[@]}")
 d1=(~/.local/bin/,*)
 d2=(~/.config/rofi/scripts/*)
 d3=(~/.notes/*.md)
-files=("${d0[@]}" "${d1[@]}" "${d2[@]}" "${d3[@]}")
+d4=(~/.config/shell/*)
+d5=(~/.config/x11/*)
+files=("${d0[@]}" "${d1[@]}" "${d2[@]}" "${d3[@]}" "${d4[@]}" "${d5[@]}")
 
 choice=$(printf '%s\n' "${files[@]}" | fzf --bind 'J:preview-down,K:preview-up' --reverse --header-first --header="fzf-confedit" --preview="bat --color always {}")
 
