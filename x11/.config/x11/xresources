@@ -1,6 +1,6 @@
 Xcursor.theme: Phinger Cursors (light)
 ! Apparently size only works if a theme exists?
-Xcursor.size: 16
+Xcursor.size: 24
 
 !! Transparency (0-1):
 /* *.alpha: 0.8 */
