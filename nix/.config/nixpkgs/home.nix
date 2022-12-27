@@ -40,6 +40,7 @@
     slop
     tmux
     translate-shell
+    ueberzug
 
     # development
     fx
@@ -81,19 +82,12 @@
     glances
     lazydocker
     lazygit
+    yad
 
     # shell related
     atuin
     babelfish
-    ueberzug
-    yad
+    navi
     zoxide
   ];
-
-  programs.bat = {
-    enable = true;
-    config = {
-      theme = "ansi";
-    };
-  };
 }
