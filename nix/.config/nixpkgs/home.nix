@@ -32,10 +32,12 @@
     fzf
     jdupes
     maim
+    navi
     nodePackages_latest.insect
     pdd
     pfetch
     slop
+    tealdeer
     tmux
     translate-shell
     ueberzug
@@ -85,7 +87,6 @@
     # shell related
     atuin
     babelfish
-    navi
     zoxide
   ];
 }
