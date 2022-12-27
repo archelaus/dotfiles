@@ -23,13 +23,11 @@
     vimv-rs
 
     # dependencies
-    rlwrap # cht.sh
     playerctl # polybar spotify module
     pulseaudio-ctl # polybar
 
     # cli
     bunnyfetch
-    cht-sh
     didyoumean
     fzf
     jdupes
