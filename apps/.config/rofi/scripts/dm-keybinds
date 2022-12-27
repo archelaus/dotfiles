@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+# Script name: dm-keybinds
+# Description: Show your i3wm keybindings with dmenu
+# Dependencies: dmenu, i3wm
+
+set -euo pipefail
+
+_path="$(cd "$(dirname "$BASH_SOURCE")" && cd "$(dirname "$(readlink "$BASH_SOURCE" || echo ".")")" && pwd)"
+if [[  -f "${_path}/_dm-helper" ]]; then
+  # shellcheck disable=SC1090,SC1091
+  source "${_path}/_dm-helper"
+else
+  # shellcheck disable=SC1090
+  echo "No helper-script found"
+fi
+
+source "$(get_config)"
+
+I3_CONFIG=$HOME/.config/i3/config
+
+mod_key=$(sed -nre 's/^set \$mod (.*)/\1/p' $I3_CONFIG)
+
+main() {
+  grep "^bindsym" $HOME/.config/i3/keybinds |
+    sed "s/-\(-\w\+\)\+//g;s/\$mod/${mod_key}/g;s/Mod1/Alt/g;s/exec //;s/bindsym //;s/^\s\+//;s/^\([^ ]\+\) \(.\+\)$/\2: \1/;s/^\s\+//" |
+    tr -s ' ' |
+    $DMENU " => " "$@"
+}
+
+[[ "$BASH_SOURCE" = "$0" ]] && main "$@"
