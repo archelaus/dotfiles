@@ -58,7 +58,6 @@
     dunst
     font-awesome
     j4-dmenu-desktop
-    picom-next
     xorg.xbacklight
     xidlehook
 
