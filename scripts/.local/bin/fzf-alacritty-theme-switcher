@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+alacritty_color_schemes=~/.config/alacritty/colors
+current=$(alacritty-colorscheme status | cut -d. -f1)
+
+selected=$(find ~/.config/alacritty/colors/ -type f \( -name \*.yaml -o -name \*.yml \) -printf '%f\n' | cut -d. -f1 |
+  sort |
+  fzf \
+  -0 -1 \
+  --query="$*" \
+  --expect=ctrl-y,ctrl-e \
+  --cycle \
+  --height=20 \
+  --border=rounded \
+  --header-first \
+  --header="Current: $current | ⌃ E: edit, ⌃ Y: copy, ⌃ D: del, Esc: keep current" \
+  --layout=reverse \
+  --preview-window=0 \
+  --preview="alacritty-colorscheme apply {}.yaml || alacritty-colorscheme apply {}.yml" \
+  --info=inline
+)
+
+# re-apply current color scheme when aborting
+if [[ -z $selected ]] ; then
+	alacritty-colorscheme apply "$current.yaml" || alacritty-colorscheme apply "$current.yml"
+else
+  key_pressed=$(echo "$selected" | head -n1)
+  selected=$(echo "$selected" | tail -n+2)
+  theme_path="$alacritty_color_schemes/$selected"
+  if [[ "$key_pressed" == "ctrl-y" ]] ; then
+  	echo "Yaml for '$selected' copied."
+  	cat "$theme_path.yaml" || cat "$theme_path.yml" | pbcopy
+  elif [[ "$key_pressed" == "ctrl-e" ]] ; then
+  	open "$theme_path.yaml" || open "$theme_path.yml"
+  else
+  	alacritty-colorscheme apply "$selected.yaml" || alacritty-colorscheme apply "$selected.yml"
+  fi
+fi
