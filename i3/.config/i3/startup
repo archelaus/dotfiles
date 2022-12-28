@@ -33,7 +33,7 @@ exec_always --no-startup-id "sleep 30; ~/.config/i3/scripts/silence"
 exec_always --no-startup-id autotiling --w 1
 
 # -- Startup daemons
-# exec --no-startup-id greenclip daemon >/dev/null # clipboard
+exec --no-startup-id greenclip daemon >/dev/null # clipboard
 exec_always --no-startup-id dunst & # notifications
 exec_always --no-startup-id picom & # compositor
 exec --no-startup-id pactl set-sink-volume 0 100% # set default volume
