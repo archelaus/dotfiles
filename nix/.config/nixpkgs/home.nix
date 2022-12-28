@@ -30,6 +30,7 @@
     bunnyfetch
     didyoumean
     fzf
+    gcal
     jdupes
     maim
     navi
