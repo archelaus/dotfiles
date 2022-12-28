@@ -64,3 +64,17 @@ Alternative regex: `"s|^/home/user\(/.*\)\?$|~\1|"`
 `tilde=\~${PWD#~}`
 
 [Source](https://unix.stackexchange.com/questions/207210/make-pwd-result-in-terms-of)
+
+3. Print base file name using find
+
+`find . -type f -name \*.out -exec basename {} ';'`
+
+`find . -type f -name '*.out' | sed -e 's#.*/##'`
+
+`find . -type f -name '*.out' -exec basename -a -- {} +`
+
+`find . -type f -name \*.out -exec basename {} \;`
+
+`find . -type f -name \*.out -printf '%f\n'`
+
+[Source](https://unix.stackexchange.com/questions/169178/how-to-print-the-base-file-name-using-find-in-unix)
