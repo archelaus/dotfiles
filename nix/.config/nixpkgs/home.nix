@@ -39,8 +39,6 @@
     pdd
     pfetch
     slop
-    tealdeer
-    tmux
     translate-shell
     ueberzug
 
@@ -49,6 +47,7 @@
     gron
     mdcat
     pup
+    tmux
 
     # files
     lf
