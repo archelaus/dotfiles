@@ -247,6 +247,18 @@ map <leader>te :tabedit <C-r>=expand("%:p:h")<cr>/
 map <Leader>th <C-w>t<C-w>H
 map <Leader>tk <C-w>t<C-w>K
 
+" Go to tab by number
+noremap <leader>1 1gt
+noremap <leader>2 2gt
+noremap <leader>3 3gt
+noremap <leader>4 4gt
+noremap <leader>5 5gt
+noremap <leader>6 6gt
+noremap <leader>7 7gt
+noremap <leader>8 8gt
+noremap <leader>9 9gt
+noremap <leader>0 :tablast<cr>
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Commands/Functions
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -261,8 +273,6 @@ augroup Mkdir
   autocmd!
   autocmd BufWritePre * call mkdir(expand("<afile>:p:h"), "p")
 augroup END
-
-autocmd! BufWritePost $MYVIMRC source $MYVIMRC | echom "Reloaded vimrc"
 
 " From: https://github.com/henrebotha/dotfiles/blob/c1244f36e0406b4e2326096f137668091d268353/vim/.vimrc#L473
 " Copy the file name, Git repo name, and commit hash along with whatever's selected
@@ -308,10 +318,14 @@ autocmd BufWritePre * cal cursor(currPos[1], currPos[2])
 autocmd BufRead,BufNewFile Xresources,Xdefaults,xresources,xdefaults set filetype=xdefaults
 autocmd BufWritePost Xresources,Xdefaults,xresources,xdefaults !xrdb %
 
+autocmd! BufWritePost $MYVIMRC source $MYVIMRC | echom "Reloaded vimrc"
+" autocmd! BufWritePost vimrc,.vimrc source $MYVIMRC | echom "Reloaded vimrc"
+autocmd! BufWritePost tmux.conf,.tmux.conf !tmux source %
+
 " Spellcheck .txt files
 autocmd BufRead *.txt set spell
 
-set commentstring=#\ %s
+" setglobal commentstring=#\ %s
 autocmd FileType fish setlocal commentstring=#\ %s
 
 " Improve scrolling performance
