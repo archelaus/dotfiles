@@ -35,6 +35,8 @@ Plug 'mbbill/undotree'
 Plug 'christoomey/vim-system-copy'
 Plug 'romainl/vim-cool'
 Plug 'junegunn/vim-easy-align'
+Plug 'scrooloose/syntastic'
+Plug 'dbeniamine/cheat.sh-vim'
 call plug#end()
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
