@@ -55,8 +55,8 @@ bindsym $mod+r mode "resize"
 #-- Screenshot
 # bindsym Print exec --no-startup-id flameshot full
 # bindsym $mod+Insert exec --no-startup-id flameshot gui
-# bindsym $mod+Home exec --no-startup-id ~/.config/rofi/scripts/rofi-screenshot
-# bindsym $mod+End exec --no-startup-id ~/.config/rofi/scripts/rofi-screenshot -s
+bindsym $mod+Home exec --no-startup-id ~/.config/rofi/scripts/rofi-screenshot
+bindsym $mod+End exec --no-startup-id ~/.config/rofi/scripts/rofi-screenshot -s
 
 # -- Lock screen with betterlockscreen
 # bindsym $mod+x exec --no-startup-id betterlockscreen -l
