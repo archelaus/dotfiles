@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+# Script name: dm-urlview
+# Description: Capture urls in terminal
+# Dependencies: dmenu, tmux
+
+set -uo pipefail
+
+_path="$(cd "$(dirname "$BASH_SOURCE")" && cd "$(dirname "$(readlink "$BASH_SOURCE" || echo ".")")" && pwd)"
+if [[  -f "${_path}/_dm-helper" ]]; then
+  # shellcheck disable=SC1090,SC1091
+  source "${_path}/_dm-helper"
+else
+  # shellcheck disable=SC1090
+  echo "No helper-script found"
+fi
+
+source "$(get_config)"
+
+tmux capture-pane -b temp-capture-buffer -S - &&
+tmux save-buffer -b temp-capture-buffer /tmp/tmux-buffer &&
+tmux delete-buffer -b capture-buffer
+
+choice=$(grep -Eo '(http|https)://[a-zA-Z0-9./?=_-]*' < /tmp/tmux-buffer | uniq | $DMENU "$DMBROWSER open: ")
+
+if [[ -n $choice ]]; then
+  nohup "$DMBROWSER" "$choice" >/dev/null 2>&1 &
+fi
+
+exit 0
