@@ -1,36 +1,20 @@
 #!/bin/sh
 
-case "$1" in
+while read -r file; do
+  case "$1" in
     "w") ,setbg "$file" ;;
-    "r")
-        while read -r file; do
-            convert -rotate 90 "$file" "$file"
-        done
-        ;;
-    "R")
-        while read -r file; do
-            convert -rotate 90 "$file" "$file"
-        done
-        ;;
-    "f")
-        while read -r file; do
-            convert -flop "$file" "$file"
-        done
-        ;;
-    "y")
-        xclip -selection clipboard -target image/png "$file"
-        notify-send "$file has been copied to clipboard"
-        ;;
-    "d")
-        if [ "$(printf "No\\nYes" | dmenu -i -p "Really delete $file?")" = "Yes" ]; then
-            rm "$file"
-            notify-send "$file deleted."
-        fi
-        ;;
-    "i")
-        alacritty --title ExifTool -e sh -c "exiftool '$file' | less" &
-        ;;
-esac
+    "r") convert -rotate 90 "$file" "$file" ;;
+    "R") convert -rotate 90 "$file" "$file" ;;
+    "f") convert -flop "$file" "$file" ;;
+    "y") xclip -selection clipboard -target image/png "$file" &&
+          notify-send "$(printf "%s" "$file" | sed "s|^$HOME|~|g") has been copied to clipboard" ;;
+    "Y") readlink -f "$file" | tr -d '\n' | xclip -selection clipboard &&
+          notify-send "Path copied to clipboard" ;;
+    "d") if [ "$(printf "No\\nYes" | dmenu -i -p "Really delete $file?")" = "Yes" ]; then
+          rm "$file"; notify-send "$file deleted."; fi ;;
+    "i") alacritty --title ExifTool -e sh -c "exiftool '$file' | less" & ;;
+  esac
+done
 
 # NYI
 # "c")
