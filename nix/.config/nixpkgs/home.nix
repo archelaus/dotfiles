@@ -28,6 +28,7 @@
 
     # cli
     bunnyfetch
+    cht-sh
     didyoumean
     fzf
     gcal
