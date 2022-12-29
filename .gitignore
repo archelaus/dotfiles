@@ -10,5 +10,6 @@ scripts/.local/bin/*
 !scripts/.local/bin/t.py
 !scripts/.local/bin/mi.py
 !scripts/.local/bin/fzf-alacritty-theme-switcher
+!scripts/.local/bin/tmux-cht.sh
 notes/.notes/quick.md
 apps/.config/dmscripts/dmnote
