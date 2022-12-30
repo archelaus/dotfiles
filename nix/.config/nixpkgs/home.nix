@@ -66,7 +66,6 @@
     feh
     mat2
     nsxiv
-    simplescreenrecorder
 
     # misc
     cava
