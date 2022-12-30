@@ -220,8 +220,8 @@ rm -rf ./tidy-viewer-*/
 # curl -sL https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o "$TEMPD"/yt-dlp &&
 # chmod +x "$TEMPD"/yt-dlp
 
-# ytdlp-patched
-pipx install https://github.com/ytdl-patched/ytdl-patched/archive/master.tar.gz
+# ytdlp
+pipx install https://github.com/yt-dlp/yt-dlp/archive/master.tar.gz
 
 set +x
 
