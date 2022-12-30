@@ -1,0 +1,19 @@
+#!/bin/sh
+
+uptime -p | sed 's/up\s*//; s/\s*days/d/; s/\s*hours/h/; s/\s*minutes/m/'
+
+uptime | awk -F'( |,|:)+' '{d=h=m=0; if ($7=="min") m=$6; else {if ($7~/^day/) {d=$6;h=$8;m=$9} else {h=$6;m=$7}}} {print d+0,"days,",h+0,"hours,",m+0,"minutes."}'
+
+uptime -p
+
+uptime -p | cut -d " " -f2-
+
+cat /proc/uptime | cut -d" " -f1
+
+awk '{m=$1/60; h=m/60; printf "%s:%s:%s\n", int(h%24), int(m%60), int($1%60) }' /proc/uptime
+
+awk '{m=$1/60; h=m/60; printf "%sd %sh %sm %ss\n", int(h/24), int(h%24), int(m%60), int($1%60) }' /proc/uptime
+
+awk '{printf("%02d:%02d:%02d\n",int($1/3600),int($1%3600/60),int($1%60))}' /proc/uptime
+
+awk '{printf("%02d:%02d\n",int($1/3600),int($1%3600/60))}' /proc/uptime
