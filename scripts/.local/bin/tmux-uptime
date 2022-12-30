@@ -1,0 +1,4 @@
+#!/bin/sh
+
+# uptime -p | sed 's/up\s*//; s/\s*days/d/; s/\s*hours/h/; s/\s*minutes/m/'
+awk '{printf("%02d:%02d\n",int($1/3600),int($1%3600/60))}' /proc/uptime
