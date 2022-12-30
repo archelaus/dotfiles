@@ -17,7 +17,7 @@ fi
 
 source "$(get_config)"
 
-tmux capture-pane -b temp-capture-buffer -S - &&
+tmux capture-pane -b temp-capture-buffer -S -1000 &&
 tmux save-buffer -b temp-capture-buffer /tmp/tmux-buffer &&
 tmux delete-buffer -b capture-buffer
 
