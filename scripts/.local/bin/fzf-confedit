@@ -9,24 +9,33 @@ done
 
 d0=("${_clean_list[@]}")
 files=("${d0[@]}"
+~/.config/rofi/scripts/*
+~/.config/shell/*
+~/.config/tmux/*
+~/.config/x11/*
 ~/.local/bin/,*
 ~/.local/bin/tmux-*
 ~/.local/bin/fzf-*
-~/.config/rofi/scripts/*
 ~/.notes/*.md
-~/.config/shell/*
-~/.config/x11/*
 )
 
-choice=$(printf '%s\n' "${files[@]}" | fzf --bind 'J:preview-down,K:preview-up' --reverse --header-first --header="fzf-confedit" --preview="bat --color always {}")
+choice=$(printf '%s\n' "${files[@]}" |
+  fzf --header="fzf-confedit" --header-first \
+  --expect=ctrl-f \
+  --bind 'page-down:preview-down,page-up:preview-up' --preview="bat --color always {}")
 
 if [[ $choice ]]; then
+  key_pressed=$(echo "$choice" | head -n1)
+  choice=$(echo "$choice" | tail -n+2)
+  if [[ $key_pressed = "ctrl-f" ]]; then
+    bat --style header,grid "$choice"
+  else
+    $DMEDITOR "$choice" &
+  fi
   # cfg=$(printf '%s\n' "${_clean_list["$choice"]}")
   # $DMEDITOR "$cfg"
-  $DMEDITOR "$choice" &
   # choice=$( printf "$choice" | sed "s|$HOME|~|" )
   # xdotool type --delay 0 "vim $choice"
 else
-    echo "[✓] Program exited"
-    exit 0
+  echo "[✓] Program exited"; exit 0
 fi
