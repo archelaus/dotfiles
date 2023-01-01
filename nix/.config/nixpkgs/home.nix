@@ -63,9 +63,9 @@
 
     # media
     exiftool
-    feh
     mat2
     nsxiv
+    setroot
 
     # misc
     cava

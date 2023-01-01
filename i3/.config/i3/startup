@@ -14,8 +14,8 @@ set $ws8 8
 set $ws9 9
 set $ws10 10
 
-# -- Set wallpaper with feh
-exec_always --no-startup-id feh --bg-scale ~/.local/share/wallpaper
+# -- Set wallpaper with setroot
+exec_always --no-startup-id setroot --restore
 
 # -- Start XDG autostart .desktop files using dex
 exec --no-startup-id dex --autostart --environment i3
