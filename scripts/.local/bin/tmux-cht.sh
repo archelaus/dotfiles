@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 
 selected=$(cat ~/.config/tmux/tmux-cht-languages ~/.config/tmux/tmux-cht-command |
-  fzf --preview-window wrap)
+  fzf-tmux -r)
 
 if [[ -z $selected ]]; then
-    exit 0
+  exit 0
 fi
 
 if grep -qs "$selected" ~/.config/tmux/tmux-cht-languages; then
-    read -p "Enter query: " query
-    tmux neww bash -c "cht.sh $selected $query | less -r"
+  read -p "Enter query: " query
+  tmux neww -n cht.sh bash -c "cht.sh $selected $query | less -r"
 else
-    tmux neww bash -c "cht.sh $selected | less -r"
+  tmux neww -n cht.sh bash -c "cht.sh $selected | less -r"
 fi
