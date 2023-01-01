@@ -53,24 +53,24 @@ draw_bold_text_with_bright_colors: true
 ##################################################
 
 key_bindings:
-  - {key: J, mods: Alt, action: ScrollLineDown}
-  - {key: K, mods: Alt, action: ScrollLineUp}
-  - {key: Down, mods: Alt, action: ScrollLineDown}
-  - {key: Up, mods: Alt, action: ScrollLineUp}
-  - {key: V, mods: Alt, action: Paste}
-  - {key: C, mods: Alt, action: Copy}
-  - {key: Home, mods: Alt, action: ScrollToTop}
-  - {key: End, mods: Alt, action: ScrollToBottom}
-  - {key: PageUp, mods: Alt, action: ScrollPageUp}
-  - {key: PageDown, mods: Alt, action: ScrollPageDown}
-  - {key: Insert, mods: Shift, action: PasteSelection}
-  - {key: K, mods: Alt|Shift, action: IncreaseFontSize}
-  - {key: J, mods: Alt|Shift, action: DecreaseFontSize}
-  - {key: Up, mods: Alt|Shift, action: IncreaseFontSize}
-  - {key: Down, mods: Alt|Shift, action: DecreaseFontSize}
-  - {key: Plus, mods: Control, action: IncreaseFontSize}
-  - {key: Minus, mods: Control, action: DecreaseFontSize}
-  - {key: Key0, mods: Control, action: ResetFontSize}
+  - {key: J,        mods: Alt,       action: ScrollLineDown}
+  - {key: K,        mods: Alt,       action: ScrollLineUp}
+  - {key: Down,     mods: Alt,       action: ScrollLineDown}
+  - {key: Up,       mods: Alt,       action: ScrollLineUp}
+  - {key: V,        mods: Alt,       action: Paste}
+  # - {key: C,        mods: Alt,       action: Copy}
+  - {key: Home,     mods: Alt,       action: ScrollToTop}
+  - {key: End,      mods: Alt,       action: ScrollToBottom}
+  - {key: PageUp,   mods: Alt,       action: ScrollPageUp}
+  - {key: PageDown, mods: Alt,       action: ScrollPageDown}
+  - {key: Insert,   mods: Shift,     action: PasteSelection}
+  - {key: K,        mods: Alt|Shift, action: IncreaseFontSize}
+  - {key: J,        mods: Alt|Shift, action: DecreaseFontSize}
+  - {key: Up,       mods: Alt|Shift, action: IncreaseFontSize}
+  - {key: Down,     mods: Alt|Shift, action: DecreaseFontSize}
+  - {key: Plus,     mods: Control,   action: IncreaseFontSize}
+  - {key: Minus,    mods: Control,   action: DecreaseFontSize}
+  - {key: Key0,     mods: Control,   action: ResetFontSize}
 
 ##################################################
 
@@ -130,19 +130,19 @@ colors:
     cyan: '0x8ec07c'
     white: '0xebdbb2'
   cursor:
-    text: '0xaaaaaa'
-    cursor: '0xffffff'
+    text: '0x2c2c2c'
+    cursor: '0xd9d9d9'
 
   # Normal colors
   dim:
-    black: '0x000000'
-    red: '0xb21818'
-    green: '0x18b218'
-    yellow: '0xb26818'
-    blue: '0x1818b2'
-    magenta: '0xb218b2'
-    cyan: '0x18b2b2'
-    white: '0xb2b2b2'
+    black: '0x232323'
+    red: '0x74423f'
+    green: '0x5e6547'
+    yellow: '0x8b7653'
+    blue: '0x556b79'
+    magenta: '0x6e4962'
+    cyan: '0x5c8482'
+    white: '0x828282'
   search:
     matches:
       foreground: '0xb2b2b2'

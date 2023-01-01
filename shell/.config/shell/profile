@@ -84,19 +84,22 @@ export IMGUR_XSEL_OPTIONS=-b
 
 fzf_binds() {
   printf 'ctrl-v:execute(bat --style header,grid {}),'
-  printf 'ctrl-e:execute($TERMINAL -e ${EDITOR:-vim} {} &),'
+  printf 'ctrl-e:execute(alacritty -e vim {} &),'
   printf 'ctrl-u:execute-silent(xclip -selection clipboard < {}),'
   printf 'ctrl-y:execute-silent(echo {} | xargs echo -n | xclip -selection clipboard),'
   printf 'ctrl-r:execute-silent(realpath {} | xargs echo -n | xclip -selection clipboard),'
   printf '?:toggle-preview,'
   printf 'page-up:preview-up,'
-  printf 'page-down:preview-down'
+  printf 'page-down:preview-down,'
+  printf 'ctrl-h:reload(fd --type f --strip-cwd-prefix --hidden --follow --exclude .git),'
+  printf 'ctrl-f:change-prompt(Files => )+reload(fd --type f --strip-cwd-prefix),'
+  printf 'ctrl-d:change-prompt(Directories => )+reload(fd --type d --strip-cwd-prefix)'
 }
 
 export FZF_DEFAULT_OPTS="
-  --bind '$(fzf_binds)'
-  --prompt '  '
-  --pointer ' λ'
-  --layout=reverse
-  --border horizontal
-  --height 40"
+--bind '$(fzf_binds)'
+--prompt '  '
+--pointer ' ▶'
+--marker ' ✓'
+--layout reverse
+"
