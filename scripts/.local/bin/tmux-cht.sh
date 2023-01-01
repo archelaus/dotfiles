@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 
-selected=$(cat ~/.config/tmux/tmux-cht-languages ~/.config/tmux/tmux-cht-command | \
-    fzf --bind 'J:preview-down,K:preview-up' --reverse \
-    --preview-window wrap)
+selected=$(cat ~/.config/tmux/tmux-cht-languages ~/.config/tmux/tmux-cht-command |
+  fzf --preview-window wrap)
 
 if [[ -z $selected ]]; then
     exit 0
