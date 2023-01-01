@@ -8,8 +8,6 @@ set shell bash
 set ifs "\n"
 set drawbox
 set icons
-# set reverse
-# set sortby time
 set scrolloff 10
 set relativenumber
 set truncatechar *
@@ -19,6 +17,8 @@ set cleaner ctpvclear
 &ctpv -s $id
 &ctpvquit $id
 
+# set reverse
+# set sortby time
 # set autoquit on
 # set hiddenfiles ".*:*.aux:*.log:*.bbl:*.bcf:*.blg:*.run.xml"
 
@@ -31,9 +31,9 @@ set cleaner ctpvclear
 # \____\___/|_| |_| |_|_| |_| |_|\__,_|_| |_|\__,_|___/
 
 cmd bulkrename ${{
-    vimv --git -- $(basename -a -- $fx)
-    lf -remote "send $id load"
-    lf -remote "send $id unselect"
+  vimv --git -- $(basename -a -- $fx)
+  lf -remote "send $id load"
+  lf -remote "send $id unselect"
 }}
 
 cmd chmod ${{
@@ -44,19 +44,21 @@ cmd chmod ${{
 }}
 
 cmd delete ${{
-    set -f
-    printf "%s\n" "$fx" | sed "s|^$HOME|~|"
-    tput bold
-    read -p "Delete (y/n)? " choice
-    [[ $choice =~ ^[Yy]$ ]] && trash-put $fx
+  set -f
+  printf "%s\n" "$fx" | sed "s|^$HOME|~|"
+  tput bold
+  read -p "Delete (y/n)? " choice
+  [[ $choice =~ ^[Yy]$ ]] && trash-put $fx
 }}
 
 # cmd extract ${{
-#     clear; tput bold; set -f
-#     printf "%s\n" "$fx" | sed "s|$HOME|~|"
-#     read -p "Extract (y/n)? " choice
-#     [[ $choice =~ ^[Yy]$ ]] && bsdtar -xvf "$fx"
+#   set -f
+#   printf "%s\n" "$fx" | sed "s|^$HOME|~|"
+#   tput bold
+#   read -p "Extract (y/n)? " choice
+#   [[ $choice =~ ^[Yy]$ ]] && bsdtar -xvf "$fx"
 # }}
+
 cmd extract $bsdtar -xvf $f
 
 cmd follow_link %{{
@@ -72,6 +74,7 @@ cmd mkfile ${{
   read ans
   $EDITOR $ans
 }}
+
 cmd mkdir ${{
   printf "Directory name: "
   read ans
@@ -79,11 +82,11 @@ cmd mkdir ${{
 }}
 
 cmd newfold ${{
-    set -f
-    read newd
-    printf "Directory name: "
-    mkdir -- "$newd"
-    mv -- $fx "$newd"
+  set -f
+  printf "Directory name: "
+  read newd
+  mkdir -- "$newd"
+  mv -- $fx "$newd"
 }}
 
 cmd on-cd &{{
@@ -91,7 +94,7 @@ cmd on-cd &{{
 }}
 
 cmd open ${{
-    case $(file --mime-type -Lb $f) in
+  case $(file --mime-type -Lb $f) in
     text/*|application/json|inode/x-empty)
       $EDITOR $fx
       ;;
@@ -128,37 +131,38 @@ cmd open ${{
 
 # Dynamically set columns
 cmd recol ${{
-    w=$(tput cols)
-    if [ $w -le 80 ]; then
-        lf -remote "send $id set ratios 1:2"
-    else
-        lf -remote "send $id set ratios 1:2:3"
-        lf -remote "send $id set info size:time"
-    fi
+  w=$(tput cols)
+  if [ $w -le 80 ]; then
+      lf -remote "send $id set ratios 1:2"
+      lf -remote "send $id set nopreview"
+  else
+      lf -remote "send $id set ratios 1:2:3"
+      lf -remote "send $id set info size:time"
+  fi
 }}
 
 # Select all files or directories
 cmd select-files ${{
-    { echo "$fs"; find -L "$(pwd)" -mindepth 1 -maxdepth 1 -type f; } |
-        if [ "$lf_hidden" = "false" ]; then
-          # remove any hidden files so you only select files you can see.
-          grep -v '/\.[^/]\+$'
-        else
-          cat
-        fi |
-        sed '/^$/d' | sort | uniq -u |
-        xargs -d '\n' -r -I{} lf -remote "send $id toggle {}"
+  { echo "$fs"; find -L "$(pwd)" -mindepth 1 -maxdepth 1 -type f; } |
+    if [ "$lf_hidden" = "false" ]; then
+      # remove any hidden files so you only select files you can see.
+      grep -v '/\.[^/]\+$'
+    else
+      cat
+    fi |
+    sed '/^$/d' | sort | uniq -u |
+    xargs -d '\n' -r -I{} lf -remote "send $id toggle {}"
 }}
 
 cmd select-dirs ${{
-    { echo "$fs"; find -L "$(pwd)" -mindepth 1 -maxdepth 1 -type d; } |
-        if [ "$lf_hidden" = "false" ]; then
-          grep -v '/\.[^/]\+$'
-        else
-          cat
-        fi |
-        sed '/^$/d' | sort | uniq -u |
-        xargs -d '\n' -r -I{} lf -remote "send $id toggle {}"
+  { echo "$fs"; find -L "$(pwd)" -mindepth 1 -maxdepth 1 -type d; } |
+    if [ "$lf_hidden" = "false" ]; then
+      grep -v '/\.[^/]\+$'
+    else
+      cat
+    fi |
+    sed '/^$/d' | sort | uniq -u |
+    xargs -d '\n' -r -I{} lf -remote "send $id toggle {}"
 }}
 
 cmd share $curl -F"file=@$fx" https://0x0.st | xclip -selection c
@@ -197,8 +201,6 @@ cmd yank-basename-without-extension &basename -a -- $fx | rev | cut -d. -f2- | r
 #     rm ~/.local/share/lf/files
 #     lf -remote "send clear"
 # }}
-
-# cmd setbg "$1"
 
 # cmd moveto ${{
 #     clear; tput cup $(($(tput lines)/3)); tput bold
@@ -239,16 +241,16 @@ cmd yank-basename-without-extension &basename -a -- $fx | rev | cut -d. -f2- | r
 
 # Jump in directories using fzf
 cmd fzf_jump ${{
-    # res="$(find . -maxdepth 1 | fzf --reverse --header='Jump to location' | sed 's/\\/\\\\/g;s/"/\\"/g')"
-    res="$(fd -H -td -tl --max-depth 1 | fzf --reverse --preview 'lsd -A {} --color always' --header='Jump to location' | sed 's/\\/\\\\/g;s/"/\\"/g')"
-    if [ -d "$res" ] ; then
-        cmd="cd"
-    elif [ -f "$res" ] ; then
-        cmd="select"
-    else
-        exit 0
-    fi
-    lf -remote "send $id $cmd \"$res\""
+  # res="$(find . -maxdepth 1 | fzf --reverse --header='Jump to location' | sed 's/\\/\\\\/g;s/"/\\"/g')"
+  res="$(fd -H -td -tl --max-depth 1 | fzf --reverse --preview 'lsd -A {} --color always' --header='Jump to location' | sed 's/\\/\\\\/g;s/"/\\"/g')"
+  if [ -d "$res" ] ; then
+      cmd="cd"
+  elif [ -f "$res" ] ; then
+      cmd="select"
+  else
+      exit 0
+  fi
+  lf -remote "send $id $cmd \"$res\""
 }}
 
 # # Git
@@ -265,15 +267,15 @@ cmd fzf_jump ${{
 
 # ripgrep (Search file contents)
 cmd fzf_search ${{
-    res="$( \
-        RG_PREFIX="rg --column --line-number --no-heading --color=always \
-            --smart-case "
-        FZF_DEFAULT_COMMAND="$RG_PREFIX ''" \
-            fzf --bind "change:reload:$RG_PREFIX {q} || true" \
-            --ansi --layout=reverse --header 'Search in files' \
-            | cut -d':' -f1
-    )"
-    [ ! -z "$res" ] && lf -remote "send $id select \"$res\""
+  res="$( \
+    RG_PREFIX="rg --column --line-number --no-heading --color=always \
+        --smart-case "
+    FZF_DEFAULT_COMMAND="$RG_PREFIX ''" \
+        fzf --bind "change:reload:$RG_PREFIX {q} || true" \
+        --ansi --layout=reverse --header 'Search in files' \
+        | cut -d':' -f1
+  )"
+  [ ! -z "$res" ] && lf -remote "send $id select \"$res\""
 }}
 
 # trash-cli
@@ -281,13 +283,13 @@ cmd trash %trash-put $f
 
 # zoxide
 cmd z %{{
-    result="$(zoxide query --exclude "${PWD}" -- "$@")"
-    lf -remote "send ${id} cd '${result}'"
+  result="$(zoxide query --exclude "${PWD}" -- "$@")"
+  lf -remote "send ${id} cd '${result}'"
 }}
 
 cmd zi ${{
-    result="$(zoxide query -i -- "$@")"
-    lf -remote "send ${id} cd '${result}'"
+  result="$(zoxide query -i -- "$@")"
+  lf -remote "send ${id} cd '${result}'"
 }}
 
 # =============================================================================
@@ -299,40 +301,44 @@ cmd zi ${{
 # |____/|_|_| |_|\__,_|_|_| |_|\__, |___/
 #                              |___/
 
-map <c-f> :fzf_jump
-map gs :fzf_search
-map <a-n> newfold
-map gL follow_link
+map . set hidden!
+map b $,setbg "$f"
+map m
+map md mkdir
+map mf mkfile
+map B bulkrename
 map D delete
 map E extract
-map <c-n> push :mkdir<space>
-map . set hidden!
-
-map A rename # at the very end
-map r push A<c-u> # new rename
-map I push A<c-a> # at the very beginning
-map i push A<a-b><c-b> # before extension
-map a push A<a-b> # after extension
-
 map P $bat --paging=always -p "$f"
-map B bulkrename
 map V push :!vim<space>
 map Y $printf "%s" "$fx" | xclip -selection clipboard
 
-map m
-map mf mkfile
-map md mkdir
-map R reload
+map <c-n> newfold
+map <c-f> :fzf_jump
+map <c-z> $ kill -STOP $PPID
+
+map A rename # at the very end
+map a push A<a-b> # after extension
+map i push A<a-b><c-b> # before extension
+map r push A<c-u> # new rename
+map I push A<c-a> # at the very beginning
 
 # Movement
-map gD cd ~/Documents
+map gb cd ~/.local/bin
+map gc cd ~/.config
 map gd cd ~/Downloads
 map gp cd ~/Pictures
-map gc cd ~/.config
-map gb cd ~/.local/bin
+map gs :fzf_search
+map gD cd ~/Documents
+map gL follow_link
 
-# Put lf into background
-map <c-z> $ kill -STOP $PPID
+# Custom sort
+map sa :set sortby atime; set info atime; set reverse; push gg
+map sc :set sortby ctime; set info ctime; set reverse; push gg
+map st :set sortby time; set info time; set reverse; push gg
+map ss :set sortby size; set info size; set reverse; push gg
+map se :set sortby ext; set info; set noreverse; push gg
+map sn :set sortby natural; set info size:time; set noreverse; push gg
 
 # TEST
 # map x $$f
@@ -340,7 +346,6 @@ map <c-z> $ kill -STOP $PPID
 # map o &mimeopen "$f"
 # map O $mimeopen --ask "$f"
 # NYI
-# map b $setbg $f
 # map C copyto
 # map M moveto
 # map J $lf -remote "send $id cd $(sed -e 's/\s*#.*//' -e '/^$/d' -e 's/^\S*\s*//' ${XDG_CONFIG_HOME:-$HOME/.config}/shell/bm-dirs | fzf)"
@@ -348,5 +353,7 @@ map <c-z> $ kill -STOP $PPID
 
 # Source Bookmarks
 # source "~/.config/lf/shortcutrc"
+
+# Startup
 recol
 on-cd
