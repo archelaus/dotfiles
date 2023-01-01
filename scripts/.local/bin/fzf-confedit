@@ -19,19 +19,16 @@ files=("${d0[@]}"
 ~/.notes/*.md
 )
 
+# choice=$(printf '%s\n' "${files[@]}" |
+#   fzf --header="fzf-confedit" --header-first \
+#   --preview="bat --color always {}")
+
 choice=$(printf '%s\n' "${files[@]}" |
   fzf --header="fzf-confedit" --header-first \
-  --expect=ctrl-f \
-  --bind 'page-down:preview-down,page-up:preview-up' --preview="bat --color always {}")
+  --preview="bat --color always {}")
 
 if [[ $choice ]]; then
-  key_pressed=$(echo "$choice" | head -n1)
-  choice=$(echo "$choice" | tail -n+2)
-  if [[ $key_pressed = "ctrl-f" ]]; then
-    bat --style header,grid "$choice"
-  else
-    $DMEDITOR "$choice" &
-  fi
+  $DMEDITOR "$choice" &
   # cfg=$(printf '%s\n' "${_clean_list["$choice"]}")
   # $DMEDITOR "$cfg"
   # choice=$( printf "$choice" | sed "s|$HOME|~|" )
