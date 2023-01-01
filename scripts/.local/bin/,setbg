@@ -1,4 +1,5 @@
 #!/bin/sh
 
-cp -- "$1" "$HOME"/.local/share/wallpaper
-feh --bg-scale "$HOME"/.local/share/wallpaper
+cp -- "$1" "$HOME/.local/share/wallpaper" &&
+  setroot --restore
+# feh --bg-scale "$HOME"/.local/share/wallpaper
