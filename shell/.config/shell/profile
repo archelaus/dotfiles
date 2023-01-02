@@ -16,12 +16,12 @@ export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 # export MANPAGER="nvim -c 'set ft=man' -"
 
 # Path
-if [ -d "$HOME/.bin" ] ;
-  then PATH="$HOME/.bin:$PATH"
+if [ -d "$HOME/.bin" ]; then
+  PATH="$HOME/.bin:$PATH"
 fi
 
-if [ -d "$HOME/.local/bin" ] ;
-  then PATH="$HOME/.local/bin:$PATH"
+if [ -d "$HOME/.local/bin" ]; then
+  PATH="$HOME/.local/bin:$PATH"
 fi
 
 if [ -d "/var/lib/flatpak/exports/bin/" ] ;
