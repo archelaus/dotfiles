@@ -59,7 +59,7 @@ cmd delete ${{
 #   [[ $choice =~ ^[Yy]$ ]] && bsdtar -xvf "$fx"
 # }}
 
-cmd extract $bsdtar -xvf $f
+cmd extract $bsdtar -xf $f
 
 cmd follow_link %{{
   lf -remote "send ${id} select '$(readlink $f)'"
