@@ -1,0 +1,7 @@
+preview tidy-viewer .csv {{
+  tidy-viewer -e "$f"
+}}
+
+preview bsdtar application/zip {{
+  bsdtar -tf "$f"
+}}
