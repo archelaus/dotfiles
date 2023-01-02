@@ -68,6 +68,7 @@ confedit_list[nix]="$HOME/.config/nixpkgs/home.nix"
 confedit_list[lf]="$HOME/.config/lf/lfrc"
 confedit_list[sxiv]="$HOME/.config/sxiv/exec/key-handler"
 confedit_list[starship]="$HOME/.config/starship.toml"
+confedit_list[ctpv]="$HOME/.config/ctpv/config"
 
 # dm-reddit config
 declare -a reddit_list=(
