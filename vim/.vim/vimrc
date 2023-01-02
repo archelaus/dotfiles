@@ -207,8 +207,10 @@ nnoremap <expr> k v:count ? 'k' : 'gk'
 " From: https://bluz71.github.io/2017/05/15/vim-tips-tricks.html
 " Line completion
 inoremap <C-l> <C-x><C-l
+" Disable Ex mode
+map Q <Nop>
 " Execute a macro over visual line selections
-xnoremap Q :'<,'>:normal @q<CR>
+xnoremap Q :normal @q<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Splits and Tabbed Files
@@ -318,8 +320,8 @@ autocmd BufWritePre * cal cursor(currPos[1], currPos[2])
 autocmd BufRead,BufNewFile Xresources,Xdefaults,xresources,xdefaults set filetype=xdefaults
 autocmd BufWritePost Xresources,Xdefaults,xresources,xdefaults !xrdb %
 
-autocmd! BufWritePost $MYVIMRC source $MYVIMRC | echom "Reloaded vimrc"
 " autocmd! BufWritePost vimrc,.vimrc source $MYVIMRC | echom "Reloaded vimrc"
+autocmd! BufWritePost $MYVIMRC source $MYVIMRC | echom "Reloaded vimrc"
 autocmd! BufWritePost tmux.conf,.tmux.conf !tmux source %
 
 " Spellcheck .txt files
