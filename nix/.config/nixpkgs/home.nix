@@ -25,6 +25,7 @@
     # dependencies
     playerctl # polybar spotify module
     pulseaudio-ctl # polybar
+    rlwrap # cht.sh
 
     # cli
     bunnyfetch
@@ -34,7 +35,6 @@
     gcal
     jdupes
     maim
-    navi
     nodePackages_latest.insect
     pdd
     pfetch
