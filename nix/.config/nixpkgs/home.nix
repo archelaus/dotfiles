@@ -62,6 +62,7 @@
     xidlehook
 
     # media
+    cmus
     exiftool
     mat2
     nsxiv
