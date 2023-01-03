@@ -14,8 +14,9 @@ files=(
 ~/.config/tmux/*
 ~/.config/x11/*
 ~/.local/bin/,*
-~/.local/bin/tmux-*
+~/.local/bin/cmus-*
 ~/.local/bin/fzf-*
+~/.local/bin/tmux-*
 ~/.notes/*.md
 )
 
