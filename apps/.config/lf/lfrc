@@ -328,7 +328,8 @@ map gb cd ~/.local/bin
 map gc cd ~/.config
 map gd cd ~/Downloads
 map gp cd ~/Pictures
-map gs :fzf_search
+map gs cd ~/Pictures/Screenshots
+# map gs :fzf_search
 map gD cd ~/Documents
 map gL follow_link
 
