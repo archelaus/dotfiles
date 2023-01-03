@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+tmux new-session -d -s music dash
+tmux split-window -t music -v -p 33
+tmux send-keys -t music " tmux set status off" C-m
+tmux send-keys -t music " cava" C-m
+tmux select-pane -t music:1.0
+tmux send-keys -t music " cmus-cover" C-m
+tmux split-window -t music -h -p 77
+tmux send-keys -t music " cmus; tmux kill-session -t music" C-m
+tmux select-pane -t music:1.1
+tmux attach-session -t music
