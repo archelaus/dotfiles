@@ -22,6 +22,7 @@ files=(
 printf '%s\n' "${files[@]}" |
   fzf --height 100% --header="fzf-confedit" --header-first \
   --preview="bat --color always {}" \
-  --bind="enter:execute($DMEDITOR {} &)+abort"
+  --bind="enter:execute(vim {})+abort"
+  # --bind="enter:execute($DMEDITOR {} &)+abort"
 
 exit 0
