@@ -65,7 +65,7 @@ cmd follow_link %{{
   lf -remote "send ${id} select '$(readlink $f)'"
 }}
 
-cmd imgur ${{
+cmd upload ${{
   ,imgur $fx
 }}
 
