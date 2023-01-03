@@ -9,9 +9,8 @@ scripts/.local/bin/*
 !scripts/.local/bin/*,*
 !scripts/.local/bin/t.py
 !scripts/.local/bin/mi.py
-!scripts/.local/bin/fzf-alacritty-theme-switcher
-!scripts/.local/bin/fzf-confedit
-!scripts/.local/bin/tmux-uptime
-!scripts/.local/bin/tmux-cht.sh
+!scripts/.local/bin/fzf-*
+!scripts/.local/bin/tmux-*
+!scripts/.local/bin/cmus-*
 notes/.notes/quick.md
 apps/.config/dmscripts/dmnote
