@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+input="${1:-"/dev/stdin"}"
+php -r "echo json_encode(simplexml_load_file('$input'));"

@@ -1,0 +1,12 @@
+#!/usr/bin/env sh
+
+file=$(readlink -f "$1")
+dir=$(dirname "$file")
+base="${file%.*}"
+
+cd "$dir" || exit
+
+case "$file" in
+	*\.doc|*\.docx|*\.pptx) libreoffice --convert-to pdf "$file" ;;
+	*) echo "Don't know how to convert $file"
+esac
