@@ -21,23 +21,20 @@ source "$(get_config)"
 # Defining our config location
 
 get_timestamp() {
-  date '+%d-%m-%Y_%H-%M-%S'
+  date '+%Y%m%d-%H%M%S'
 }
 
-cp2cb-maim() {
-  case "$XDG_SESSION_TYPE" in
-    'x11') xclip -selection clipboard -t image/png;;
-    'wayland') wl-copy -t image/png;;
-    *) err "Unknown display server";;
-  esac
+notify() {
+  notify-send "Saved screenshot" "${1/#$HOME/\~}"
 }
 
 main() {
   local _maim_args=""
   local _file_type=""
+
   # Makes sure the directory exists.
   # shellcheck disable=SC2154
-  mkdir -p "${maim_dir}"
+  mkdir -p "$maim_dir"
 
   declare -a modes=(
   "Fullscreen"
@@ -68,14 +65,16 @@ main() {
     _maim_args="${_maim_args} --delay=0.5"
   fi
 
-  _maim_args="${_maim_args} -q -u -B -m 1"
+  _maim_args="${maim_args} ${_maim_args}"
   local destination=( "File" "Clipboard" "Both" )
   dest=$(printf '%s\n' "${destination[@]}" | $DMENU 'Destination:' "$@" ) || exit 1
+  local file="${maim_dir}/${maim_file_prefix}-${_file_type}-$(get_timestamp).png"
   case "$dest" in
     'File')
       # shellcheck disable=SC2086,SC2154
-      maim ${_maim_args} "${maim_dir}/${maim_file_prefix}-${_file_type}-$(get_timestamp).png"
-      notify-send "Saved screenshot" "${maim_dir}/${maim_file_prefix}-${_file_type}-$(get_timestamp).png"
+      maim ${_maim_args} "$file"
+      echo "screenshot $file" >> "$lastactionfile"
+      notify "$file"
     ;;
     'Clipboard')
       # shellcheck disable=SC2086
@@ -84,14 +83,14 @@ main() {
     ;;
     'Both')
       # shellcheck disable=SC2086
-      maim ${_maim_args} | tee "${maim_dir}/${maim_file_prefix}-${_file_type}-$(get_timestamp).png" | cp2cb-maim
-      notify-send "Saved screenshot" "${maim_dir}/${maim_file_prefix}-${_file_type}-$(get_timestamp).png and clipboard"
+      maim ${_maim_args} | tee "$file" | cp2cb-maim
+      echo "screenshot $file" >> "$lastactionfile"
+      notify "$file"
     ;;
     *)
       exit 1
     ;;
   esac
-
 }
 
 [[ "$BASH_SOURCE" = "$0" ]] && main "$@"

@@ -1,0 +1,92 @@
+#!/usr/bin/env bash
+
+# Script name: dm-actonlast
+# Description: Run action on last modified file
+# Dependencies: dmenu, imagemagick nsxiv, tesseract, xclip, zbar
+
+_path="$(cd "$(dirname "$BASH_SOURCE")" && cd "$(dirname "$(readlink "$BASH_SOURCE" || echo ".")")" && pwd)"
+if [[  -f "${_path}/_dm-helper" ]]; then
+  # shellcheck disable=SC1090,SC1091
+  source "${_path}/_dm-helper"
+else
+  # shellcheck disable=SC1090
+  echo "No helper-script found"
+fi
+
+source "$(get_config)"
+
+die() {
+  echo "$@" > /dev/stderr
+  exit 1
+}
+
+notify() {
+  notify-send "$1" "${2/#$HOME/\~}"
+}
+
+trimWhitespace() {
+	sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//'
+}
+
+deleteEmptyLines() {
+	sed '/^$/ d'
+}
+
+getSuggestions() {
+  printf "View|nsxiv\n"
+  printf "Add shadow|screenshotAddShadow\n"
+  printf "Decode QR code|screenshotQRCode\n"
+  printf "OCR|screenshotOCR\n"
+  printf "Clipboard|screenshotClipboard\n"
+}
+
+screenshotOCR() {
+	[[ -f $1 ]] || die "Can't find file"
+  tmpfile="$(mktemp)"
+  tesseract "$1" "$tmpfile"
+	LINES=$(wc -l < "${tmpfile}.txt")
+	if [[ $LINES -eq 0 ]]; then
+		notify-send "OCR" "No text was detected"
+		exit 1
+	fi
+	cat "${tmpfile}.txt" | cp2cb &&
+  notify-send "OCR" "Copied to clipboard"
+}
+
+screenshotAddShadow() {
+	[[ -f $1 ]] || die "Can't find file"
+	newfile="${1%.*}-withshadow.${1##*.}"
+	convert "$1" \( +clone -background black -shadow 80x20+0+15 \) +swap -background transparent -layers merge +repage "$newfile"
+	screenshotClipboard "$newfile"
+	notify "Added shadow to screenshot" "$newfile"
+	echo "screenshot $newfile" >> "$lastactionfile"
+}
+
+screenshotClipboard() {
+  cp2cb-maim < "$1"
+}
+
+screenshotQRCode() {
+  tmpfile="$(mktemp)"
+	zbarimg "$1" | cp2cb
+	notify-send "QR code" "Decoded and copied to clipboard"
+}
+
+[[ -f $lastactionfile ]] || die "No last action"
+# lastaction="$(sed -n 1p "$lastactionfile")"
+lastaction="$(tail -n1 "$lastactionfile")"
+[[ -n $lastaction ]] || die "No last action"
+
+action="$(echo "$lastaction" | cut -d ' ' -f 1)"
+options="$(echo "$lastaction" | cut -d ' ' -f 2-)"
+suggestions="$(getSuggestions "$action")"
+
+torun=""
+if [[ "$(echo "$suggestions" | wc -l)" -le 1 ]]; then
+	torun="$(echo "$suggestions" | sed -n 1p | cut -d\| -f 2)"
+else
+	choice="$(echo "$suggestions" | cut -d\| -f 1 | $DMENU "Select ")"
+	[[ -n "$choice" ]] || die "Exited without selection"
+	torun="$(echo "$suggestions" | grep "^$choice" | cut -d\| -f 2)"
+fi
+$torun $options

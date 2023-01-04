@@ -56,6 +56,14 @@ cp2cb() {
   esac
 }
 
+cp2cb-maim() {
+  case "$XDG_SESSION_TYPE" in
+    'x11') xclip -selection clipboard -t image/png;;
+    'wayland') wl-copy -t image/png;;
+    *) err "Unknown display server";;
+  esac
+}
+
 # grep-desktop() {
 #   case "$XDG_SESSION_TYPE" in
 #     'x11') grep "Name=" /usr/share/xsessions/*.desktop | cut -d'=' -f2;;
