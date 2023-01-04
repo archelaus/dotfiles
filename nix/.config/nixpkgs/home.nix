@@ -23,9 +23,9 @@
     vimv-rs
 
     # dependencies
-    playerctl # polybar spotify module
+    playerctl      # polybar spotify module
     pulseaudio-ctl # polybar
-    rlwrap # cht.sh
+    rlwrap         # cht.sh
 
     # cli
     bunnyfetch
@@ -47,7 +47,9 @@
     gron
     mdcat
     pup
+    tesseract5
     tmux
+    zbar
 
     # files
     lf
