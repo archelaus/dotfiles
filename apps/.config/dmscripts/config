@@ -41,6 +41,8 @@ bookman_show_source=1
 # dm-maim
 maim_dir="${HOME}/Pictures/Screenshots"
 maim_file_prefix="maim"
+maim_args="--quiet --capturebackground --hidecursor"
+lastactionfile="${XDG_DATA_HOME:-$HOME/.local/share}/lastaction"
 
 # dm-note
 note_dir="${HOME}/.config/dmscripts/dmnote"
