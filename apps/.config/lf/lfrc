@@ -242,7 +242,7 @@ cmd yank-basename-without-extension &basename -a -- $fx | rev | cut -d. -f2- | r
 # Jump in directories using fzf
 cmd fzf_jump ${{
   # res="$(find . -maxdepth 1 | fzf --reverse --header='Jump to location' | sed 's/\\/\\\\/g;s/"/\\"/g')"
-  res="$(fd -H -td -tl --max-depth 1 | fzf --reverse --preview 'lsd -A {} --color always' --header='Jump to location' | sed 's/\\/\\\\/g;s/"/\\"/g')"
+  res="$(fd -H --max-depth 1 | fzf --reverse --header='Jump to location' | sed 's/\\/\\\\/g;s/"/\\"/g')"
   if [ -d "$res" ] ; then
       cmd="cd"
   elif [ -f "$res" ] ; then
@@ -325,6 +325,7 @@ map I push A<c-a> # at the very beginning
 
 # Movement
 map gb cd ~/.local/bin
+map gl cd ~/.local/share
 map gc cd ~/.config
 map gd cd ~/Downloads
 map gp cd ~/Pictures
