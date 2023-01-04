@@ -25,4 +25,8 @@ test -n "$XYZ"; or set XYZ whatever
 [Source #1](https://github.com/fish-shell/fish-shell/issues/3926)
 [Source #2](https://stackoverflow.com/questions/47743015/fish-shell-how-to-check-if-a-variable-is-set-empty)
 
-2.
+2. Pretty print fish_user_paths
+
+`echo $fish_user_paths | tr " " "\n" | nl`
+
+[Source #1](https://github.com/fish-shell/fish-shell/issues/2681)
