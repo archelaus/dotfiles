@@ -3,20 +3,19 @@
 ###############################################################
 
 # -- Audio (Fn) keybinds
-set $refresh_i3status killall -SIGUSR1 i3status
+# set $refresh_i3status killall -SIGUSR1 i3status
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% && $refresh_i3status
 bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10% && $refresh_i3status
 bindsym XF86AudioMicMute     exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
 bindsym XF86AudioMute        exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
-# (Alt) Notifications for brightness and volume, using dunstify
-# Source: https://gist.github.com/Blaradox/030f06d165a82583ae817ee954438f2e
-# bindsym XF86AudioRaiseVolume exec --no-startup-id ~/.config/i3/scripts/volume-control up
-# bindsym XF86AudioLowerVolume exec --no-startup-id ~/.config/i3/scripts/volume-control down
 
 # -- Brightness (Fn) keybinds
 # Requirement: brightnessctl
 # bindsym XF86MonBrightnessUp exec --no-startup-id ~/.config/i3/scripts/brightness-control up
 # bindsym XF86MonBrightnessDown exec --no-startup-id ~/.config/i3/scripts/brightness-control down
+
+# -- Map power off button to dmenu/rofi
+# bindsym XF86PowerOff exec --no-startup-id "rofi -show power-menu -modi power-menu:rofi-power-menu"
 
 # -- Start a terminal
 bindsym $mod+Return exec --no-startup-id alacritty
@@ -28,11 +27,14 @@ bindsym $mod+Shift+q kill
 # bindsym $mod+d exec --no-startup-id "rofi -show combi -combi-modi drun,window -icon-theme Papirus -show-icons"
 bindsym $mod+d exec --no-startup-id j4-dmenu-desktop
 
-# -- dmenu
-bindsym $mod+q exec --no-startup-id ~/.config/rofi/scripts/dm-hub
+# -- dm-hub
+bindsym $mod+b exec --no-startup-id ~/.config/rofi/scripts/dm-hub
 
 # -- Reload the configuration file
 bindsym $mod+Shift+c reload
+
+# -- Enter resize mode
+bindsym $mod+r mode "resize"
 
 # -- Restart i3
 bindsym $mod+Shift+r restart
@@ -46,17 +48,12 @@ bindsym $mod+Shift+r restart
 # Source: https://github.com/BIBJAW/Final_Rice/blob/main/MYDE/i3/scripts/powermenu
 bindsym $mod+Shift+e exec --no-startup-id ~/.config/rofi/powermenu/rofi-powermenu-gruvbox
 
-# -- Enter resize mode
-bindsym $mod+r mode "resize"
-
-# -- Map power off button to dmenu/rofi
-# bindsym XF86PowerOff exec --no-startup-id "rofi -show power-menu -modi power-menu:rofi-power-menu"
-
 #-- Screenshot
 # bindsym Print exec --no-startup-id flameshot full
 # bindsym $mod+Insert exec --no-startup-id flameshot gui
-bindsym $mod+Home exec --no-startup-id ~/.config/rofi/scripts/rofi-screenshot
-bindsym $mod+End exec --no-startup-id ~/.config/rofi/scripts/rofi-screenshot -s
+# bindsym $mod+Home exec --no-startup-id ~/.config/rofi/scripts/rofi-screenshot
+# bindsym $mod+End exec --no-startup-id ~/.config/rofi/scripts/rofi-screenshot -s
+bindsym $mod+Home exec --no-startup-id ~/.config/rofi/scripts/dm-maim
 
 # -- Lock screen with betterlockscreen
 # bindsym $mod+x exec --no-startup-id betterlockscreen -l
@@ -73,21 +70,24 @@ bindsym $mod+Shift+semicolon exec --no-startup-id ~/.config/i3/scripts/silence
 
 # -- Caps Lock indicator
 mode "caps" {
-    bindsym Caps_Lock mode "default"
+  bindsym Caps_Lock mode "default"
 }
-# bindsym Caps_Lock mode "caps"
+bindsym Caps_Lock mode "caps"
 
 # -- Num Lock indicator
 mode "num" {
-        bindsym Num_Lock mode "default"
+  bindsym Num_Lock mode "default"
 }
 bindsym Num_Lock mode "num"
 
 # -- Emoji picker using rofi
-bindsym $mod+Shift+grave exec ~/.config/rofi/scripts/rofi-emoji
+bindsym $mod+g exec ~/.config/rofi/scripts/rofi-emoji
 
 # -- Calculations using rofi
-bindsym $mod+grave exec --no-startup-id rofi -theme arthur -modi calc -show calc -calc-command 'xdotool type --clearmodifiers "{result}"' > /dev/null
+bindsym $mod+t exec --no-startup-id rofi -theme arthur -modi calc -show calc -calc-command 'xdotool type --clearmodifiers "{result}"' > /dev/null
+
+# -- dmenu
+bindsym $mod+period exec --no-startup-id ~/.config/rofi/scripts/dm-actonlast
 
 # -- greenclip
 bindsym $mod+Insert exec --no-startup-id greenclip print | grep . | dmenu -i -l 10 -p clipboard | xargs -r -d'\n' -I '{}' greenclip print '{}'
@@ -111,9 +111,9 @@ bindsym $mod+m exec --no-startup-id alacritty -T Music -e tmux-music &
 # bindsym $mod+minus scratchpad show
 
 # Keys available for binding
+# bindsym $mod+q
 # bindsym $mod+Shift+w
 # bindsym $mod+Shift+r
-# bindsym $mod+t
 # bindsym $mod+Shift+t
 # bindsym $mod+y
 # bindsym $mod+Shift+y
@@ -126,12 +126,9 @@ bindsym $mod+m exec --no-startup-id alacritty -T Music -e tmux-music &
 # bindsym $mod+Shift+p
 # bindsym $mod+Shift+d
 # bindsym $mod+Shift+f
-# bindsym $mod+g
 # bindsym $mod+Shift+g
 # bindsym $mod+Shift+x
 # bindsym $mod+Shift+v
-# bindsym $mod+b
 # bindsym $mod+Shift+b
 # bindsym $mod+n
 # bindsym $mod+Shift+n
-# bindsym $mod+Shift+m
