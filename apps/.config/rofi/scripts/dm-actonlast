@@ -38,6 +38,12 @@ getSuggestions() {
   printf "Decode QR code|screenshotQRCode\n"
   printf "OCR|screenshotOCR\n"
   printf "Clipboard|screenshotClipboard\n"
+  printf "Upload to Imgur|uploadImgur\n"
+}
+
+uploadImgur() {
+  ,imgur "$1" >> ~/.local/share/imgur-history 2>&1 &&
+  notify-send "imgur.sh" "Upload successful. Link copied to clipboard"
 }
 
 screenshotOCR() {
@@ -57,13 +63,14 @@ screenshotAddShadow() {
 	[[ -f $1 ]] || die "Can't find file"
 	newfile="${1%.*}-withshadow.${1##*.}"
 	convert "$1" \( +clone -background black -shadow 80x20+0+15 \) +swap -background transparent -layers merge +repage "$newfile"
-	screenshotClipboard "$newfile"
+  cp2cb-maim < "$1"
 	notify "Added shadow to screenshot" "$newfile"
 	echo "screenshot $newfile" >> "$lastactionfile"
 }
 
 screenshotClipboard() {
   cp2cb-maim < "$1"
+	notify "Copied file to clipboard" "$1"
 }
 
 screenshotQRCode() {
