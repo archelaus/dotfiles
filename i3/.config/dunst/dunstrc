@@ -29,7 +29,7 @@
   show_indicators = yes
 
   icon_position = left
-  max_icon_size= 30
+  max_icon_size= 60
   sticky_history = no
   history_length = 10
   title = Dunst
