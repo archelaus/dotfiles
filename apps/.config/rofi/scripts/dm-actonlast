@@ -33,7 +33,7 @@ deleteEmptyLines() {
 }
 
 getSuggestions() {
-  printf "View|nsxiv\n"
+  printf "View|nsxiv-rifle\n"
   printf "Add shadow|screenshotAddShadow\n"
   printf "Decode QR code|screenshotQRCode\n"
   printf "OCR|screenshotOCR\n"

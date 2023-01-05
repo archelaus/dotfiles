@@ -76,7 +76,7 @@ wtc() {
 }
 
 wtf() {
-  maim -i $(xdotool getactivewindow) --quality 1 $maim_args "$screenshot_directory/$dt.png"
+  maim -i $(xdotool getactivewindow) $maim_args "$screenshot_directory/$dt.png"
   notify "Region saved to ${screenshot_directory//$HOME/\~}"
 }
 
