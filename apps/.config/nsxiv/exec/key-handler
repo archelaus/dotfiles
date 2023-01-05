@@ -14,16 +14,22 @@ while read -r file; do
           rm "$file"; notify-send "$file deleted."; fi ;;
     "i") alacritty --title ExifTool -e sh -c "exiftool '$file' | less" & ;;
     "u") ,imgur "$file" >> ~/.local/share/imgur-history 2>&1 &&
-          notify-send "imgur.sh" "Upload successful. Link copied to clipboard"
+          notify-send "imgur.sh" "Upload successful. Link copied to clipboard" ;;
   esac
 done
 
 # NYI
+
+# "c") curl -sF "reqtype=fileupload" -F "fileToUpload=@$1" https://catbox.moe/user/api.php -w "\n" 2>&1 |
+#         tee >(cp2cb) >> ~/.local/share/catbox-history &&
+#         notify-send "catbox" "Upload successful. Link copied to clipboard" ;;
+
 # "c")
 #     [ -z "$destdir" ] && destdir="$(sed "s/#.*$//;/^\s*$/d" ${XDG_CONFIG_HOME:-$HOME/.config}/shell/bm-dirs | awk '{print $2}' | dmenu -l 20 -i -p "Copy file(s) to where?" | sed "s|~|^$HOME|")"
     # [ ! -d "$destdir" ] && notify-send "$destdir is not a directory, cancelled." && exit
     # cp "$file" "$destdir" && notify-send -i "$(readlink -f "$file")" "$file copied to $destdir." &
     # ;;
+
 # "m")
     # [ -z "$destdir" ] && destdir="$(sed "s/#.*$//;/^\s*$/d" ${XDG_CONFIG_HOME:-$HOME/.config}/shell/bm-dirs | awk '{print $2}' | dmenu -l 20 -i -p "Move file(s) to where?" | sed "s|~|$HOME|g")"
     # [ ! -d "$destdir" ] && notify-send "$destdir is not a directory, cancelled." && exit

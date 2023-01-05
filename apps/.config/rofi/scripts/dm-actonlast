@@ -38,12 +38,19 @@ getSuggestions() {
   printf "Decode QR code|screenshotQRCode\n"
   printf "OCR|screenshotOCR\n"
   printf "Clipboard|screenshotClipboard\n"
-  printf "Upload to Imgur|uploadImgur\n"
+  printf "Imgur|uploadImgur\n"
+  printf "Catbox|uploadCatbox\n"
 }
 
 uploadImgur() {
   ,imgur "$1" >> ~/.local/share/imgur-history 2>&1 &&
   notify-send "imgur.sh" "Upload successful. Link copied to clipboard"
+}
+
+uploadCatbox() {
+  curl -sF "reqtype=fileupload" -F "fileToUpload=@$1" https://catbox.moe/user/api.php -w "\n" 2>&1 |
+    tee >(cp2cb) >> ~/.local/share/catbox-history &&
+  notify-send "catbox" "Upload successful. Link copied to clipboard"
 }
 
 screenshotOCR() {
