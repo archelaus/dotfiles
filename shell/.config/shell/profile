@@ -81,7 +81,7 @@ fi
 
 export XDG_DATA_DIRS=$HOME/.nix-profile/share:$HOME/.local/share:"${XDG_DATA_DIRS:-/usr/local/share/:/usr/share/}"
 export IMGUR_XSEL_OPTIONS=-b
-export UPLOAD_KEY=x
+export UPLOAD_KEY=HAHA_IM_FILTERED!
 
 fzf_binds() {
   printf 'ctrl-v:execute(bat --style header,grid {}),'
