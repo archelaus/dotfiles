@@ -2,6 +2,7 @@
 
 source "$(ueberzug library)"
 
+cp ~/.local/share/fallback.png /tmp/cover.png
 COVER="/tmp/cover.png"
 X_PADDING=0
 Y_PADDING=0
