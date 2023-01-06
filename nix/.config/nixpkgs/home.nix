@@ -33,6 +33,7 @@
     didyoumean
     fzf
     gcal
+    imgurbash2
     jdupes
     maim
     nodePackages_latest.insect
