@@ -5,7 +5,6 @@ cat
 chmod
 chown
 cp
-cp
 docker
 docker-compose
 find
