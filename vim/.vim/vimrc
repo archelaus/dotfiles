@@ -101,7 +101,7 @@ set hidden
 set ignorecase
 set smartcase
 set wildmenu
-set cursorline
+" set cursorline
 set ttyfast
 set ruler
 set relativenumber
@@ -196,7 +196,7 @@ vnoremap . :normal .<CR>
 nnoremap S :%s//g<Left><Left>
 
 " save bash shebang as a macro in register b. use @b to get it in vim
-let @b='i#!/usr/bin/env bashjj'
+let @b='i#!/usr/bin/env bashjjojjo'
 
 " 5 dashes or equal signs followed by space or enter creates a line trigger
 abbrev ===== ============================================================================
