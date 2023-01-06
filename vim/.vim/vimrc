@@ -113,7 +113,7 @@ set wrap
 " From: https://www.youtube.com/watch?v=DogKdiRx7ls
 set noswapfile
 set nobackup
-set scrolloff=8
+" set scrolloff=8
 set signcolumn=yes
 
 set cmdwinheight=1
@@ -180,9 +180,6 @@ nmap <silent> <leader>ev :tabe ~/.vim/vimrc<CR>
 nmap <silent> <leader>eb :tabe ~/.bashrc<CR>
 nmap <silent> <leader>ef :tabe ~/.config/fish/config.fish<CR>
 
-" Go to first and last char of current line easier
-noremap H ^
-noremap L $
 " Yank from the cursor to the end of the line, to be consistent with C and D.
 nnoremap Y y$
 
