@@ -59,14 +59,14 @@ bindsym $mod+Home exec --no-startup-id ~/.config/rofi/scripts/dm-maim
 # bindsym $mod+x exec --no-startup-id betterlockscreen -l
 
 # -- Lock screen with modified i3lock
-bindsym $mod+Shift+x exec --no-startup-id ~/.config/i3/scripts/i3lock-extra
+bindsym $mod+Shift+x exec --no-startup-id ~/.config/i3/i3lock-extra
 
 # [NYI] Launch btop
 # bindsym $mod+F11 exec --no-startup-id alacritty -e btop
 
 # -- Silent urgent windows
 bindsym $mod+semicolon [urgent="latest"] focus
-bindsym $mod+Shift+semicolon exec --no-startup-id ~/.config/i3/scripts/silence
+bindsym $mod+Shift+semicolon exec --no-startup-id ~/.config/i3/silence
 
 # -- Caps Lock indicator
 mode "caps" {
