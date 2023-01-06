@@ -326,6 +326,7 @@ map I push A<c-a> # at the very beginning
 # Movement
 map gb cd ~/.local/bin
 map gl cd ~/.local/share
+map gm cd "/mnt/3. Stuff/Music"
 map gc cd ~/.config
 map gd cd ~/Downloads
 map gp cd ~/Pictures
