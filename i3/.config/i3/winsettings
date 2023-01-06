@@ -54,7 +54,7 @@ for_window [class="Nemo"] move to workspace $ws4
 for_window [class="Plex"] move to workspace $ws4
 for_window [class="TelegramDesktop"] move to workspace $ws5
 for_window [class="Spotify"] move to workspace $ws6
-for_window [title="Music"] move to workspace $ws6
+for_window [title="Musicc"] move to workspace $ws6
 
 # -- Workspace specific preferences
 focus_follows_mouse no
