@@ -325,8 +325,8 @@ autocmd BufWritePre * cal cursor(currPos[1], currPos[2])
 autocmd BufRead,BufNewFile Xresources,Xdefaults,xresources,xdefaults set filetype=xdefaults
 autocmd BufWritePost Xresources,Xdefaults,xresources,xdefaults !xrdb %
 
-" autocmd! BufWritePost vimrc,.vimrc source $MYVIMRC | echom "Reloaded vimrc"
-autocmd! BufWritePost $MYVIMRC source $MYVIMRC | echom "Reloaded vimrc"
+autocmd! BufWritePost vimrc,.vimrc source $MYVIMRC | echom "Reloaded vimrc"
+" autocmd! BufWritePost $MYVIMRC source $MYVIMRC | echom "Reloaded vimrc"
 autocmd! BufWritePost tmux.conf,.tmux.conf !tmux source %
 
 " Spellcheck .txt files
