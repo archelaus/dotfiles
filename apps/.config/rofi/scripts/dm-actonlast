@@ -4,6 +4,8 @@
 # Description: Run action on last modified file
 # Dependencies: dmenu, imagemagick nsxiv, tesseract, xclip, zbar
 
+set -e
+set -x
 _path="$(cd "$(dirname "$BASH_SOURCE")" && cd "$(dirname "$(readlink "$BASH_SOURCE" || echo ".")")" && pwd)"
 if [[  -f "${_path}/_dm-helper" ]]; then
   # shellcheck disable=SC1090,SC1091
@@ -40,11 +42,22 @@ getSuggestions() {
   printf "Clipboard|screenshotClipboard\n"
   printf "Imgur|uploadImgur\n"
   printf "Catbox|uploadCatbox\n"
+  printf "upload.systems|uploadSystems\n"
 }
 
 uploadImgur() {
-  ,imgur "$1" >> ~/.local/share/imgur-history 2>&1 &&
-  notify-send "imgur.sh" "Upload successful. Link copied to clipboard"
+  imgurbash2 -l "$1" &&
+  notify-send "imgurbash2" "Upload successful. Link copied to clipboard"
+}
+
+uploadSystems() {
+  rand=$(tr -cd 'a-f0-9' < /dev/urandom | head -c 7)
+  tmpfile=/tmp/"${rand}.png"
+  cp "$1" $tmpfile
+  response="$(curl -X POST -F key=$UPLOAD_KEY -F "file=@$tmpfile" https://api.upload.systems/images/upload)"
+  jq -r .url <<< "$response" | cp2cb; sleep 1
+  echo "https://who-the-fuck-pinged.me/$(jq -r .image.emojiId <<< "$response")" | cp2cb
+  notify-send "upload.systems" "Upload successful. Link copied to clipboard"
 }
 
 uploadCatbox() {

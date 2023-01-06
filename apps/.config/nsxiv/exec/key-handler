@@ -13,8 +13,8 @@ while read -r file; do
     "d") if [ "$(printf "No\\nYes" | dmenu -i -p "Really delete $file?")" = "Yes" ]; then
           rm "$file"; notify-send "$file deleted."; fi ;;
     "i") alacritty --title ExifTool -e sh -c "exiftool '$file' | less" & ;;
-    "u") ,imgur "$file" >> ~/.local/share/imgur-history 2>&1 &&
-          notify-send "imgur.sh" "Upload successful. Link copied to clipboard" ;;
+    "u") imgurbash2 -l "$file" &&
+          notify-send "imgurbash2" "Upload successful. Link copied to clipboard" ;;
   esac
 done
 
