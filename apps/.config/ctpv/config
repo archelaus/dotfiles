@@ -5,3 +5,7 @@ preview tidy-viewer .csv {{
 preview bsdtar application/zip {{
   bsdtar -tf "$f"
 }}
+
+preview bsdtar application/x-xz {{
+  bsdtar -tf "$f"
+}}
