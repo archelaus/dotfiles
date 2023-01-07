@@ -22,14 +22,18 @@ get_config() {
 ######################
 
 # Simple warn function
-warn () {
+warn() {
   printf 'Warn: %s\n' "$1"
 }
 
 # Simple error function
-err () {
+err() {
   printf 'Error: %s\n' "$1"
   exit 1
+}
+
+checkBin() {
+  command -v $1 >/dev/null 2>&1
 }
 
 ############################

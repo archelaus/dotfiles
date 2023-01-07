@@ -8,17 +8,12 @@ set -euo pipefail
 
 _path="$(cd "$(dirname "$BASH_SOURCE")" && cd "$(dirname "$(readlink "$BASH_SOURCE" || echo ".")")" && pwd)"
 if [[  -f "${_path}/_dm-helper" ]]; then
-  # shellcheck disable=SC1090,SC1091
   source "${_path}/_dm-helper"
 else
-  # shellcheck disable=SC1090
   echo "No helper-script found"
 fi
 
-# script will not hit this if there is no config-file to load
-# shellcheck disable=SC1090
 source "$(get_config)"
-# Defining our config location
 
 get_timestamp() {
   date '+%Y%m%d-%H%M%S'
@@ -28,7 +23,13 @@ notify() {
   notify-send "Saved screenshot" "${1/#$HOME/\~}"
 }
 
+tmux_bar() {
+    checkBin tmux && tmux set status on
+}
+checkBin tmux && tmux set status off
+
 main() {
+
   local _maim_args=""
   local _file_type=""
 
@@ -95,7 +96,7 @@ main() {
   #     exit 1
   #   ;;
   # esac
-
 }
 
+trap tmux_bar EXIT
 [[ "$BASH_SOURCE" = "$0" ]] && main "$@"
