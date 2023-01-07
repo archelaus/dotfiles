@@ -1,24 +1,100 @@
-#!/bin/sh
+#!/usr/bin/env bash
+
+# Script name: dm-handler
+# Description: Link handler based on dmenu
+# Dependencies: dmenu,
 
 set -euo pipefail
 
-web=qutebrowser
-term=alacritty
+_path="$(cd "$(dirname "$BASH_SOURCE")" && cd "$(dirname "$(readlink "$BASH_SOURCE" || echo ".")")" && pwd)"
+if [[  -f "${_path}/_dm-helper" ]]; then
+  source "${_path}/_dm-helper"
+else
+  echo "No helper-script found"
+fi
 
-feed="${1:-$(printf "%s" | dmenu -p 'Paste URL or file path')}"
+source "$(get_config)"
 
-case "$(printf "copy url\\nsxiv\\nsetbg\\nPDF\\nweb\\nlynx\\nvim\\nmpv\\nmpv loop\\nmpv float\\nqueue download\\nqueue yt-dlp\\nqueue yt-dlp audio" | dmenu -i -p "Open it with?")" in
-	"copy url") echo "$feed" | xclip -selection clipboard ;;
-	mpv) setsid -f mpv -quiet "$feed" >/dev/null 2>&1 ;;
-	"mpv loop") setsid -f mpv -quiet --loop "$feed" >/dev/null 2>&1 ;;
-	"mpv float") setsid -f "$term" -e mpv --geometry=+0-0 --autofit=30%  --title="mpvfloat" "$feed" >/dev/null 2>&1 ;;
-	"queue yt-dlp") qndl "$feed" >/dev/null 2>&1 ;;
-	"queue yt-dlp audio") qndl "$feed" 'yt-dlp -o "%(title)s.%(ext)s" -f bestaudio --embed-metadata --restrict-filenames' ;;
-	"queue download") qndl "$feed" 'curl -LO' >/dev/null 2>&1 ;;
-	PDF) curl -sL "$feed" > "/tmp/$(echo "$feed" | sed "s|.*/||;s/%20/ /g")" && zathura "/tmp/$(echo "$feed" | sed "s|.*/||;s/%20/ /g")"  >/dev/null 2>&1 ;;
-	sxiv) curl -sL "$feed" > "/tmp/$(echo "$feed" | sed "s|.*/||;s/%20/ /g")" && sxiv -a "/tmp/$(echo "$feed" | sed "s|.*/||;s/%20/ /g")"  >/dev/null 2>&1 ;;
-	vim) curl -sL "$feed" > "/tmp/$(echo "$feed" | sed "s|.*/||;s/%20/ /g")" && setsid -f "$term" -e "$EDITOR" "/tmp/$(echo "$feed" | sed "s|.*/||;s/%20/ /g")"  >/dev/null 2>&1 ;;
-	setbg) curl -L "$feed" > $XDG_CACHE_HOME/pic ; xwallpaper --zoom $XDG_CACHE_HOME/pic >/dev/null 2>&1 ;;
-	web) setsid -f "$web" "$feed" >/dev/null 2>&1 ;;
-	lynx) lynx "$feed" >/dev/null 2>&1 ;;
+clipboard="$(xclip -o -selection clipboard)"
+feed="${clipboard:-$(printf "%s" | $DMENU "Paste URL or file path")}"
+
+menu() {
+  printf "auto\n"
+  printf "nsxiv\n"
+  printf "setbg\n"
+  printf "PDF\n"
+  printf "web\n"
+  printf "lynx\n"
+  printf "vim\n"
+  printf "mpv\n"
+  printf "mpv loop\n"
+  printf "mpv float\n"
+  printf "queue download\n"
+  printf "queue yt-dlp\n"
+  printf "queue yt-dlp audio"
+}
+
+case $(menu | $DMENU "Open it with?") in
+  auto)
+    case "$feed" in
+      *mkv|*webm|*mp4|*youtube.com/watch*|*youtube.com/playlist*|*youtube.com/shorts*|*youtu.be*)
+        setsid -f mpv -quiet "$feed" >/dev/null 2>&1
+        ;;
+      *png|*jpg|*jpe|*jpeg|*gif)
+        curl -sL "$feed" > "/tmp/$(echo "$feed" | sed "s/.*\///;s/%20/ /g")" &&
+          nsxiv -a "/tmp/$(echo "$feed" | sed "s/.*\///;s/%20/ /g")"  >/dev/null 2>&1 &
+        ;;
+      *pdf|*cbz|*cbr)
+        curl -sL "$feed" > "/tmp/$(echo "$feed" | sed "s/.*\///;s/%20/ /g")" &&
+          zathura "/tmp/$(echo "$feed" | sed "s/.*\///;s/%20/ /g")"  >/dev/null 2>&1 &
+        ;;
+      *mp3|*flac|*opus|*mp3?source*)
+        qndl "$feed" 'curl -LO' >/dev/null 2>&1
+        ;;
+      *)
+        [[ -f $feed ]] &&
+          setsid -f $DMEDITOR "$feed" >/dev/null 2>&1 || setsid -f $DMBROWSER "$feed" >/dev/null 2>&1
+    esac
+    ;;
+	mpv)
+    setsid -f mpv -quiet "$feed" >/dev/null 2>&1
+    ;;
+	"mpv loop")
+    setsid -f mpv -quiet --loop "$feed" >/dev/null 2>&1
+    ;;
+	"mpv float")
+    setsid -f mpv --autofit=50% --title="mpvfloat" "$feed" >/dev/null 2>&1
+    # setsid -f $DMTERM mpv --geometry=+0-0 --autofit=30% --title="mpvfloat" "$feed" >/dev/null 2>&1
+    ;;
+	"queue yt-dlp")
+    qndl "$feed" >/dev/null 2>&1
+    ;;
+	"queue yt-dlp audio")
+    qndl "$feed" 'yt-dlp -x --no-write-auto-subs --no-write-subs'
+    ;;
+	"queue download")
+    qndl "$feed" 'curl -LO' >/dev/null 2>&1
+    qndl "$feed" 'aria2c -i -c -x 16 -j 4' >/dev/null 2>&1
+    ;;
+	PDF)
+    curl -sL "$feed" > "/tmp/$(echo "$feed" | sed "s|.*/||;s/%20/ /g")" &&
+      zathura "/tmp/$(echo "$feed" | sed "s|.*/||;s/%20/ /g")"  >/dev/null 2>&1
+    ;;
+	nsxiv)
+    curl -sL "$feed" > "/tmp/$(echo "$feed" | sed "s|.*/||;s/%20/ /g")" &&
+      nsxiv -a "/tmp/$(echo "$feed" | sed "s|.*/||;s/%20/ /g")"  >/dev/null 2>&1
+    ;;
+	vim)
+    curl -sL "$feed" > "/tmp/$(echo "$feed" | sed "s|.*/||;s/%20/ /g")" &&
+      setsid -f  $DMEDITOR "/tmp/$(echo "$feed" | sed "s|.*/||;s/%20/ /g")"  >/dev/null 2>&1
+    ;;
+	setbg)
+    curl -L "$feed" > $XDG_DATA_HOME/wallpaper &&
+      setroot --restore 2>&1
+    ;;
+	web)
+    setsid -f $DMBROWSER "$feed" >/dev/null 2>&1
+	# lynx)
+    # lynx "$feed" >/dev/null 2>&1
+    # ;;
 esac
