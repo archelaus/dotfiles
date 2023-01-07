@@ -52,4 +52,4 @@ exec --no-startup-id qutebrowser &
 exec --no-startup-id i3-msg 'workspace $ws7'
 
 # -- Scratchpad(s)
-# exec_always --no-startup-id alacritty --class "scratchpad" --title "LF | File manager" -e lf &
+exec_always --no-startup-id alacritty --class "fm" -e lf &

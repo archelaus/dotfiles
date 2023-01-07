@@ -105,7 +105,7 @@ bindsym $mod+u exec --no-startup-id ~/.config/rofi/scripts/dm-handler
 # bindsym $mod+y resize set 1200 px 800 px, move position center
 
 # -- Scratchpad(s)
-# bindsym $mod+b [class="scratchpad"] scratchpad show
+bindsym $mod+grave [class="fm"] scratchpad show
 
 # -- Make focused window a scratchpad
 # bindsym $mod+Shift+minus move scratchpad
