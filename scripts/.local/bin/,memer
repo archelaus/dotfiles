@@ -1,7 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-# dependencies - jq, sxiv, xclip, rofi
-# https://github.com/sayan01/scripts/blob/master/memer
+# Dependencies - fzf, jq, nsxiv, xclip
 
 exito(){
   rm "$output"
@@ -15,22 +14,21 @@ configdir="${HOME}/.config/memer"
 config="${configdir}/imgflip-credentials"
 
 curl -s -X GET https://api.imgflip.com/get_memes > "$output"
-if [ ! -r "$output" ] ; then exito ; fi
-jq .data.memes[].name -r <"$output" > "$names"
-if [ ! -r "$names" ] ; then exito ; fi
-name="$(fzf --scroll-off=5 --layout=reverse --prompt="Pick template: " <"$names")"
-# name="$(rofi -dmenu -p "Memes" -no-custom -i <"$names")"
+[[ -r $output ]] || exito
 
-if [ -z "$name" ]; then exito; fi
+jq .data.memes[].name -r < "$output" > "$names"
+[[ -r $names ]] || exito
 
-uo="$(echo -e "1. Copy template\n2. Copy with text" | fzf --layout=reverse --prompt="Mode? ")"
+name="$(fzf --scroll-off=5 --prompt="Pick template: " < "$names")"
+[[ -n $name ]] || exito
 
-if  echo "$uo" | grep -q "1" ; then
-  url="$(jq <"$output" | grep "$name" -A1 -m1 | grep -Po 'http.*((jpg)|(png))')" # most proabably there is a way of doing this with jq, too lazy to figure it out
+uo="$(printf "1. Copy template\n2. Copy with text" | fzf --prompt="Choose ")"
+
+if echo "$uo" | grep -q "1"; then
+  url="$(jq < "$output" | grep "$name" -A1 -m1 | grep -Po 'http.*((jpg)|(png))')"
 else
-# if copying with text, first get meme with placeholder text
-  if [ ! -r "${config}" ] ; then 
-    echo "config file at $config is absent, quitting"
+  if [[ ! -r $config ]]; then
+    echo "Config file at $config is absent. Quitting.."
     exito 1
   fi
 
@@ -39,12 +37,10 @@ else
   boxcount="$(jq <"$output" | grep "$name" -A4 | tail -n1 | grep -Po '\d*')"
   id="$(jq <"$output" | grep "$name" -B1 -m1 | grep -Po '\d*')"
 
-# show template with placeholder numbers
-
   echo "form \"template_id=$id\"" > "$configdir/t"
   echo "form \"username=$username\"" >> "$configdir/t"
   echo "form \"password=$password\"" >> "$configdir/t"
-  
+
   for i in $(seq "$boxcount" ) ; do
     echo "form \"boxes[$(( i - 1 ))][text]=$i\"" >> "$configdir/t"
   done
@@ -52,39 +48,35 @@ else
 
   textedres="$(curl -s -X POST -K "$configdir/t" )"
 
-  if echo "$textedres" | grep -q "false" ; then 
+  if echo "$textedres" | grep -q "false"; then
     echo "Failure!"
     echo "$textedres" | jq
-    notify-send -t 3000 -a "Memer" "! Error getting meme"
+    notify-send -t 3000 -a "Memer" "[!] Error getting meme"
     exito 1
   fi
   url=$(echo "$textedres" | jq -r .data.url )
 
-  if [ -z "$url" ]; then exito; fi
+  [[ -n $url ]] || exito
 
   curl -s "$url" -o "$configdir/${name}"
 
-  sxiv "$configdir/${name}" &  # show template with placeholder text to user
-  # notify-send -t 3000 -a "Memer" "Enter text in given order"
-
-# take actual input
+  nsxiv "$configdir/${name}" &
 
   echo "form \"template_id=$id\"" > "$configdir/t"
   echo "form \"username=$username\"" >> "$configdir/t"
   echo "form \"password=$password\"" >> "$configdir/t"
   for i in $(seq "$boxcount" ) ; do
-    text=$(echo "" | fzf --layout=reverse --print-query --prompt="Enter text [#] ${i}/${boxcount}: ")
+    text=$(echo "" | fzf --print-query --prompt="Enter text [#] ${i}/${boxcount}: ")
     echo "form \"boxes[$(( i - 1 ))][text]=$text\"" >> "$configdir/t"
   done
   echo "url = \"https://api.imgflip.com/caption_image\" " >> "$configdir/t"
 
   textedres="$(curl -s -X POST -K "$configdir/t" )"
 
-  if echo "$textedres" | grep -q "false" ; then 
+  if echo "$textedres" | grep -q "false"; then
     echo "Failure!"
     echo "$textedres" | jq
-    # notify-send -t 3000 -a "Memer" "! Error getting meme"
-    echo "! Error fetching meme.."
+    echo "[!] Error fetching meme.."
     exito 1
   fi
   url=$(echo "$textedres" | jq -r .data.url )
@@ -92,13 +84,10 @@ fi
 
 echo "$name - $url"
 
-if [ -z "$url" ]; then exito; fi
+[[ -n $url ]] || exito
 
 curl -s "$url" -o "$configdir/${name}"
 
-if xclip -selection clipboard -t image/png -i "$configdir/${name}" ;
-then
-  # notify-send -t 3000 -a "Memer" "Meme copied to clipboard :)"
+if xclip -selection clipboard -t image/png -i "$configdir/${name}"; then
   echo "Meme copied to clipboard :)"
 fi
-

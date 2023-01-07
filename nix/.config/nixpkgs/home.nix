@@ -77,7 +77,6 @@
     cowsay
     figlet
     hollywood
-    pacvim
     pipes-rs
     toilet
 

@@ -83,7 +83,7 @@ export XDG_DATA_DIRS=$HOME/.nix-profile/share:$HOME/.local/share:"${XDG_DATA_DIR
 export UPLOAD_KEY=HAHA_IM_FILTERED!
 
 fzf_binds() {
-  printf 'ctrl-v:execute(bat --style header,grid {}),'
+  printf 'ctrl-v:execute(bat --style header,grid {})+abort,'
   printf 'ctrl-e:execute(alacritty -e vim {} &),'
   printf 'ctrl-u:execute-silent(xclip -selection clipboard < {}),'
   printf 'ctrl-y:execute-silent(echo {} | xargs echo -n | xclip -selection clipboard),'
