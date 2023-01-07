@@ -71,6 +71,8 @@ confedit_list[lf]="$HOME/.config/lf/lfrc"
 confedit_list[nsxiv]="$HOME/.config/nsxiv/exec/key-handler"
 confedit_list[starship]="$HOME/.config/starship.toml"
 confedit_list[ctpv]="$HOME/.config/ctpv/config"
+confedit_list[yt-dlp]="$HOME/.config/yt-dlp/config"
+confedit_list[setroot]="$HOME/.config/setroot/config"
 
 # dm-reddit config
 declare -a reddit_list=(
