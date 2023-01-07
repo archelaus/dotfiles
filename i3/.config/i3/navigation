@@ -140,7 +140,7 @@ mode "resize" {
 }
 
 # -- Move floating windows with keys (Move mode)
-bindsym $mod+Shift+m mode "move" focus floating
+bindsym $mod+m mode "move" focus floating
 mode "move" {
     bindsym $mod+Tab focus right
 

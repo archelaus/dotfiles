@@ -96,7 +96,7 @@ bindsym $mod+Insert exec --no-startup-id greenclip print | grep . | dmenu -i -l 
 # bindsym $mod+Insert exec --no-startup-id rofi -modi "Clipboard:greenclip print" -show Clipboard -run-command '{cmd}' -theme ~/.config/rofi/selmenu.rasi
 
 # -- Play music in style
-bindsym $mod+m exec --no-startup-id alacritty -T Musicc -e tmux-music &
+bindsym $mod+Shift+m exec --no-startup-id alacritty -T Musicc -e tmux-music &
 
 # -- Resize and center focused window
 # bindsym $mod+y resize set 1200 px 800 px, move position center
