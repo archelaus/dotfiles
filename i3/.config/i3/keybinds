@@ -72,7 +72,7 @@ bindsym $mod+Shift+semicolon exec --no-startup-id ~/.config/i3/silence
 mode "caps" {
   bindsym Caps_Lock mode "default"
 }
-bindsym Caps_Lock mode "caps"
+# bindsym Caps_Lock mode "caps"
 
 # -- Num Lock indicator
 mode "num" {
@@ -87,7 +87,7 @@ bindsym $mod+g exec ~/.config/rofi/scripts/rofi-emoji
 bindsym $mod+t exec --no-startup-id rofi -theme arthur -modi calc -show calc -calc-command 'xdotool type --clearmodifiers "{result}"' > /dev/null
 
 # -- dmenu
-bindsym $mod+period exec --no-startup-id ~/.config/rofi/scripts/dm-actonlast
+bindsym $mod+period exec --no-startup-id ~/.config/rofi/scripts/dm-actOnLast
 
 # -- greenclip
 bindsym $mod+Insert exec --no-startup-id greenclip print | grep . | dmenu -i -l 10 -p clipboard | xargs -r -d'\n' -I '{}' greenclip print '{}'
@@ -123,7 +123,6 @@ bindsym $mod+m exec --no-startup-id alacritty -T Musicc -e tmux-music &
 # bindsym $mod+Shift+i
 # bindsym $mod+o
 # bindsym $mod+Shift+o
-# bindsym $mod+Shift+p
 # bindsym $mod+Shift+d
 # bindsym $mod+Shift+f
 # bindsym $mod+Shift+g
@@ -132,3 +131,4 @@ bindsym $mod+m exec --no-startup-id alacritty -T Musicc -e tmux-music &
 # bindsym $mod+Shift+b
 # bindsym $mod+n
 # bindsym $mod+Shift+n
+# bindsym $mod+Shift+p

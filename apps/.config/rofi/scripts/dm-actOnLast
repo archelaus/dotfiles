@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
-# Script name: dm-actonlast
+# Script name: dm-actOnLast
 # Description: Run action on last modified file
 # Dependencies: dmenu, imagemagick nsxiv, tesseract, xclip, zbar
 
 set -e
-set -x
+
 _path="$(cd "$(dirname "$BASH_SOURCE")" && cd "$(dirname "$(readlink "$BASH_SOURCE" || echo ".")")" && pwd)"
 if [[  -f "${_path}/_dm-helper" ]]; then
   # shellcheck disable=SC1090,SC1091
