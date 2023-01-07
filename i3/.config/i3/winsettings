@@ -56,6 +56,7 @@ for_window [class="TelegramDesktop"] move to workspace $ws5
 for_window [class="Spotify"] move to workspace $ws6
 for_window [title="Musicc"] move to workspace $ws6
 for_window [title="mpvfloat"] floating enable; move position center
+for_window [title="mpvfloat"] border pixel 1
 
 # -- Workspace specific preferences
 focus_follows_mouse no
