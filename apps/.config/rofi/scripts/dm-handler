@@ -2,7 +2,7 @@
 
 # Script name: dm-handler
 # Description: Link handler based on dmenu
-# Dependencies: dmenu,
+# Dependencies: dmenu, mpv, nsxiv, setroot, tsp, vim, yt-dlp, zathura
 
 set -euo pipefail
 
@@ -16,7 +16,13 @@ fi
 source "$(get_config)"
 
 clipboard="$(xclip -o -selection clipboard)"
-feed="${clipboard:-$(printf "%s" | $DMENU "Paste URL or file path")}"
+choice=$(printf "%s\n%s\n%s" "$clipboard" "Yes" "No" | $DMENU "Proceed with?")
+
+if [[ $choice = "No" ]]; then
+  feed="$(printf "%s" | $DMENU "Paste URL or file path")"
+else
+  feed="$clipboard"
+fi
 
 menu() {
   printf "auto\n"
@@ -74,7 +80,7 @@ case $(menu | $DMENU "Open it with?") in
     ;;
 	"queue download")
     qndl "$feed" 'curl -LO' >/dev/null 2>&1
-    qndl "$feed" 'aria2c -i -c -x 16 -j 4' >/dev/null 2>&1
+    # qndl "$feed" 'aria2c -i -c -x 16 -j 4' >/dev/null 2>&1
     ;;
 	PDF)
     curl -sL "$feed" > "/tmp/$(echo "$feed" | sed "s|.*/||;s/%20/ /g")" &&
