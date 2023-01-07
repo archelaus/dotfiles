@@ -46,6 +46,7 @@
     # development
     fx
     gron
+    lynx
     mdcat
     pup
     tesseract5
