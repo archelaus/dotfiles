@@ -33,3 +33,9 @@
 
 # workarounds
 # --no-check-certificates
+
+# Save all videos under YouTube directory in your home directory
+-o ~/Downloads/YouTube/"%(title)s.%(ext)s"
+
+# Do not copy the mtime
+--no-mtime
