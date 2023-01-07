@@ -26,6 +26,7 @@ mapfile
 mv
 ps
 readarray
+readlink
 rename
 rg
 rm

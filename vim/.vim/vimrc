@@ -75,7 +75,7 @@ let g:undotree_SetFocusWhenToggle = 1
 " https://stackoverflow.com/questions/2666551/vim-default-syntax-for-files-with-no-extension
 autocmd BufNewFile,BufRead * if &syntax == '' | setlocal commentstring=#\ %s | endif
 " setglobal commentstring=#\ %s
-" autocmd FileType fish setlocal commentstring=#\ %s
+autocmd FileType fish setlocal commentstring=#\ %s
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General settings
