@@ -23,10 +23,10 @@ notify() {
   notify-send "Saved screenshot" "${1/#$HOME/\~}"
 }
 
-tmux_bar() {
-    checkBin tmux && tmux set status on
-}
-checkBin tmux && tmux set status off
+# tmux_bar() {
+#     checkBin tmux && tmux set status on
+# }
+# checkBin tmux && tmux set status off
 
 main() {
 
@@ -98,5 +98,5 @@ main() {
   # esac
 }
 
-trap tmux_bar EXIT
+# trap tmux_bar EXIT
 [[ "$BASH_SOURCE" = "$0" ]] && main "$@"
