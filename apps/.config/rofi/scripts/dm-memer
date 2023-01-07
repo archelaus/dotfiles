@@ -1,0 +1,110 @@
+#!/usr/bin/env bash
+
+# Script name: dm-memer
+# Description: Create memes with Imgflip API and dmenu
+# Dependencies: dmenu, jq, nsxiv, xclip
+
+set -e
+
+_path="$(cd "$(dirname "$BASH_SOURCE")" && cd "$(dirname "$(readlink "$BASH_SOURCE" || echo ".")")" && pwd)"
+if [[  -f "${_path}/_dm-helper" ]]; then
+  # shellcheck disable=SC1090,SC1091
+  source "${_path}/_dm-helper"
+else
+  # shellcheck disable=SC1090
+  echo "No helper-script found"
+fi
+
+source "$(get_config)"
+
+exito() {
+  rm "$output"
+  rm "$names"
+  exit "$1"
+}
+
+notify() {
+  notify-send "Memer" "$@"
+}
+
+output="$(mktemp)"
+names="$(mktemp)"
+configdir="${HOME}/.config/memer"
+config="${configdir}/imgflip-credentials"
+
+curl -s -X GET https://api.imgflip.com/get_memes > "$output"
+[[ -r $output ]] || exito
+
+jq .data.memes[].name -r < "$output" > "$names"
+[[ -r $names ]] || exito
+
+name="$($DMENU "Pick template:" < "$names")"
+[[ -n $name ]] || exito
+
+uo="$(printf "1. Copy template\n2. Copy with text" | $DMENU "Choose:")"
+
+if echo "$uo" | grep -q "1"; then
+  url="$(jq < "$output" | grep "$name" -A1 -m1 | grep -Po 'http.*((jpg)|(png))')"
+else
+  if [[ ! -r $config ]]; then
+    notify "Config file at $config is absent. Quitting.."
+    exito 1
+  fi
+
+  username="$(head -n1 "$config")"
+  password="$(tail -n1 "$config")"
+  boxcount="$(jq <"$output" | grep "$name" -A4 | tail -n1 | grep -Po '\d*')"
+  id="$(jq <"$output" | grep "$name" -B1 -m1 | grep -Po '\d*')"
+
+  echo "form \"template_id=$id\"" > "$configdir/t"
+  echo "form \"username=$username\"" >> "$configdir/t"
+  echo "form \"password=$password\"" >> "$configdir/t"
+
+  for i in $(seq "$boxcount" ) ; do
+    echo "form \"boxes[$(( i - 1 ))][text]=$i\"" >> "$configdir/t"
+  done
+  echo "url = \"https://api.imgflip.com/caption_image\" " >> "$configdir/t"
+
+  textedres="$(curl -s -X POST -K "$configdir/t" )"
+
+  if echo "$textedres" | grep -q "false"; then
+    # echo "$textedres" | jq
+    notify -t 3000 "Failure! Error getting meme"
+    exito 1
+  fi
+  url=$(echo "$textedres" | jq -r .data.url )
+
+  [[ -n $url ]] || exito
+
+  curl -s "$url" -o "$configdir/${name}"
+
+  nsxiv "$configdir/${name}" &
+
+  echo "form \"template_id=$id\"" > "$configdir/t"
+  echo "form \"username=$username\"" >> "$configdir/t"
+  echo "form \"password=$password\"" >> "$configdir/t"
+  for i in $(seq "$boxcount" ) ; do
+    text=$(echo "" | $DMENU "Enter text (${i}/${boxcount}):")
+    echo "form \"boxes[$(( i - 1 ))][text]=$text\"" >> "$configdir/t"
+  done
+  echo "url = \"https://api.imgflip.com/caption_image\" " >> "$configdir/t"
+
+  textedres="$(curl -s -X POST -K "$configdir/t" )"
+
+  if echo "$textedres" | grep -q "false"; then
+    # echo "$textedres" | jq
+    notify "Failure! Error fetching meme.."
+    exito 1
+  fi
+  url=$(echo "$textedres" | jq -r .data.url )
+fi
+
+# echo "$name - $url"
+
+[[ -n $url ]] || exito
+
+curl -s "$url" -o "$configdir/${name}"
+
+if xclip -selection clipboard -t image/png -i "$configdir/${name}"; then
+  notify "Meme copied to clipboard!"
+fi
