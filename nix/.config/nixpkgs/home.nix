@@ -54,7 +54,6 @@
     zbar
 
     # files
-    lf
     zathura
 
     # i3wm
