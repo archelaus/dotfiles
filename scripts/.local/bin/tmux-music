@@ -7,7 +7,7 @@ if ! tmux has-session -t music; then
   tmux send-keys -t music " cava" C-m
   tmux select-pane -t music:1.0
   tmux send-keys -t music " cmus-cover" C-m
-  tmux split-window -t music -h -p 84
+  tmux split-window -t music -h -p 91
   tmux send-keys -t music " cmus; tmux kill-session -t music" C-m
   tmux select-pane -t music:1.1
   tmux attach-session -t music
