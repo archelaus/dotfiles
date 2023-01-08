@@ -111,7 +111,6 @@ export NNN_ARCHIVE="\\.(7z|a|ace|alz|arc|arj|bz|bz2|cab|cpio|deb|gz|jar|lha|lz|l
 export NNN_BMS="b:$HOME/.local/bin;c:$HOME/.config;d:$HOME/Downloads;D:$HOME/Documents;h:$HOME;l:$HOME/.local/share;p:$HOME/Pictures;s:$HOME/Pictures/Screenshots"
 export NNN_COLORS='1234'
 export NNN_FCOLORS='c1e2272e006033f7c6d6abc4'
-export NNN_FIFO=/tmp/nnn.fifo
 export NNN_PLUG
 export NNN_TRASH=1
 export sel=${XDG_CONFIG_HOME:-$HOME/.config}/nnn/.selection
