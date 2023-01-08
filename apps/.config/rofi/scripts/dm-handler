@@ -15,7 +15,7 @@ fi
 
 source "$(get_config)"
 
-clipboard="$(xclip -o -selection clipboard)"
+clipboard="$(xclip -o -selection clipboard)" || continue
 choice=$(printf "%s\n%s\n%s" "$clipboard" "Yes" "No" | $DMENU "Proceed with?")
 
 if [[ $choice = "No" ]]; then
