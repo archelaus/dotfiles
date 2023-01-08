@@ -46,6 +46,7 @@ exec --no-startup-id onboard &
 exec --no-startup-id kdeconnect-indicator &
 exec --no-startup-id qutebrowser &
 exec_always --no-startup-id tmux-nnn
+# exec_always --no-startup-id alacritty --class fm -e lf
 
 # -- Startup workspaces
 # exec --no-startup-id i3-msg 'workspace $ws3; append_layout ~/.config/i3/workspace-3.json; workspace $ws4; append_layout ~/.config/i3/workspace-4.json; workspace $ws7'
