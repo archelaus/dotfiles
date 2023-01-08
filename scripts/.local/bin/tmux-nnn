@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+
+if ! tmux has-session -t nnn; then
+  tmux new-session -d -s nnn
+  tmux send-keys -t nnn " tmux set status off" C-m
+  tmux send-keys -t nnn " nnn -a -P p; tmux kill-session -t nnn" C-m
+  tmux attach-session -t nnn
+fi

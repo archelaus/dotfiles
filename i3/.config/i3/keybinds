@@ -27,9 +27,6 @@ bindsym $mod+Shift+q kill
 # bindsym $mod+d exec --no-startup-id "rofi -show combi -combi-modi drun,window -icon-theme Papirus -show-icons"
 bindsym $mod+d exec --no-startup-id j4-dmenu-desktop
 
-# -- dm-hub
-bindsym $mod+b exec --no-startup-id ~/.config/rofi/scripts/dm-hub
-
 # -- Reload the configuration file
 bindsym $mod+Shift+c reload
 
@@ -86,32 +83,24 @@ bindsym $mod+g exec ~/.config/rofi/scripts/rofi-emoji
 # -- Calculations using rofi
 bindsym $mod+t exec --no-startup-id rofi -theme arthur -modi calc -show calc -calc-command 'xdotool type --clearmodifiers "{result}"' > /dev/null
 
-# -- dmenu
-bindsym $mod+period exec --no-startup-id ~/.config/rofi/scripts/dm-actOnLast
-
 # -- greenclip
 bindsym $mod+Insert exec --no-startup-id greenclip print | grep . | dmenu -i -l 10 -p clipboard | xargs -r -d'\n' -I '{}' greenclip print '{}'
 # rofi -modi "clipboard:greenclip print" -show clipboard -run-command '{cmd}'
 # rofi -modi "clipboard:greenclip print" -show clipboard -run-command '{cmd}' ; sleep 0.5; xdotool type $(xclip -o -selection clipboard)
 # bindsym $mod+Insert exec --no-startup-id rofi -modi "Clipboard:greenclip print" -show Clipboard -run-command '{cmd}' -theme ~/.config/rofi/selmenu.rasi
 
-# -- Play music in style
-bindsym $mod+Shift+m exec --no-startup-id alacritty -T Musicc -e tmux-music &
-
-# -- Play music in style
-bindsym $mod+u exec --no-startup-id ~/.config/rofi/scripts/dm-handler
+# -- cmus
+bindsym $mod+Shift+m exec --no-startup-id alacritty -T "C* Music Player" -e tmux-music &
 
 # -- Resize and center focused window
 # bindsym $mod+y resize set 1200 px 800 px, move position center
 
-# -- Scratchpad(s)
+# -- dmenu scripts
+bindsym $mod+b exec --no-startup-id ~/.config/rofi/scripts/dm-hub
+bindsym $mod+u exec --no-startup-id ~/.config/rofi/scripts/dm-handler
+bindsym $mod+period exec --no-startup-id ~/.config/rofi/scripts/dm-actOnLast
+
 bindsym $mod+grave [class="fm"] scratchpad show
-
-# -- Make focused window a scratchpad
-# bindsym $mod+Shift+minus move scratchpad
-
-# -- Show first scratchpad
-# bindsym $mod+minus scratchpad show
 
 # Keys available for binding
 # bindsym $mod+q

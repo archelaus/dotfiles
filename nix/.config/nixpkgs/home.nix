@@ -57,7 +57,6 @@
     zathura
 
     # i3wm
-    autotiling
     dunst
     font-awesome
     j4-dmenu-desktop
