@@ -100,8 +100,6 @@ bindsym $mod+b exec --no-startup-id ~/.config/rofi/scripts/dm-hub
 bindsym $mod+u exec --no-startup-id ~/.config/rofi/scripts/dm-handler
 bindsym $mod+period exec --no-startup-id ~/.config/rofi/scripts/dm-actOnLast
 
-bindsym $mod+grave [class="fm"] scratchpad show
-
 # Keys available for binding
 # bindsym $mod+q
 # bindsym $mod+Shift+w
