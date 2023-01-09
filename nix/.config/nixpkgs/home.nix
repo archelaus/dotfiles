@@ -32,6 +32,7 @@
     cht-sh
     didyoumean
     fzf
+    fzy
     gcal
     imgurbash2
     jdupes
