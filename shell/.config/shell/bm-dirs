@@ -1,3 +1,5 @@
 ~/.config
 ~/.local/share
 ~/.config/fish/functions
+~/.config/nnn
+~/.config/rclone
