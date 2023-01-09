@@ -11,5 +11,5 @@ done
 
 session_name="files"
 if ! [[ -v sessions["$session_name"] ]]; then
-  tmuxs new-session -s "$session_name" "nnn -a -P p"\; set -t "$session_name" status off
+  tmuxs new-session -s "$session_name" "nnn -aoP p"\; set -t "$session_name" status off
 fi
