@@ -54,8 +54,10 @@ for_window [class="Nemo"] move to workspace $ws4
 for_window [class="Plex"] move to workspace $ws4
 for_window [class="TelegramDesktop"] move to workspace $ws5
 for_window [class="Spotify"] move to workspace $ws6
-for_window [instance="file-manager"] move to workspace $ws4
 for_window [title="C* Music Player"] move to workspace $ws6
+
+# -- Scratchpad(s)
+for_window [class="fm"] floating enable, border pixel 2, move scratchpad
 
 # -- Workspace specific preferences
 focus_follows_mouse no
