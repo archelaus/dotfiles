@@ -15,8 +15,11 @@ HISTFILE="${XDG_CACHE_HOME:-$HOME/.cache}/bash_history"
 # [ -f "${XDG_CONFIG_HOME:-$HOME/.config}/shell/shortcutrc" ] && source "${XDG_CONFIG_HOME:-$HOME/.config}/shell/shortcutrc"
 [ -f "${XDG_CONFIG_HOME:-$HOME/.config}/shell/aliasrc" ] && source "${XDG_CONFIG_HOME:-$HOME/.config}/shell/aliasrc"
 
-# Ignore upper and lowercase when TAB completion
-bind "set completion-ignore-case on"
+bind "TAB:menu-complete" 2>/dev/null
+bind "set show-all-if-ambiguous on" 2>/dev/null
+bind "set completion-ignore-case on" 2>/dev/null
+bind "set menu-complete-display-prefix on" 2>/dev/null
+bind '"\e[Z":menu-complete-backward' 2>/dev/null
 
 cdown () {
     N=$1
