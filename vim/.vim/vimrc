@@ -179,6 +179,8 @@ vnoremap <C-s> :sort<CR>
 nmap <silent> <leader>ev :tabe ~/.vim/vimrc<CR>
 nmap <silent> <leader>eb :tabe ~/.bashrc<CR>
 nmap <silent> <leader>ef :tabe ~/.config/fish/config.fish<CR>
+nmap <silent> <leader>et :tabe ~/.config/tmux/tmux.conf<CR>
+nmap <silent> <leader>ep :tabe ~/.config/shell/profile<CR>
 
 " Yank from the cursor to the end of the line, to be consistent with C and D.
 nnoremap Y y$
@@ -322,10 +324,17 @@ autocmd BufWritePre * cal cursor(currPos[1], currPos[2])
 autocmd BufRead,BufNewFile Xresources,Xdefaults,xresources,xdefaults set filetype=xdefaults
 autocmd BufWritePost Xresources,Xdefaults,xresources,xdefaults !xrdb %
 
-autocmd! BufWritePost vimrc,.vimrc source $MYVIMRC | echom "Reloaded vimrc"
 " autocmd! BufWritePost $MYVIMRC source $MYVIMRC | echom "Reloaded vimrc"
+autocmd! BufWritePost vimrc,.vimrc source $MYVIMRC | redraw | echom "Reloaded vimrc!"
+
+" https://vi.stackexchange.com/questions/3060/suppress-output-from-a-vim-autocomand
+" autocmd! BufWritePost tmux.conf,.tmux.conf execute "!tmux source %" | redraw | echom "Reloaded tmux.conf!"
+" autocmd! BufWritePost tmux.conf,.tmux.conf silent execute "!tmux source %" | redraw | echom "Reloaded tmux.conf!"
 autocmd! BufWritePost tmux.conf,.tmux.conf !tmux source %
 
+" autocmd! BufWritePost profile,.profile !source %
+
+set shell=/usr/bin/bash
 " Spellcheck .txt files
 autocmd BufRead *.txt set spell
 
