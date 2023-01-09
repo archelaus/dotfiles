@@ -101,8 +101,8 @@ export FZF_DEFAULT_OPTS="
 --layout reverse
 "
 
-CUSTOM_PLUGINS='c:!convert $nnn png:- | xclip -sel clipboard -t image/png*;C:!cp -rv "$nnn" "$nnn".bak;P:-!less -iR $nnn;x:!chmod +x $nnn'
-DEFAULT_PLUGINS='b:bulknew;d:diffs;f:fzcd;j:autojump;k:kdeconnect;p:preview-tui;X:togglex;v:imgview'
+CUSTOM_PLUGINS='c:!convert $nnn png:- | xclip -sel clipboard -t image/png*;C:!cp -rv "$nnn" "$nnn".bak;P:-!less -iR $nnn;r:!~/rfv;x:!chmod +x $nnn'
+DEFAULT_PLUGINS='b:bulknew;d:diffs;g:gitroot;f:fzcd;j:autojump;k:kdeconnect;o:fzopen;p:preview-tui;v:imgview'
 NNN_PLUG="$CUSTOM_PLUGINS;$DEFAULT_PLUGINS"
 export NNN_ARCHIVE="\\.(7z|a|ace|alz|arc|arj|bz|bz2|cab|cpio|deb|gz|jar|lha|lz|lzh|lzma|lzo|rar|rpm|rz|t7z|tar|tbz|tbz2|tgz|tlz|txz|tZ|tzo|war|xpi|xz|Z|zip)$"
 export NNN_BMS="b:$HOME/.local/bin;c:$HOME/.config;d:$HOME/Downloads;D:$HOME/Documents;l:$HOME/.local/share;p:$HOME/Pictures;s:$HOME/Pictures/Screenshots"
