@@ -20,6 +20,9 @@ done
 
 # NYI
 
+# "u") imgurbash2 -l "$file" &&
+#       notify-send "imgurbash2" "Upload successful. Link copied to clipboard" ;;
+
 # "c") curl -sF "reqtype=fileupload" -F "fileToUpload=@$1" https://catbox.moe/user/api.php -w "\n" 2>&1 |
 #         tee >(cp2cb) >> ~/.local/share/catbox-history &&
 #         notify-send "catbox" "Upload successful. Link copied to clipboard" ;;
