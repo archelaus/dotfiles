@@ -65,6 +65,45 @@ cmd follow_link %{{
   lf -remote "send ${id} select '$(readlink $f)'"
 }}
 
+cmd kdeconnect ${{
+  filter_files() {
+    for file in $fx; do
+      if [[ -f $file ]]; then
+        printf "%s\0" "$file"
+      else
+        printf "Error: Not a regular file: %s\n" "$file" >&2
+      fi
+    done
+  }
+
+  send() {
+    filter_files | xargs -0 -I{} kdeconnect-cli --name "$devname" --share {}
+    lf -remote "send $id echomsg Files sent!"
+    lf -remote "send $id unselect"
+  }
+
+  # Select paired device
+  names=$(kdeconnect-cli --list-available --name-only 2>/dev/null)
+  if [[ -z $names ]]; then
+    lf -remote "send $id echomsg No devices paired and available"
+    exit
+  fi
+
+  ndevs=$(printf "%s" "$names" | awk 'END{print NR}')
+  if [[ $ndevs -eq 1 ]]; then
+    devname="$names"
+  else
+    printf "%s" "$names" | awk '{ print NR ". " $0 }'
+    printf "Pick a device: "
+    read -r pick
+    if [[ -n $pick && $pick -eq "$pick" ]]; then
+      devname=$(printf '%s' "$names" | awk "NR==$pick")
+    fi
+  fi
+
+  send
+}}
+
 cmd upload ${{
   imgurbash2 -l $fx
 }}
@@ -312,9 +351,10 @@ map E extract
 map P $bat --paging=always -p "$f"
 map V push :!vim<space>
 
-map <c-y> $printf "%s" "$f" | xclip -selection clipboard
-map <c-n> newfold
 map <c-f> :fzf_jump
+map <c-k> :kdeconnect
+map <c-n> newfold
+map <c-y> $printf "%s" "$f" | xclip -selection clipboard
 map <c-z> $ kill -STOP $PPID
 
 map A rename # at the very end
