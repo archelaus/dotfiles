@@ -26,6 +26,7 @@ fi
 
 menu() {
   printf "auto\n"
+  printf "upload\n"
   printf "nsxiv\n"
   printf "setbg\n"
   printf "PDF\n"
@@ -100,6 +101,28 @@ case $(menu | $DMENU "Open it with?") in
     ;;
 	web)
     setsid -f $DMBROWSER "$feed" >/dev/null 2>&1
+    ;;
+  upload)
+    case $(printf "imgur\ncatbox\nupload.systems" | $DMENU "Choose site:") in
+      imgur)
+        imgurbash2 -l "$1" &&
+          notify-send "imgurbash2" "Upload successful. Link copied to clipboard"
+        ;;
+      "upload.systems")
+        rand=$(tr -cd 'a-f0-9' < /dev/urandom | head -c 7)
+        tmpfile=/tmp/"${rand}.png"
+        cp "$1" $tmpfile
+        response="$(curl -X POST -F key=$UPLOAD_KEY -F "file=@$tmpfile" https://api.upload.systems/images/upload)"
+        jq -r .url <<< "$response" | cp2cb; sleep 1
+        echo "https://who-the-fuck-pinged.me/$(jq -r .image.emojiId <<< "$response")" | cp2cb
+        notify-send "upload.systems" "Upload successful. Link copied to clipboard"
+        ;;
+      catbox)
+        curl -sF "reqtype=fileupload" -F "fileToUpload=@$1" https://catbox.moe/user/api.php -w "\n" 2>&1 |
+          tee >(cp2cb) >> ~/.local/share/catbox-history &&
+        notify-send "catbox" "Upload successful. Link copied to clipboard"
+        ;;
+    esac
 	# lynx)
     # lynx "$feed" >/dev/null 2>&1
     # ;;
