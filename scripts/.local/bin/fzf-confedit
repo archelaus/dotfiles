@@ -9,6 +9,7 @@ done
 
 files=(
 "${_clean_list[@]}"
+~/.config/nnn/plugins/*
 ~/.config/rclone/*
 ~/.config/rofi/scripts/*
 ~/.config/shell/*
