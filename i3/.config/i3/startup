@@ -32,10 +32,10 @@ exec --no-startup-id "sleep 30; ~/.config/i3/scripts/silence"
 # exec_always --no-startup-id ~/.config/i3/scripts/floating-terminal.py &
 
 # -- Startup daemons
-exec --no-startup-id greenclip daemon >/dev/null # clipboard
-exec_always --no-startup-id dunst & # notifications
-exec_always --no-startup-id picom & # compositor
-exec --no-startup-id pactl set-sink-volume 0 100% # set default volume
+exec --no-startup-id greenclip daemon >/dev/null        # clipboard
+exec_always --no-startup-id dunst &                     # notifications
+exec_always --no-startup-id picom &                     # compositor
+exec --no-startup-id pactl set-sink-volume 0 100%       # set default volume
 exec_always --no-startup-id ~/.config/polybar/launch.sh # alternative to i3bar
 exec --no-startup-id xidlehook --not-when-fullscreen --detect-sleep --not-when-audio --timer 300 'xrandr --output eDP1 --brightness .1' 'xrandr --output eDP1 --brightness 1' --timer 300 'xrandr --output eDP1 --brightness 1; ~/.config/i3/i3lock-extra' '' --timer 300 'systemctl suspend' '' &
 exec --no-startup-id /usr/bin/gnome-keyring-daemon --start --components=secrets
