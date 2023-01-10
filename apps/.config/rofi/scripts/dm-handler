@@ -31,6 +31,7 @@ menu() {
   printf "setbg\n"
   printf "PDF\n"
   printf "web\n"
+  printf "brave\n"
   printf "lynx\n"
   printf "vim\n"
   printf "mpv\n"
@@ -41,7 +42,8 @@ menu() {
   printf "queue yt-dlp audio"
 }
 
-case $(menu | $DMENU "Open it with?") in
+set -x
+case $(menu | sort | $DMENU "Open it with?") in
   auto)
     case "$feed" in
       *mkv|*webm|*mp4|*youtube.com/watch*|*youtube.com/playlist*|*youtube.com/shorts*|*youtu.be*)
@@ -70,8 +72,7 @@ case $(menu | $DMENU "Open it with?") in
     setsid -f mpv -quiet --loop "$feed" >/dev/null 2>&1
     ;;
 	"mpv float")
-    setsid -f mpv --autofit=50% --title="mpvfloat" "$feed" >/dev/null 2>&1
-    # setsid -f $DMTERM mpv --geometry=+0-0 --autofit=30% --title="mpvfloat" "$feed" >/dev/null 2>&1
+    setsid -f mpv --geometry=50%:50% --autofit=40% --x11-name="mpvfloat" "$feed" >/dev/null 2>&1
     ;;
 	"queue yt-dlp")
     qndl "$feed" >/dev/null 2>&1
@@ -101,6 +102,9 @@ case $(menu | $DMENU "Open it with?") in
     ;;
 	web)
     setsid -f $DMBROWSER "$feed" >/dev/null 2>&1
+    ;;
+	brave)
+    setsid -f /usr/bin/brave-browser-stable --password-store=gnome %U "$feed" >/dev/null 2>&1
     ;;
   upload)
     case $(printf "imgur\ncatbox\nupload.systems" | $DMENU "Choose site:") in
