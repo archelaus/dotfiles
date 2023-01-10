@@ -25,7 +25,7 @@ bindsym XF86AudioMute         exec --no-startup-id pactl set-sink-mute @DEFAULT_
 
 # -- Session/i3 related
 bindsym $mod+Shift+c reload  # reload config file
-bindsym $mod+Shift+q kill    # kill focused window
+bindsym $mod+Shift+q kill
 bindsym $mod+Shift+r restart # restart i3
 bindsym $mod+Shift+x exec --no-startup-id \
   ~/.config/i3/i3lock-extra
@@ -35,6 +35,7 @@ bindsym $mod+Shift+semicolon exec --no-startup-id ~/.config/i3/silence
 
 # -- Different modes
 # bindsym $mod+r mode "resize"
+bindsym $mod+Shift+m mode "move" focus floating
 
 # Resizing windows by 10 in i3 using keyboard only
 bindsym $mod+y resize grow width 10 px or 10 ppt
@@ -57,7 +58,7 @@ bindsym Num_Lock mode "num"
 # bindsym $mod+Insert exec --no-startup-id flameshot gui
 # bindsym $mod+Home   exec --no-startup-id ~/.config/rofi/scripts/rofi-screenshot
 # bindsym $mod+End    exec --no-startup-id ~/.config/rofi/scripts/rofi-screenshot -s
-bindsym $mod+Home   exec --no-startup-id ~/.config/rofi/scripts/dm-maim
+# bindsym $mod+Home   exec --no-startup-id ~/.config/rofi/scripts/dm-maim
 
 # -- Rofi
 bindsym $mod+d exec j4-dmenu-desktop
@@ -73,12 +74,14 @@ bindsym $mod+Shift+e exec --no-startup-id ~/.config/rofi/powermenu/rofi-powermen
 
 # -- dmenu scripts
 bindsym $mod+b      exec --no-startup-id ~/.config/rofi/scripts/dm-hub
-bindsym $mod+q      exec --no-startup-id ~/.config/rofi/scripts/dm-handler
+bindsym $mod+n      exec --no-startup-id ~/.config/rofi/scripts/dm-handler
+bindsym $mod+m      exec --no-startup-id ~/.config/rofi/scripts/dm-maim
+# bindsym $mod+comma  exec --no-startup-id
 bindsym $mod+period exec --no-startup-id ~/.config/rofi/scripts/dm-actOnLast
 
 # -- tmux scripts
 # bindsym $mod+n       exec --no-startup-id tmux-nnn; workspace $ws4
-bindsym $mod+Shift+m exec --no-startup-id tmux-music; workspace $ws7
+# bindsym $mod+Shift+m exec --no-startup-id tmux-music; workspace $ws7
 
 # -- Apps
 bindsym $mod+Return exec --no-startup-id alacritty
@@ -93,8 +96,9 @@ bindsym $mod+Return exec --no-startup-id alacritty
 # bindsym $mod+F11 exec --no-startup-id alacritty -e btop
 
 # Keys available for binding
-# bindsym $mod+Shift+w
+# bindsym $mod+q
 # bindsym $mod+r
+# bindsym $mod+Shift+w
 # bindsym $mod+Shift+r
 # bindsym $mod+Shift+t
 # bindsym $mod+Shift+y
