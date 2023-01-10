@@ -2,119 +2,104 @@
 # ----------------------- KEYBINDINGS ----------------------- #
 ###############################################################
 
-# -- Audio (Fn) keybinds
-# set $refresh_i3status killall -SIGUSR1 i3status
-bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% && $refresh_i3status
-bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10% && $refresh_i3status
-bindsym XF86AudioMicMute     exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
-bindsym XF86AudioMute        exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
+# -- Workspace names
+set $ws1 1: 
+set $ws2 2: 
+set $ws3 3: 
+set $ws4 4: 
+set $ws5 5: 
+set $ws6 6: 
+set $ws7 7: 
+set $ws8 8
+set $ws9 9
+set $ws10 10
 
-# -- Brightness (Fn) keybinds
-# Requirement: brightnessctl
-# bindsym XF86MonBrightnessUp exec --no-startup-id ~/.config/i3/scripts/brightness-control up
+# -- Hardware keys
+bindsym XF86AudioRaiseVolume  exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% && $refresh_i3status
+bindsym XF86AudioLowerVolume  exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10% && $refresh_i3status
+bindsym XF86AudioMicMute      exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
+bindsym XF86AudioMute         exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
+# bindsym XF86MonBrightnessUp   exec --no-startup-id ~/.config/i3/scripts/brightness-control up
 # bindsym XF86MonBrightnessDown exec --no-startup-id ~/.config/i3/scripts/brightness-control down
+# bindsym XF86PowerOff          exec --no-startup-id "rofi -show power-menu -modi power-menu:rofi-power-menu"
 
-# -- Map power off button to dmenu/rofi
-# bindsym XF86PowerOff exec --no-startup-id "rofi -show power-menu -modi power-menu:rofi-power-menu"
+# -- Session/i3 related
+bindsym $mod+Shift+c reload  # reload config file
+bindsym $mod+Shift+q kill    # kill focused window
+bindsym $mod+Shift+r restart # restart i3
+bindsym $mod+Shift+x exec --no-startup-id \
+  ~/.config/i3/i3lock-extra
 
-# -- Start a terminal
-bindsym $mod+Return exec --no-startup-id alacritty
-
-# -- Kill focused window
-bindsym $mod+Shift+q kill
-
-# -- Launch app menu
-# bindsym $mod+d exec --no-startup-id "rofi -show combi -combi-modi drun,window -icon-theme Papirus -show-icons"
-bindsym $mod+d exec --no-startup-id j4-dmenu-desktop
-
-# -- Reload the configuration file
-bindsym $mod+Shift+c reload
-
-# -- Enter resize mode
-bindsym $mod+r mode "resize"
-
-# -- Restart i3
-bindsym $mod+Shift+r restart
-
-# -- Exit i3
-# bindsym $mod+Shift+e exec --no-startup-id "i3-nagbar -t warning \
-#    -m 'Exit i3? This will end your X session.' \
-#    -B 'Yes, exit i3' 'i3-msg exit'"
-# bindsym $mod+Shift+e exec "rofi -show power-menu -modi power-menu:rofi-power-menu"
-# (Alt) powermenu
-# Source: https://github.com/BIBJAW/Final_Rice/blob/main/MYDE/i3/scripts/powermenu
-bindsym $mod+Shift+e exec --no-startup-id ~/.config/rofi/powermenu/rofi-powermenu-gruvbox
-
-#-- Screenshot
-# bindsym Print exec --no-startup-id flameshot full
-# bindsym $mod+Insert exec --no-startup-id flameshot gui
-# bindsym $mod+Home exec --no-startup-id ~/.config/rofi/scripts/rofi-screenshot
-# bindsym $mod+End exec --no-startup-id ~/.config/rofi/scripts/rofi-screenshot -s
-bindsym $mod+Home exec --no-startup-id ~/.config/rofi/scripts/dm-maim
-
-# -- Lock screen with betterlockscreen
-# bindsym $mod+x exec --no-startup-id betterlockscreen -l
-
-# -- Lock screen with modified i3lock
-bindsym $mod+Shift+x exec --no-startup-id ~/.config/i3/i3lock-extra
-
-# [NYI] Launch btop
-# bindsym $mod+F11 exec --no-startup-id alacritty -e btop
-
-# -- Silent urgent windows
-bindsym $mod+semicolon [urgent="latest"] focus
+bindsym $mod+semicolon       [urgent="latest"] focus
 bindsym $mod+Shift+semicolon exec --no-startup-id ~/.config/i3/silence
 
-# -- Caps Lock indicator
+# -- Different modes
+# bindsym $mod+r mode "resize"
+
+# Resizing windows by 10 in i3 using keyboard only
+bindsym $mod+y resize grow width 10 px or 10 ppt
+bindsym $mod+u resize grow height 10 px or 10 ppt
+bindsym $mod+i resize shrink height 10 px or 10 ppt
+bindsym $mod+o resize shrink width 10 px or 10 ppt
+
 mode "caps" {
   bindsym Caps_Lock mode "default"
 }
 # bindsym Caps_Lock mode "caps"
 
-# -- Num Lock indicator
 mode "num" {
   bindsym Num_Lock mode "default"
 }
 bindsym Num_Lock mode "num"
 
-# -- Emoji picker using rofi
-bindsym $mod+g exec ~/.config/rofi/scripts/rofi-emoji
+# -- Screenshot
+# bindsym Print       exec --no-startup-id flameshot full
+# bindsym $mod+Insert exec --no-startup-id flameshot gui
+# bindsym $mod+Home   exec --no-startup-id ~/.config/rofi/scripts/rofi-screenshot
+# bindsym $mod+End    exec --no-startup-id ~/.config/rofi/scripts/rofi-screenshot -s
+bindsym $mod+Home   exec --no-startup-id ~/.config/rofi/scripts/dm-maim
 
-# -- Calculations using rofi
-bindsym $mod+t exec --no-startup-id rofi -theme arthur -modi calc -show calc -calc-command 'xdotool type --clearmodifiers "{result}"' > /dev/null
+# -- Rofi
+bindsym $mod+d exec j4-dmenu-desktop
+bindsym $mod+g exec ~/.config/rofi/scripts/rofi-emoji # emoji picker
 
-# -- greenclip
-bindsym $mod+Insert exec --no-startup-id greenclip print | grep . | dmenu -i -l 10 -p clipboard | xargs -r -d'\n' -I '{}' greenclip print '{}'
-# rofi -modi "clipboard:greenclip print" -show clipboard -run-command '{cmd}'
-# rofi -modi "clipboard:greenclip print" -show clipboard -run-command '{cmd}' ; sleep 0.5; xdotool type $(xclip -o -selection clipboard)
-# bindsym $mod+Insert exec --no-startup-id rofi -modi "Clipboard:greenclip print" -show Clipboard -run-command '{cmd}' -theme ~/.config/rofi/selmenu.rasi
+bindsym $mod+t exec \
+  rofi -theme arthur -modi calc -show calc -calc-command 'xdotool type --clearmodifiers "{result}"' > /dev/null
+bindsym $mod+Insert exec --no-startup-id \
+  greenclip print | grep . | dmenu -i -l 10 -p clipboard | xargs -r -d'\n' -I '{}' greenclip print '{}'
 
-# -- cmus
-bindsym $mod+Shift+m exec --no-startup-id alacritty -T "C* Music Player" -e tmux-music &
-
-# -- Resize and center focused window
-# bindsym $mod+y resize set 1200 px 800 px, move position center
-
-# bindsym $mod+n [class="fm"] scratchpad show, move position center
-# bindsym $mod+n exec --no-startup-id tmux-nnn
+# bindsym $mod+Shift+e exec "rofi -show power-menu -modi power-menu:rofi-power-menu"
+bindsym $mod+Shift+e exec --no-startup-id ~/.config/rofi/powermenu/rofi-powermenu-gruvbox
 
 # -- dmenu scripts
-bindsym $mod+b exec --no-startup-id ~/.config/rofi/scripts/dm-hub
-bindsym $mod+u exec --no-startup-id ~/.config/rofi/scripts/dm-handler
+bindsym $mod+b      exec --no-startup-id ~/.config/rofi/scripts/dm-hub
+bindsym $mod+q      exec --no-startup-id ~/.config/rofi/scripts/dm-handler
 bindsym $mod+period exec --no-startup-id ~/.config/rofi/scripts/dm-actOnLast
 
+# -- tmux scripts
+# bindsym $mod+n       exec --no-startup-id tmux-nnn; workspace $ws4
+bindsym $mod+Shift+m exec --no-startup-id tmux-music; workspace $ws7
+
+# -- Apps
+bindsym $mod+Return exec --no-startup-id alacritty
+
+# # -- Exit i3
+# bindsym $mod+Shift+e exec --no-startup-id "i3-nagbar -t warning \
+#   -m 'Exit i3? This will end your X session.' \
+#   -B 'Yes, exit i3' 'i3-msg exit'"
+
+# -- [NYI]
+# bindsym $mod+n   [class"fm"] scratchpad show, move position center
+# bindsym $mod+F11 exec --no-startup-id alacritty -e btop
+
 # Keys available for binding
-# bindsym $mod+q
 # bindsym $mod+Shift+w
+# bindsym $mod+r
 # bindsym $mod+Shift+r
 # bindsym $mod+Shift+t
-# bindsym $mod+y
 # bindsym $mod+Shift+y
-# bindsym $mod+u
 # bindsym $mod+Shift+u
-# bindsym $mod+i
 # bindsym $mod+Shift+i
-# bindsym $mod+o
 # bindsym $mod+Shift+o
 # bindsym $mod+Shift+d
 # bindsym $mod+Shift+f

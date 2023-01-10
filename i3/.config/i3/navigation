@@ -79,9 +79,9 @@ bindsym $mod+k focus up
 bindsym $mod+l focus right
 
 # -- Change focus (cursor keys)
-bindsym $mod+Left focus left
-bindsym $mod+Down focus down
-bindsym $mod+Up focus up
+bindsym $mod+Left  focus left
+bindsym $mod+Down  focus down
+bindsym $mod+Up    focus up
 bindsym $mod+Right focus right
 
 # -- Move focused window
@@ -91,16 +91,14 @@ bindsym $mod+Shift+k move up
 bindsym $mod+Shift+l move right
 
 # -- Move focused window (cursor keys)
-bindsym $mod+Shift+Left move left
-bindsym $mod+Shift+Down move down
-bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Left  move left
+bindsym $mod+Shift+Down  move down
+bindsym $mod+Shift+Up    move up
 bindsym $mod+Shift+Right move right
 
-# -- Split in horizontal orientation
-bindsym $mod+Shift+z split h
-
-# -- Split in vertical orientation
-bindsym $mod+v split v
+# -- Splits
+bindsym $mod+v       split v # vertical
+bindsym $mod+Shift+z split h # horizontal
 
 # -- Make focused fullscreen
 bindsym $mod+f fullscreen toggle
@@ -116,47 +114,45 @@ bindsym $mod+space floating toggle
 # -- Change focus between tiling / floating windows
 bindsym $mod+Shift+space focus mode_toggle
 
-# -- Focus the parent container
+# -- Focus container
 bindsym $mod+p focus parent
-
-# -- Focus the child container
 bindsym $mod+c focus child
 
 # -- Resize window
 mode "resize" {
-        bindsym h resize shrink width 10 px or 10 ppt
-        bindsym j resize grow height 10 px or 10 ppt
-        bindsym k resize shrink height 10 px or 10 ppt
-        bindsym l resize grow width 10 px or 10 ppt
+  bindsym h resize shrink width 10 px or 10 ppt
+  bindsym j resize grow height 10 px or 10 ppt
+  bindsym k resize shrink height 10 px or 10 ppt
+  bindsym l resize grow width 10 px or 10 ppt
 
-        bindsym Left resize shrink width 10 px or 10 ppt
-        bindsym Down resize grow height 10 px or 10 ppt
-        bindsym Up resize shrink height 10 px or 10 ppt
-        bindsym Right resize grow width 10 px or 10 ppt
+  bindsym Left resize shrink width 10 px or 10 ppt
+  bindsym Down resize grow height 10 px or 10 ppt
+  bindsym Up resize shrink height 10 px or 10 ppt
+  bindsym Right resize grow width 10 px or 10 ppt
 
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
-        bindsym $mod+r mode "default"
+  bindsym Return mode "default"
+  bindsym Escape mode "default"
+  bindsym $mod+r mode "default"
 }
 
 # -- Move floating windows with keys (Move mode)
 bindsym $mod+m mode "move" focus floating
 mode "move" {
-    bindsym $mod+Tab focus right
+  bindsym $mod+Tab focus right
 
-    bindsym Left  move left
-    bindsym Down  move down
-    bindsym Up    move up
-    bindsym Right move right
+  bindsym Left  move left
+  bindsym Down  move down
+  bindsym Up    move up
+  bindsym Right move right
 
-    bindsym h     move left
-    bindsym j     move down
-    bindsym k     move up
-    bindsym l     move right
+  bindsym h     move left
+  bindsym j     move down
+  bindsym k     move up
+  bindsym l     move right
 
-    # back to normal: Enter or Escape
-    bindsym Return mode "default"
-    bindsym Escape mode "default"
+  # back to normal: Enter or Escape
+  bindsym Return mode "default"
+  bindsym Escape mode "default"
 }
 
 # -- Switch between workspaces (next, prev)
