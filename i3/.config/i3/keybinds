@@ -61,7 +61,7 @@ bindsym Num_Lock mode "num"
 # bindsym $mod+Home   exec --no-startup-id ~/.config/rofi/scripts/dm-maim
 
 # -- Rofi
-bindsym $mod+d exec j4-dmenu-desktop
+bindsym $mod+d exec --no-startup-id j4-dmenu-desktop
 bindsym $mod+g exec ~/.config/rofi/scripts/rofi-emoji # emoji picker
 
 bindsym $mod+t exec \
