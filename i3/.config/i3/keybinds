@@ -95,7 +95,7 @@ bindsym $mod+Shift+m exec --no-startup-id alacritty -T "C* Music Player" -e tmux
 # -- Resize and center focused window
 # bindsym $mod+y resize set 1200 px 800 px, move position center
 
-# bindsym $mod+n [class="fm"] scratchpad show, move position center
+bindsym $mod+n [class="fm"] scratchpad show, move position center
 
 # -- dmenu scripts
 bindsym $mod+b exec --no-startup-id ~/.config/rofi/scripts/dm-hub
