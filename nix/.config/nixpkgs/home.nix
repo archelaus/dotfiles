@@ -50,6 +50,7 @@
     gron
     lynx
     mdcat
+    newsboat
     pup
     tesseract5
     tmux
