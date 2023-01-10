@@ -21,8 +21,7 @@ tmux capture-pane -b temp-capture-buffer -S -1000 &&
 tmux save-buffer -b temp-capture-buffer /tmp/tmux-buffer &&
 tmux delete-buffer -b capture-buffer
 
-# choice=$(grep -Eo '(http|https)://[a-zA-Z0-9./?=_-]*' < /tmp/tmux-buffer | uniq -u | $DMENU "$DMBROWSER open: ")
-choice=$(sed "s/http/\nhttp/g" < /tmp/tmux-buffer  | sed -n "s/\(^http[s]*:[a-Z0-9/.=?_-]*\)\(.*\)/\1/p" | uniq -u | $DMENU "$DMBROWSER open: ")
+choice=$(urlscan -dn < /tmp/tmux-buffer | $DMENU "$DMBROWSER open: ")
 
 if [[ -n $choice ]]; then
   nohup "$DMBROWSER" "$choice" >/dev/null 2>&1 &
