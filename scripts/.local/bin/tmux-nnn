@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 tmuxs() {
-  $TERMINAL --class fm -e tmux $*;
+  $TERMINAL --class Alacritty,file-manager -e tmux $*;
 }
 
 declare -A sessions=()

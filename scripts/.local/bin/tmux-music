@@ -1,14 +1,28 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
-if ! tmux has-session -t music; then
-  tmux new-session -d -s music
-  tmux split-window -t music -v -p 33
-  tmux send-keys -t music " tmux set status off" C-m
-  tmux send-keys -t music " cava" C-m
-  tmux select-pane -t music:1.0
-  tmux send-keys -t music " cmus-cover" C-m
-  tmux split-window -t music -h -p 91
-  tmux send-keys -t music " cmus; tmux kill-session -t music" C-m
-  tmux select-pane -t music:1.1
-  tmux attach-session -t music
+tmuxs() {
+  $TERMINAL --class Alacritty,music -e tmux "$@";
+}
+
+declare -A sessions=()
+for name in $(tmux ls -F "#{session_name}"); do
+  sessions["$name"]="$name"
+done
+
+session_name="music"
+if [[ -v sessions["$session_name"] ]]; then
+  tmuxs attach-session -t "$session_name"
+else
+  set -x
+  tmuxs new-session -d -s $session_name\; \
+  set -t $session_name status off\; \
+  set -t $session_name set-titles-string Music\; \
+  split-window -t $session_name -v -p 33\; \
+  send-keys -t $session_name " cava" C-m\; \
+  select-pane -t $session_name:1.0\; \
+  send-keys -t $session_name " cmus-cover" C-m\; \
+  split-window -t $session_name -h -p 84\; \
+  send-keys -t $session_name " cmus; tmux kill-session -t $session_name" C-m\; \
+  select-pane -t $session_name:1.1\; \
+  attach-session -t $session_name
 fi
