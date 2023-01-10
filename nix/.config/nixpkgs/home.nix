@@ -56,6 +56,8 @@
 
     # files
     lf
+    sox
+    tree
     zathura
 
     # i3wm
