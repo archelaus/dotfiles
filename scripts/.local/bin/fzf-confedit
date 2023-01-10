@@ -1,31 +1,47 @@
 #!/usr/bin/env bash
 
-source $HOME/.config/dmscripts/config
+main() {
+  source $HOME/.config/dmscripts/config
 
-declare -A _clean_list
-for i in "${!confedit_list[@]}"; do
-  [[ -f ${confedit_list[$i]} ]] && _clean_list[$i]=${confedit_list[$i]}
-done
+  declare -A _clean_list
+  for i in "${!confedit_list[@]}"; do
+    [[ -f ${confedit_list[$i]} ]] && _clean_list[$i]=${confedit_list[$i]}
+  done
 
-files=(
-"${_clean_list[@]}"
-~/.config/nnn/plugins/*
-~/.config/rclone/*
-~/.config/rofi/scripts/*
-~/.config/shell/*
-~/.config/tmux/*
-~/.config/x11/*
-~/.local/bin/,*
-~/.local/bin/cmus-*
-~/.local/bin/fzf-*
-~/.local/bin/tmux-*
-~/.notes/*.md
-)
+  files=(
+  "${_clean_list[@]}"
+  ~/.config/nnn/plugins/*
+  ~/.config/rclone/*
+  ~/.config/rofi/scripts/*
+  ~/.config/shell/*
+  ~/.config/tmux/*
+  ~/.config/x11/*
+  ~/.local/bin/,*
+  ~/.local/bin/cmus-*
+  ~/.local/bin/fzf-*
+  ~/.local/bin/tmux-*
+  ~/.notes/*.md
+  )
 
-printf '%s\n' "${files[@]}" |
+  printf '%s\n' "${files[@]}" |
+    fzf --height 100% --header="fzf-confedit" --header-first \
+    --preview="bat --color always {}" \
+    --bind="enter:execute(vim {})+abort"
+    # --bind="enter:execute($DMEDITOR {} &)+abort"
+
+}
+
+test() {
+
+readarray -t dirs < <(zoxide query --list | grep ".config")
+# printf "%s\n" "${dirs[@]}"
+
+find "${dirs[@]}" -maxdepth 1 -type f |
   fzf --height 100% --header="fzf-confedit" --header-first \
   --preview="bat --color always {}" \
   --bind="enter:execute(vim {})+abort"
-  # --bind="enter:execute($DMEDITOR {} &)+abort"
 
+}
+
+main
 exit 0

@@ -10,6 +10,10 @@ for name in $(tmux ls -F "#{session_name}"); do
 done
 
 session_name="files"
-if ! [[ -v sessions["$session_name"] ]]; then
-  tmuxs new-session -s "$session_name" "nnn -aoP p"\; set -t "$session_name" status off
+if [[ -v sessions["$session_name"] ]]; then
+  tmux attach-session -t "$session_name"
+else
+  tmuxs new-session -s "$session_name" "nnn -aodP p"\; \
+  set -t "$session_name" status off\; \
+  set -t "$session_name" set-titles-string nnn
 fi

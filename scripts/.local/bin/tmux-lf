@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+tmuxs() {
+  # $TERMINAL -e env SHELL=/usr/bin/dash tmux "$@"
+  $TERMINAL --class fm -e tmux "$@"
+}
+
+declare -A sessions=()
+for name in $(tmux ls -F "#{session_name}"); do
+  sessions["$name"]="$name"
+done
+
+session_name="files"
+if [[ -v sessions["$session_name"] ]]; then
+  tmuxs attach-session -t "$session_name"
+else
+  tmuxs new-session -d -s "$session_name" -n Home\; \
+  send-keys -t "$session_name" " lf ~" C-m\; \
+  new-window -t "$session_name":2 -n Configs\; \
+  send-keys -t "$session_name" " lf ~/.config/" C-m\; \
+  select-window -t "$session_name":1\; \
+  attach-session -t "$session_name"
+fi
