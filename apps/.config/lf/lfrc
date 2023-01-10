@@ -4,23 +4,24 @@
 # | |_) | (_| \__ \ | (__   \ V / (_| | |  \__ \
 # |____/ \__,_|___/_|\___|   \_/ \__,_|_|  |___/
 
-set shell bash
-set ifs "\n"
 set drawbox
 set icons
-set scrolloff 10
+set ifs "\n"
+set ratios 1:2
 set relativenumber
+set scrolloff 10
+set shell bash
 set truncatechar *
 
-set previewer ctpv
-set cleaner ctpvclear
 &ctpv -s $id
 &ctpvquit $id
+set cleaner ctpvclear
+set previewer ctpv
 
-# set reverse
-# set sortby time
 # set autoquit on
 # set hiddenfiles ".*:*.aux:*.log:*.bbl:*.bcf:*.blg:*.run.xml"
+# set reverse
+# set sortby time
 
 # =============================================================================
 
@@ -36,12 +37,12 @@ cmd bulkrename ${{
   lf -remote "send $id unselect"
 }}
 
-cmd chmod ${{
-  for file in "$fx"; do
-    chmod +x $file
-  done
-  lf -remote 'send reload'
-}}
+# cmd chmod ${{
+#   for file in "$fx"; do
+#     chmod +x $file
+#   done
+#   lf -remote 'send reload'
+# }}
 
 cmd delete ${{
   set -f
@@ -104,25 +105,21 @@ cmd kdeconnect ${{
   send
 }}
 
-cmd upload ${{
-  imgurbash2 -l $fx
-}}
-
 cmd mkfile ${{
-  printf "File name: "
+  printf "File name? "
   read ans
   $EDITOR $ans
 }}
 
 cmd mkdir ${{
-  printf "Directory name: "
+  printf "Directory name? "
   read ans
   mkdir $ans
 }}
 
 cmd newfold ${{
   set -f
-  printf "Directory name: "
+  printf "Directory name? "
   read newd
   mkdir -- "$newd"
   mv -- $fx "$newd"
@@ -206,6 +203,20 @@ cmd select-dirs ${{
 
 cmd share $curl -F"file=@$fx" https://0x0.st | xclip -selection c
 
+cmd togglex ${{
+  for file in $fx; do
+    if [[ -x $file ]]; then
+      chmod -x "$file"
+    else
+      chmod +x "$file"
+    fi
+  done
+  lf -remote "send reload"
+  lf -remote "send unselect"
+}}
+
+cmd upload $imgurbash2 -l "$fx"
+
 cmd yank-dirname $dirname -- "$f" | head -c-1 | xclip -i -selection clipboard
 cmd yank-path $printf '%s' "$fx" | xclip -i -selection clipboard
 cmd yank-basename $basename -a -- $fx | head -c-1 | xclip -i -selection clipboard
@@ -281,13 +292,14 @@ cmd yank-basename-without-extension &basename -a -- $fx | rev | cut -d. -f2- | r
 # Jump in directories using fzf
 cmd fzf_jump ${{
   # res="$(find . -maxdepth 1 | fzf --reverse --header='Jump to location' | sed 's/\\/\\\\/g;s/"/\\"/g')"
-  res="$(fd -H --max-depth 1 | fzf --reverse --header='Jump to location' | sed 's/\\/\\\\/g;s/"/\\"/g')"
-  if [ -d "$res" ] ; then
-      cmd="cd"
-  elif [ -f "$res" ] ; then
-      cmd="select"
+  # res="$(fd -H --max-depth 1 | fzf --reverse --header='Jump to location' | sed 's/\\/\\\\/g;s/"/\\"/g')"
+  res="$(fd -H --max-depth 1 | fzy | sed 's/\\/\\\\/g;s/"/\\"/g')"
+  if [[ -d $res ]]; then
+    cmd="cd"
+  elif [[ -f $res ]]; then
+    cmd="select"
   else
-      exit 0
+    exit 0
   fi
   lf -remote "send $id $cmd \"$res\""
 }}
@@ -345,6 +357,7 @@ map b $,setbg "$f"
 map m
 map md mkdir
 map mf mkfile
+map x :togglex
 map B bulkrename
 map D delete
 map E extract
@@ -398,5 +411,5 @@ map sn :set sortby natural; set info size:time; set noreverse; push gg
 # source "~/.config/lf/shortcutrc"
 
 # Startup
-recol
+# recol
 on-cd
