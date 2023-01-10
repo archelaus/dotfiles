@@ -7,8 +7,9 @@ set $ws1 1: 
 set $ws2 2: 
 set $ws3 3: 
 set $ws4 4: 
-set $ws5 5: 
-set $ws6 6: 
+set $ws5 5: 
+set $ws6 6: 
+set $ws7 7: 
 set $ws7 7
 set $ws8 8
 set $ws9 9
@@ -51,13 +52,14 @@ for_window [class="Alacritty"] move to workspace $ws1
 for_window [class="Brave-browser"] move to workspace $ws3
 for_window [class="qutebrowser"] move to workspace $ws3
 for_window [class="Nemo"] move to workspace $ws4
-for_window [class="Plex"] move to workspace $ws4
-for_window [class="TelegramDesktop"] move to workspace $ws5
-for_window [class="Spotify"] move to workspace $ws6
-for_window [title="C* Music Player"] move to workspace $ws6
+for_window [class="Plex"] move to workspace $ws5
+for_window [class="TelegramDesktop"] move to workspace $ws6
+for_window [class="Spotify"] move to workspace $ws7
+for_window [title="C* Music Player"] move to workspace $ws7
+for_window [class="fm"] move to workspace $ws4
 
 # -- Scratchpad(s)
-for_window [class="fm"] floating enable, border pixel 2, move scratchpad
+# for_window [class="fm"] floating enable, border pixel 2, move scratchpad
 
 # -- Workspace specific preferences
 focus_follows_mouse no
