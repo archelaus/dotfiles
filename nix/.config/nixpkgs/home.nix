@@ -45,6 +45,7 @@
     ueberzug
 
     # development
+    android-tools
     fx
     gron
     lynx
