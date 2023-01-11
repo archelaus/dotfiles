@@ -7,7 +7,6 @@
 set drawbox
 set icons
 set ifs "\n"
-set ratios 1:2
 set relativenumber
 set scrolloff 10
 set shell bash
@@ -141,10 +140,10 @@ cmd open ${{
     #   display -- $f
     #   ;;
     image/*)
-      if [ -z "$fs" ]; then
-          setsid -f nsxiv-rifle $f
+      if [[ -z $fs ]]; then
+        setsid -f nsxiv-rifle $f
       else
-          setsid -f nsxiv "$@" -- $fs
+        setsid -f nsxiv "$@" -- $fs
       fi
       ;;
     audio/*)
@@ -165,15 +164,25 @@ cmd open ${{
     esac
 }}
 
-# Dynamically set columns
-cmd recol ${{
-  w=$(tput cols)
-  if [ $w -le 80 ]; then
+# # Dynamically set columns
+# cmd recol ${{
+#   w=$(tput cols)
+#   if [ $w -le 80 ]; then
+#       lf -remote "send $id set ratios 1:2"
+#       lf -remote "send $id set nopreview"
+#   else
+#       lf -remote "send $id set ratios 1:2:3"
+#       lf -remote "send $id set info size"
+#   fi
+# }}
+
+cmd recol %{{
+  if [ $lf_width -le 80 ]; then
       lf -remote "send $id set ratios 1:2"
       lf -remote "send $id set nopreview"
   else
       lf -remote "send $id set ratios 1:2:3"
-      lf -remote "send $id set info size:time"
+      lf -remote "send $id set info size"
   fi
 }}
 
@@ -293,10 +302,13 @@ cmd yank-basename-without-extension &basename -a -- $fx | rev | cut -d. -f2- | r
 cmd fzf_jump ${{
   # res="$(find . -maxdepth 1 | fzf --reverse --header='Jump to location' | sed 's/\\/\\\\/g;s/"/\\"/g')"
   # res="$(fd -H --max-depth 1 | fzf --reverse --header='Jump to location' | sed 's/\\/\\\\/g;s/"/\\"/g')"
-  res="$(fd -H --max-depth 1 | fzy | sed 's/\\/\\\\/g;s/"/\\"/g')"
+  res="$(fd -H --max-depth 1 | fzy )"
   if [[ -d $res ]]; then
     cmd="cd"
   elif [[ -f $res ]]; then
+    if [[ $res =~ ^\. ]]; then
+      lf -remote "send $id set hidden!"
+    fi
     cmd="select"
   else
     exit 0
@@ -304,17 +316,6 @@ cmd fzf_jump ${{
   lf -remote "send $id $cmd \"$res\""
 }}
 
-# # Git
-# cmd git_branch ${{
-#     git branch | fzf | xargs git checkout
-#     pwd_shell=$(pwd)
-#     lf -remote "send $id updir"
-#     lf -remote "send $id cd \"$pwd_shell\""
-# }}
-# map gb :git_branch
-# map gp ${{clear; git pull --rebase || true; echo "press ENTER"; read ENTER}}
-# map gs ${{clear; git status; echo "press ENTER"; read ENTER}}
-# map gl ${{clear; git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit}}
 
 # ripgrep (Search file contents)
 cmd fzf_search ${{
@@ -333,11 +334,6 @@ cmd fzf_search ${{
 cmd trash %trash-put $f
 
 # zoxide
-cmd z %{{
-  result="$(zoxide query --exclude "${PWD}" -- "$@")"
-  lf -remote "send ${id} cd '${result}'"
-}}
-
 cmd zi ${{
   result="$(zoxide query -i -- "$@")"
   lf -remote "send ${id} cd '${result}'"
@@ -365,10 +361,11 @@ map P $bat --paging=always -p "$f"
 map V push :!vim<space>
 
 map <c-f> :fzf_jump
+map <c-g> :fzf_search
 map <c-k> :kdeconnect
 map <c-n> newfold
 map <c-y> $printf "%s" "$f" | xclip -selection clipboard
-map <c-z> $ kill -STOP $PPID
+map <c-z> :zi
 
 map A rename # at the very end
 map a push A<a-b> # after extension
@@ -384,7 +381,6 @@ map gc cd ~/.config
 map gd cd ~/Downloads
 map gp cd ~/Pictures
 map gs cd ~/Pictures/Screenshots
-# map gs :fzf_search
 map gD cd ~/Documents
 map gL follow_link
 
@@ -393,8 +389,8 @@ map sa :set sortby atime; set info atime; set reverse; push gg
 map sc :set sortby ctime; set info ctime; set reverse; push gg
 map st :set sortby time; set info time; set reverse; push gg
 map ss :set sortby size; set info size; set reverse; push gg
-map se :set sortby ext; set info; set noreverse; push gg
-map sn :set sortby natural; set info size:time; set noreverse; push gg
+map se :set sortby ext; set info size; set noreverse; push gg
+map sn :set sortby natural; set info size; set noreverse; push gg
 
 # TEST
 # map x $$f
@@ -411,5 +407,5 @@ map sn :set sortby natural; set info size:time; set noreverse; push gg
 # source "~/.config/lf/shortcutrc"
 
 # Startup
-# recol
+recol
 on-cd
