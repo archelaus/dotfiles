@@ -13,7 +13,6 @@ session_name="music"
 if [[ -v sessions["$session_name"] ]]; then
   tmuxs attach-session -t "$session_name"
 else
-  set -x
   tmuxs new-session -d -s $session_name\; \
   set -t $session_name status off\; \
   set -t $session_name set-titles-string Music\; \
