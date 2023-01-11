@@ -7,9 +7,13 @@
 set drawbox
 set icons
 set ifs "\n"
+set incsearch
+set info size:time
+set ratios 1:1
 set relativenumber
 set scrolloff 10
 set shell bash
+set shellopts "-eu"
 set truncatechar *
 
 &ctpv -s $id
@@ -124,8 +128,29 @@ cmd newfold ${{
   mv -- $fx "$newd"
 }}
 
+# cmd on-cd &{{
+#   printf "\033]0; $(pwd | sed "s|$HOME|~|") - lf\007" > /dev/tty
+# }}
+
 cmd on-cd &{{
   printf "\033]0; $(pwd | sed "s|$HOME|~|") - lf\007" > /dev/tty
+  case "$PWD" in
+  ~/Downloads|~/.local/bin)
+    lf -remote "send $id set user_prev_sortby $lf_sortby"
+    lf -remote "send $id set sortby time"
+    lf -remote "send $id set reverse"
+    lf -remote "send $id echomsg Changed sort to time"
+    ;;
+  *)
+    # restore sorting on directory exit
+    if [[ "$lf_user_prev_sortby" != "" ]]; then
+      lf -remote "send $id set sortby $lf_user_prev_sortby"
+      lf -remote "send $id set noreverse"
+      lf -remote "send $id echomsg Restored sort to $lf_user_prev_sortby"
+      lf -remote "send $id set user_prev_sortby ''"
+    fi
+    ;;
+  esac
 }}
 
 cmd open ${{
@@ -182,32 +207,20 @@ cmd recol %{{
       lf -remote "send $id set nopreview"
   else
       lf -remote "send $id set ratios 1:2:3"
-      lf -remote "send $id set info size"
+      lf -remote "send $id set preview"
+      # lf -remote "send $id set info size"
   fi
 }}
 
 # Select all files or directories
 cmd select-files ${{
-  { echo "$fs"; find -L "$(pwd)" -mindepth 1 -maxdepth 1 -type f; } |
-    if [ "$lf_hidden" = "false" ]; then
-      # remove any hidden files so you only select files you can see.
-      grep -v '/\.[^/]\+$'
-    else
-      cat
-    fi |
-    sed '/^$/d' | sort | uniq -u |
-    xargs -d '\n' -r -I{} lf -remote "send $id toggle {}"
+  fd -0 -L -tf --exact-depth 1 |
+  xargs -0 -r -I{} lf -remote "send $id toggle \"{}\""
 }}
 
 cmd select-dirs ${{
-  { echo "$fs"; find -L "$(pwd)" -mindepth 1 -maxdepth 1 -type d; } |
-    if [ "$lf_hidden" = "false" ]; then
-      grep -v '/\.[^/]\+$'
-    else
-      cat
-    fi |
-    sed '/^$/d' | sort | uniq -u |
-    xargs -d '\n' -r -I{} lf -remote "send $id toggle {}"
+  fd -0 -L -td --exact-depth 1 |
+  xargs -0 -r -I{} lf -remote "send $id toggle \"{}\""
 }}
 
 cmd share $curl -F"file=@$fx" https://0x0.st | xclip -selection c
@@ -349,48 +362,48 @@ cmd zi ${{
 #                              |___/
 
 map . set hidden!
-map b $,setbg "$f"
-map m
-map md mkdir
-map mf mkfile
-map x :togglex
 map B bulkrename
 map D delete
 map E extract
 map P $bat --paging=always -p "$f"
 map V push :!vim<space>
+map m
+map md mkdir
+map mf mkfile
+map x :togglex
 
+map <c-b> $,setbg "$f"
 map <c-f> :fzf_jump
 map <c-g> :fzf_search
 map <c-k> :kdeconnect
-map <c-n> newfold
+map <c-n> :newfold
 map <c-y> $printf "%s" "$f" | xclip -selection clipboard
 map <c-z> :zi
 
-map A rename # at the very end
-map a push A<a-b> # after extension
+map A rename           # at the very end
+map C push A<c-u>      # new rename
+map I push A<c-a>      # at the very beginning
+map a push A<a-b>      # after extension
 map i push A<a-b><c-b> # before extension
-map r push A<c-u> # new rename
-map I push A<c-a> # at the very beginning
 
 # Movement
-map gb cd ~/.local/bin
-map gl cd ~/.local/share
-map gm cd "/mnt/3. Stuff/Music"
-map gc cd ~/.config
-map gd cd ~/Downloads
-map gp cd ~/Pictures
-map gs cd ~/Pictures/Screenshots
 map gD cd ~/Documents
 map gL follow_link
+map gb cd ~/.local/bin
+map gc cd ~/.config
+map gd cd ~/Downloads
+map gl cd ~/.local/share
+map gm cd "/mnt/3. Stuff/Music"
+map gp cd ~/Pictures
+map gs cd ~/Pictures/Screenshots
 
 # Custom sort
 map sa :set sortby atime; set info atime; set reverse; push gg
 map sc :set sortby ctime; set info ctime; set reverse; push gg
-map st :set sortby time; set info time; set reverse; push gg
-map ss :set sortby size; set info size; set reverse; push gg
 map se :set sortby ext; set info size; set noreverse; push gg
-map sn :set sortby natural; set info size; set noreverse; push gg
+map sn :set sortby natural; set info size:time; set noreverse; push gg
+map ss :set sortby size; set info size; set reverse; push gg
+map st :set sortby time; set info time; set reverse; push gg
 
 # TEST
 # map x $$f
