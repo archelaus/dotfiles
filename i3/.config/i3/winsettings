@@ -53,7 +53,6 @@ for_window [class="qutebrowser"] move to workspace $ws3
 for_window [class="Nemo"] move to workspace $ws4
 for_window [class="Alacritty" instance="file-manager"] move to workspace $ws4
 for_window [class="Plex"] move to workspace $ws5
-for_window [class="mpv" instance="gl"] move to workspace $ws5
 for_window [class="TelegramDesktop"] move to workspace $ws6
 for_window [class="Spotify"] move to workspace $ws7
 for_window [class="Alacritty" instance="music"] move to workspace $ws7

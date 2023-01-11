@@ -97,8 +97,8 @@ bindsym $mod+Shift+Up    move up
 bindsym $mod+Shift+Right move right
 
 # -- Splits
-bindsym $mod+v       split v # vertical
-bindsym $mod+Shift+z split h # horizontal
+bindsym $mod+v split v
+bindsym $mod+Shift+z split h
 
 # -- Make focused fullscreen
 bindsym $mod+f fullscreen toggle
