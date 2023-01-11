@@ -25,11 +25,9 @@
     # dependencies
     playerctl      # polybar spotify module
     pulseaudio-ctl # polybar
-    rlwrap         # cht.sh
 
     # cli
     bunnyfetch
-    cht-sh
     didyoumean
     fzf
     fzy
@@ -54,6 +52,7 @@
     pup
     tesseract5
     tmux
+    urlscan
     zbar
 
     # files
