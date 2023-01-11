@@ -1,6 +1,13 @@
 {
-    "layout": "stacked",
+    "layout": "tabbed",
     "nodes": [
-        {"swallows": [{"class": "Brave-browser"}]}
+        {
+            "swallows": [
+                {
+                    "class": "Brave-browser",
+                    "class": "qutebrowser"
+                }
+            ]
+        }
     ]
 }

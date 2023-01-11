@@ -19,8 +19,8 @@ bindsym XF86AudioRaiseVolume  exec --no-startup-id pactl set-sink-volume @DEFAUL
 bindsym XF86AudioLowerVolume  exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10% && $refresh_i3status
 bindsym XF86AudioMicMute      exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
 bindsym XF86AudioMute         exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
-# bindsym XF86MonBrightnessUp   exec --no-startup-id ~/.config/i3/scripts/brightness-control up
-# bindsym XF86MonBrightnessDown exec --no-startup-id ~/.config/i3/scripts/brightness-control down
+bindsym XF86MonBrightnessUp   exec --no-startup-id xbacklight -inc 10
+bindsym XF86MonBrightnessDown exec --no-startup-id xbacklight -dec 10
 # bindsym XF86PowerOff          exec --no-startup-id "rofi -show power-menu -modi power-menu:rofi-power-menu"
 
 # -- Session/i3 related
@@ -84,7 +84,9 @@ bindsym $mod+period exec --no-startup-id ~/.config/rofi/scripts/dm-actOnLast
 # bindsym $mod+Shift+m exec --no-startup-id tmux-music; workspace $ws7
 
 # -- Apps
-bindsym $mod+Return exec --no-startup-id alacritty
+bindsym $mod+Return  exec --no-startup-id alacritty
+bindsym $mod+Shift+b exec --no-startup-id brave-launcher
+bindsym $mod+Shift+t exec --no-startup-id org.telegram.desktop
 
 # # -- Exit i3
 # bindsym $mod+Shift+e exec --no-startup-id "i3-nagbar -t warning \
@@ -109,6 +111,5 @@ bindsym $mod+Return exec --no-startup-id alacritty
 # bindsym $mod+Shift+f
 # bindsym $mod+Shift+x
 # bindsym $mod+Shift+v
-# bindsym $mod+Shift+b
 # bindsym $mod+Shift+n
 # bindsym $mod+Shift+p
