@@ -53,6 +53,9 @@ xmap ga <Plug>(EasyAlign)
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
 
+let g:easy_align_delimiters = {
+  \ ';': { 'pattern': ';', 'left_margin': 0, 'stick_to_left': 1 } }
+
 " Show the undo viewer
 nnoremap <F5> :UndotreeToggle<cr>
 
@@ -63,9 +66,9 @@ let &t_EI .= "\<Esc>[?2004l"
 inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
 
 function! XTermPasteBegin()
-    set pastetoggle=<Esc>[201~
-    set paste
-    return ""
+  set pastetoggle=<Esc>[201~
+  set paste
+  return ""
 endfunction
 
 " undotree window width
@@ -157,8 +160,7 @@ nnoremap <leader>W :%s/\s\+$//<cr>:let @/=''<CR>
 " open a new vertical split and switch over to it
 nnoremap <leader>w <C-w>v<C-w>l
 
-" https://vi.stackexchange.com/a/479
-" cnoremap w!! w !sudo tee %
+cabbrev w!! w !sudo tee > /dev/null %
 
 " https://old.reddit.com/r/vim/comments/t1qoma/what_are_some_of_the_unique_functions_you_use_in/
 " double space over word to find and replace
@@ -308,9 +310,6 @@ set undoreload=10000
 
 " Disables automatic commenting on newline:
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
-
-" Save file as sudo on files that require root permission:
-cabbrev w!! execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
 
 " Automatically deletes all trailing whitespace and newlines at end of file on
 " save & reset cursor position:
