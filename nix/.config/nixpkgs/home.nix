@@ -66,6 +66,7 @@
     dunst
     font-awesome
     j4-dmenu-desktop
+    polybarFull
     xorg.xbacklight
     xidlehook
 
@@ -75,6 +76,7 @@
     gifsicle
     mat2
     nsxiv
+    peek
     setroot
 
     # misc
