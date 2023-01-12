@@ -28,31 +28,31 @@ if [ -d "/var/lib/flatpak/exports/bin/" ] ;
   then PATH="/var/lib/flatpak/exports/bin/:$PATH"
 fi
 
-# ~/ Clean-up:
-export XDG_CONFIG_HOME="$HOME/.config"
-export XDG_DATA_HOME="$HOME/.local/share"
-export XDG_CACHE_HOME="$HOME/.cache"
-export XINITRC="$XDG_CONFIG_HOME/x11/xinitrc"
+# ~/ Clean-up
 #export XAUTHORITY="$XDG_RUNTIME_DIR/Xauthority" # This line will break some DMs.
-export GTK2_RC_FILES="$XDG_CONFIG_HOME/gtk-2.0/gtkrc-2.0"
-export WGETRC="$XDG_CONFIG_HOME/wget/wgetrc"
-export INPUTRC="$XDG_CONFIG_HOME/shell/inputrc"
+export ANDROID_SDK_HOME="$XDG_CONFIG_HOME/android"
+export ANSIBLE_CONFIG="$XDG_CONFIG_HOME/ansible/ansible.cfg"
+export CARGO_HOME="$XDG_DATA_HOME/cargo"
 export GNUPGHOME="$XDG_DATA_HOME/gnupg"
-export WINEPREFIX="$XDG_DATA_HOME/wineprefixes/default"
+export GOPATH="$XDG_DATA_HOME/go"
+export GTK2_RC_FILES="$XDG_CONFIG_HOME/gtk-2.0/gtkrc-2.0"
+export HISTFILE="$XDG_DATA_HOME/history"
+export INPUTRC="$XDG_CONFIG_HOME/shell/inputrc"
 export KODI_DATA="$XDG_DATA_HOME/kodi"
 export PASSWORD_STORE_DIR="$XDG_DATA_HOME/password-store"
 export TMUX_TMPDIR="$XDG_RUNTIME_DIR"
-export ANDROID_SDK_HOME="$XDG_CONFIG_HOME/android"
-export CARGO_HOME="$XDG_DATA_HOME/cargo"
-export GOPATH="$XDG_DATA_HOME/go"
-export ANSIBLE_CONFIG="$XDG_CONFIG_HOME/ansible/ansible.cfg"
-export HISTFILE="$XDG_DATA_HOME/history"
+export WGETRC="$XDG_CONFIG_HOME/wget/wgetrc"
+export WINEPREFIX="$XDG_DATA_HOME/wineprefixes/default"
+export XDG_CACHE_HOME="$HOME/.cache"
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_DATA_DIRS=$HOME/.nix-profile/share:$HOME/.local/share:"${XDG_DATA_DIRS:-/usr/local/share/:/usr/share/}"
+export XDG_DATA_HOME="$HOME/.local/share"
+export XINITRC="$XDG_CONFIG_HOME/x11/xinitrc"
 
 # Other program settings:
 export LESS=-R
 export QT_QPA_PLATFORMTHEME="gtk2" # Have QT use gtk2 theme.
-
-# [ ! -f ${XDG_CONFIG_HOME:-$HOME/.config}/shell/shortcutrc ] && setsid shortcuts >/dev/null 2>&1
+export UPLOAD_KEY=HAHA_IM_FILTERED!
 
 # Terminal color/bold definitions
 if [ -n "$TERM" ] && [ "$TERM" != "dumb" ]; then
@@ -78,9 +78,6 @@ if [ -e "$HOME/.nix-profile/etc/profile.d/nix.sh" ]; then
   . "$HOME/.nix-profile/etc/profile.d/nix.sh"
 fi
 
-export XDG_DATA_DIRS=$HOME/.nix-profile/share:$HOME/.local/share:"${XDG_DATA_DIRS:-/usr/local/share/:/usr/share/}"
-export UPLOAD_KEY=HAHA_IM_FILTERED!
-
 fzf_binds() {
   printf 'ctrl-v:execute(bat --style header,grid {})+abort,'
   printf 'ctrl-e:execute(alacritty -e vim {} &),'
@@ -99,14 +96,3 @@ export FZF_DEFAULT_OPTS="
 --marker ' ✓'
 --layout reverse
 "
-
-CUSTOM_PLUGINS='c:!convert $nnn png:- | xclip -sel clipboard -t image/png*;C:!cp -rv "$nnn" "$nnn".bak;m:-!|mediainfo $nnn;P:-!less -iR $nnn'
-DEFAULT_PLUGINS='b:bulknew;d:diffs;f:fzcd;g:gitroot;k:kdeconnect;p:preview-tui;u:fzplug;v:imgview;x:togglex;z:autojump'
-NNN_PLUG="$CUSTOM_PLUGINS;$DEFAULT_PLUGINS"
-export NNN_ARCHIVE="\\.(7z|a|ace|alz|arc|arj|bz|bz2|cab|cpio|deb|gz|jar|lha|lz|lzh|lzma|lzo|rar|rpm|rz|t7z|tar|tbz|tbz2|tgz|tlz|txz|tZ|tzo|war|xpi|xz|Z|zip)$"
-export NNN_BMS="b:$HOME/.local/bin;c:$HOME/.config;d:$HOME/Downloads;D:$HOME/Documents;l:$HOME/.local/share;p:$HOME/Pictures;s:$HOME/Pictures/Screenshots"
-export NNN_COLORS='1234'
-export NNN_FCOLORS='c1e2272e006033f7c6d6abc4'
-export NNN_PLUG
-export NNN_TRASH=1
-export sel=${XDG_CONFIG_HOME:-$HOME/.config}/nnn/.selection
