@@ -73,10 +73,11 @@ bindsym $mod+Insert exec --no-startup-id \
 bindsym $mod+Shift+e exec --no-startup-id ~/.config/rofi/powermenu/rofi-powermenu-gruvbox
 
 # -- dmenu scripts
-bindsym $mod+b      exec --no-startup-id ~/.config/rofi/scripts/dm-hub
-bindsym $mod+n      exec --no-startup-id ~/.config/rofi/scripts/dm-handler
-bindsym $mod+m      exec --no-startup-id ~/.config/rofi/scripts/dm-maim
 # bindsym $mod+comma  exec --no-startup-id
+bindsym $mod+End    exec --no-startup-id ~/.config/rofi/scripts/dm-record kill
+bindsym $mod+b      exec --no-startup-id ~/.config/rofi/scripts/dm-hub
+bindsym $mod+m      exec --no-startup-id ~/.config/rofi/scripts/dm-maim
+bindsym $mod+n      exec --no-startup-id ~/.config/rofi/scripts/dm-handler
 bindsym $mod+period exec --no-startup-id ~/.config/rofi/scripts/dm-actOnLast
 
 # -- tmux scripts
