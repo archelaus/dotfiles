@@ -11,7 +11,7 @@ main() {
   files=(
   "${_clean_list[@]}"
   ~/.config/i3/*
-  ~/.config/nnn/plugins/*
+  ~/.config/polybar/*
   ~/.config/rclone/*
   ~/.config/rofi/scripts/*
   ~/.config/shell/*
