@@ -29,6 +29,7 @@
     # cli
     bunnyfetch
     didyoumean
+    ffsend
     fzf
     fzy
     gcal
@@ -71,6 +72,7 @@
     # media
     cmus
     exiftool
+    gifsicle
     mat2
     nsxiv
     setroot
@@ -94,6 +96,7 @@
     # shell related
     atuin
     babelfish
+    mcfly
     zoxide
   ];
 }
