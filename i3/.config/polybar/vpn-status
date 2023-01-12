@@ -1,0 +1,7 @@
+#!/usr/bin/dash
+
+if nmcli c show --active | rg -q tun; then
+  polybar-msg action vpn hook 0
+else
+  polybar-msg action vpn send
+fi
