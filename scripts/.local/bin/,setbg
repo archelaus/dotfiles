@@ -1,5 +1,11 @@
 #!/bin/sh
 
-cp -- "$1" "$HOME/.local/share/wallpaper" &&
-  setroot --restore
+if file --mime-type "$1" | grep -qF 'image/'; then
+  cp -- "$1" "$HOME/.local/share/wallpaper" &&
+    setroot --restore
+else
+  # printf "Not a valid image!\n"
+  exit 1
+fi
+
 # feh --bg-scale "$HOME"/.local/share/wallpaper

@@ -12,6 +12,8 @@ done
 
 session_name="files"
 if ! [[ -v sessions["$session_name"] ]]; then
-  tmuxs new-session -d -s "$session_name" lf \; \
+  tmuxs new-session -d -s "$session_name"\; \
+  send-keys -t "$session_name" " lf" C-m\; \
+  set -t "$session_name" status off\; \
   attach-session -t "$session_name"
 fi

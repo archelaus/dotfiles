@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+if command -v fzy >/dev/null 2>&1; then
+  fuzzy=fzy
+elif command -v fzf >/dev/null 2>&1; then
+  fuzzy=fzf
+else
+  printf "fzf not installed"
+  exit 1
+fi
+
+if [[ $SHELL =~ bash$ ]]; then
+  hist_file="$HOME/.bash_history"
+  entry="$($fuzzy < "$hist_file")"
+elif [[ $SHELL =~ fish$ ]]; then
+  hist_file="$HOME/.local/share/fish/fish_history"
+  entry="$(grep "\- cmd: " "$hist_file" | cut -c 8- | $fuzzy)"
+fi
+
+if [[ -n $entry ]]; then
+  tmpfile=$(mktemp)
+  echo "$entry" >> "$tmpfile"
+  $EDITOR "$tmpfile"
+
+  if [[ -s $tmpfile ]]; then
+    stty -F /dev/tty -echo
+    xdotool type "$(cat "$tmpfile")"
+    stty -F /dev/tty -echo
+  fi
+
+  rm "$tmpfile"
+fi

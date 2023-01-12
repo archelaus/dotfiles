@@ -11,7 +11,7 @@ done
 
 session_name="files"
 if ! [[ -v sessions["$session_name"] ]]; then
-  tmuxs new-session -s "$session_name" "nnn -aodP p"\; \
+  tmuxs new-session -s "$session_name" "nnn -aodP t"\; \
   set -t "$session_name" status off\; \
   set -t "$session_name" set-titles-string nnn\; \
   attach-session -t "$session_name"

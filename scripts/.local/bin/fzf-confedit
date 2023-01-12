@@ -10,6 +10,7 @@ main() {
 
   files=(
   "${_clean_list[@]}"
+  ~/.config/i3/*
   ~/.config/nnn/plugins/*
   ~/.config/rclone/*
   ~/.config/rofi/scripts/*
@@ -17,13 +18,11 @@ main() {
   ~/.config/tmux/*
   ~/.config/x11/*
   ~/.local/bin/,*
-  ~/.local/bin/cmus-*
-  ~/.local/bin/fzf-*
-  ~/.local/bin/tmux-*
+  ~/.local/bin/*-*
   ~/.notes/*.md
   )
 
-  printf '%s\n' "${files[@]}" |
+  printf '%s\n' "${files[@]}" | sort -u |
     fzf --height 100% --header="fzf-confedit" --header-first \
     --preview="bat --color always {}" \
     --bind="enter:execute(vim {})+abort"
