@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+
+# Script name: dm-vpn
+# Description: Connect to VPN using dmenu
+# Dependencies: dmenu, windscribe, protonvpn-cli
+
+set -euo pipefail
+
+_path="$(cd "$(dirname "$BASH_SOURCE")" && cd "$(dirname "$(readlink "$BASH_SOURCE" || echo ".")")" && pwd)"
+if [[  -f "${_path}/_dm-helper" ]]; then
+  # shellcheck disable=SC1090,SC1091
+  source "${_path}/_dm-helper"
+else
+  # shellcheck disable=SC1090
+  echo "No helper-script found"
+fi
+
+source "$(get_config)"
+
+if nmcli c show --active | rg -q tun; then
+  choice=$(printf "Yes\nNo" | $DMENU "Disconnect?")
+  [[ $choice = "No" ]] || {
+    windscribe disconnect
+    sudo protonvpn disconnect
+    notify-send VPN Disconnected
+    polybar-msg action vpn send
+  }
+else
+  choice=$(printf "HK\nTR\nGB\nCH\nRO\nNO\nDE\nFR\nCA-W\nCA\nUS-W\nUS\nUS-C\nJP\nNL" | sort | $DMENU "Choose location:")
+  case $choice in
+    HK|TR|GB|CH|RO|NO|DE|FR|CA*|US*)
+      windscribe connect $choice &&
+      notify-send VPN Connected
+      ;;
+    JP|NL)
+      sudo protonvpn-cli connect --cc $choice &&
+      notify-send VPN Connected
+      ;;
+  esac
+  polybar-msg action vpn hook 0
+fi
