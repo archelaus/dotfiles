@@ -27,10 +27,9 @@ fi
 # script will not hit this if there is no config-file to load
 # shellcheck disable=SC1090
 source "$(get_config)"
-self="$BASH_SOURCE"
 
 notify() {
-  notify-send -a "$self" "$1" "$2"
+  polybar-msg action record send "$1"
 }
 
 killrecording() {
@@ -42,13 +41,12 @@ killrecording() {
 	# even after SIGTERM, ffmpeg may still run, so SIGKILL it.
 	sleep 3
 	kill -9 "$recpid"
-  notify killrecording "🔚"
+  polybar-msg action record send
 	exit
 }
 
 # -s "$(xdpyinfo | grep dimensions | awk '{print $2;}')" \
 screencast() {
-  notify screencast "⏺️"
 	ffmpeg -y \
 	-f x11grab \
 	-framerate 60 \
@@ -62,7 +60,6 @@ screencast() {
 }
 
 video() {
-  notify video "⏺️"
   ffmpeg \
 	-f x11grab \
 	-s "$(xdpyinfo | awk '/dimensions/ {print $2;}')" \
@@ -73,7 +70,6 @@ video() {
 }
 
 webcamhidef() {
-  notify webcamhidef "🎥"
   ffmpeg \
 	-f v4l2 \
 	-i /dev/video0 \
@@ -83,7 +79,6 @@ webcamhidef() {
 }
 
 webcam() {
-  notify webcam "🎥"
   ffmpeg \
 	-f v4l2 \
 	-i /dev/video0 \
@@ -93,7 +88,6 @@ webcam() {
 }
 
 audio() {
-  notify audio "🎙️"
 	ffmpeg \
 	-f alsa -i default \
 	-c:a flac \
@@ -114,7 +108,8 @@ askrecording() { \
 		webcam) webcam;;
 		"webcam (hi-def)") webcamhidef;;
 	esac
-	}
+  notify "$choice"
+}
 
 asktoend() { \
 	response=$(printf "No\\nYes" | ${DMENU} "Recording still active. End recording?") &&
