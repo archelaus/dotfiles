@@ -17,6 +17,10 @@ get_config() {
   done
 }
 
+get_timestamp() {
+  date '+%y%m%d-%H%M-%S'
+}
+
 ######################
 #   Error handling   #
 ######################

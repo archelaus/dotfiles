@@ -4,8 +4,6 @@
 # Description: Run action on last modified file
 # Dependencies: dmenu, imagemagick nsxiv, tesseract, xclip, zbar
 
-set -e
-
 _path="$(cd "$(dirname "$BASH_SOURCE")" && cd "$(dirname "$(readlink "$BASH_SOURCE" || echo ".")")" && pwd)"
 if [[  -f "${_path}/_dm-helper" ]]; then
   # shellcheck disable=SC1090,SC1091
