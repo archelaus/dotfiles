@@ -1,36 +1,19 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
-[ $(command -v ffmpeg) ] || exit 1
-vid=$1
-start_time=00:00:01
-duration=20
-height=ih/2      # input height halved , can replace with pixils .
-width=-2         # keeps aspect ratio . can replace with pixils .
-fps=25           # frames per a second .
+command -v ffmpeg >/dev/null 2>&1 || {
+  printf "ffmpeg not installed\n"
+  exit 1
+}
 
-filters="fps=$fps,scale=$width:$height:flags=lanczos"
+file="{1##*/}"
+file_noext="${file%.*}"
 
-# ffmpeg \
-#   -hide_banner -loglevel error \
-#   -i "$vid" \
-#   -filter_complex "[0:v] fps=25,scale=w=-2:h=ih/2,split [a][b];[a] palettegen=stats_mode=single [p];[b][p] paletteuse=new=1" \
-#   -y "$vid".gif
+ffmpeg(){
+  command ffmpeg -hide_banner -loglevel error -stats "$@"
+}
 
 ffmpeg -i "$1" -vf palettegen -f image2 -c:v png - |
-ffmpeg -i "$1" -i - -filter_complex paletteuse test.gif
+  ffmpeg -i "$1" -i - -filter_complex paletteuse "$file_noext".gif
 
-# ffmpeg -ss $start_time                             \
-#        -t  $duration                               \
-#        -i  "$vid"                                  \
-#        -vf "$filters,palettegen"                   \
-#        -y  palette.png                             \
-#        && ffmpeg \
-#                  -i  "$vid"                                  \
-#                  -i  palette.png                             \
-#                  -lavfi "$filters [x]; [x][1:v] paletteuse"  \
-#                  -y  "$vid".gif                              \
-#                              && rm palette.png
-
-[ $(command -v gifsicle) ] || exit 0
-# gifsicle -O3 --lossy=35 -o "$vid"-opz.gif "$vid".gif
-gifsicle -O3 -o "$vid"-opz.gif "$vid".gif
+! command -v gifsicle >/dev/null 2>&1 ||
+  gifsicle -O3 "$file_noext".gif -o "$file_noext".gif
